@@ -3,11 +3,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { FormationModule } from './formation/formation.module';
 import { DatabaseService } from './database.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env',
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
@@ -16,6 +18,7 @@ import { DatabaseService } from './database.service';
       }),
       inject: [ConfigService],
     }),
+    AuthModule,
     FormationModule,
   ],
   providers: [DatabaseService],
