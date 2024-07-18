@@ -18,7 +18,7 @@ const UpdateFormationForm=()=>{
     useEffect(()=>{
         const getFormation=async()=>{
             try{
-                const response=await axios.get(`http://localhost:3000/formation/${id}`);
+                const response=await axios.get(`http://localhost:5000/formation/${id}`);
                 const FormationData=response.data;
 
                 const updateFormation={
@@ -52,7 +52,7 @@ const UpdateFormationForm=()=>{
         e.preventDefault();
          
         try{
-            const formationResponse=await axios.put(`http://localhost:3000/formation/${id}`,FormationData);
+            const formationResponse=await axios.put(`http://localhost:5000/formation/${id}`,FormationData);
             console.log(formationResponse.data);
         }catch(error){
             console.error('Erreur d\'ajout du formation',error);

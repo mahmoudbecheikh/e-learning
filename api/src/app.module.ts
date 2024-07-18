@@ -1,35 +1,32 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
-import { FormationModule } from './formation/formation.module';
-import { DatabaseService } from './database.service';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { ConfigModule } from '@nestjs/config'; // Import du module ConfigModule
+import { MongooseModule } from '@nestjs/mongoose'; // Import du module MongooseModule
 import { AuthModule } from './auth/auth.module';
+import { CoursModule } from './module/cours/cours.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+import { FormationModule } from './formation/formation.module';
 import { NiveauModule } from './niveau/niveau.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: '.env',
-    }),
-    MongooseModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGODB_URI'),
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      }),
-      inject: [ConfigService],
-    }),
+  imports: [ConfigModule.forRoot({
+    envFilePath: '.env',
+    isGlobal: true,
+  }),
+  MongooseModule.forRoot(process.env.DB_URI, { dbName: 'E-learning' }),
+  ServeStaticModule.forRoot({
+    rootPath: join(__dirname, '..', 'uploads'),
+    serveRoot: '/uploads',
+  }),
     AuthModule,
+    CoursModule,
     FormationModule,
     NiveauModule,
+
   ],
-  providers: [DatabaseService],
+  controllers: [AppController],
+  providers: [AppService],
 })
-export class AppModule {
-  constructor(private configService: ConfigService) {
-    const mongoUri = this.configService.get<string>('MONGODB_URI');
-    console.log(`Connecting to MongoDB with URI: ${mongoUri}`);
-  }
-}
+export class AppModule { }

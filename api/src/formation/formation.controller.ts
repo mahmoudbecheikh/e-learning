@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, Patch } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+  Patch,
+} from '@nestjs/common';
 import { FormationService } from './formation.service';
 import { CreateFormationDto } from './dto/create-formation.dto';
 import { UpdateFormationDto } from './dto/update-formation.dto';
@@ -13,23 +22,29 @@ export class FormationController {
     return this.formationService.create(createFormationDto);
   }
   @Put(':id')
-  async update(@Param('id') id:string, @Body() updateFormationDto :UpdateFormationDto ){
-    return this.formationService.update(id,updateFormationDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateFormationDto: UpdateFormationDto,
+  ) {
+    return this.formationService.update(id, updateFormationDto);
   }
   @Delete(':id')
-  async delete(@Param('id') id:string) {
-  return this.formationService.destroy(id);
+  async delete(@Param('id') id: string) {
+    return this.formationService.destroy(id);
   }
   @Get()
-  async getAll(){
+  async getAll() {
     return this.formationService.getAll();
   }
   @Get(':id')
-  async GetById(@Param('id') id:string){
+  async GetById(@Param('id') id: string) {
     return this.formationService.getById(id);
   }
   @Patch(':id/niveaux')
-  async addLevel(@Param('id') id: number, @Body() createNiveauDto: CreateNiveauDto) {
+  async addLevel(
+    @Param('id') id: number,
+    @Body() createNiveauDto: CreateNiveauDto,
+  ) {
     const niveau = new Niveau(createNiveauDto);
     return this.formationService.addLevel(id, niveau);
   }

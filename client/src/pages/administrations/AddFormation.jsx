@@ -71,12 +71,12 @@ const AddFormationsForm = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:3000/formation", formationData);
+      const response = await axios.post("http://localhost:5000/formation", formationData);
       console.log("Response:", response.data);
 
       const formationId = response.data._id;
       for (const niveau of formationData.niveaux) {
-        await axios.post(`http://localhost:3000/niveau`, {
+        await axios.post(`http://localhost:5000/niveau`, {
           ...niveau,
           formation: formationId
         });

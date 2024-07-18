@@ -8,7 +8,7 @@ async function bootstrap() {
   
 
   app.enableCors({
-    origin: 'http://localhost:3001', 
+    origin: 'http://localhost:3000', 
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     exposedHeaders: 'Set-Cookie',
@@ -31,7 +31,7 @@ async function bootstrap() {
       cookie: { maxAge: 3600000 }, // 1 hour
     }),
   );
-  await app.listen(3000);
+  await app.listen(5000);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();

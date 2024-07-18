@@ -1,0 +1,51 @@
+.video-display {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+}
+
+.video-display h1 {
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+
+.video-display p {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+.video-display video {
+  width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.files-list h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.files-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.files-list li {
+  margin-bottom: 5px;
+}
+
+.files-list a {
+  text-decoration: none;
+  color: #007bff;
+  transition: color 0.3s;
+}
+
+.files-list a:hover {
+  color: #0056b3;
+}
+
+
+

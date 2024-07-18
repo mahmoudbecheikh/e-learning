@@ -12,7 +12,7 @@ const Formations = () => {
   useEffect(() => {
     const getFormation = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/formation');
+        const response = await axios.get('http://localhost:5000/formation');
         setFormations(response.data);
       } catch (error) {
         console.error('Erreur de recuperation des formations', error);
