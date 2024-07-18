@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Carousel, Form, FormControl } from 'react-bootstrap';
+import { Box, Text, Image, Heading, Input, VStack, Container } from '@chakra-ui/react';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 const Formations = () => {
   const [formations, setFormations] = useState([]);
@@ -25,29 +27,49 @@ const Formations = () => {
   );
 
   return (
-    <div>
-      <h2>Formations</h2>
-      <Form >
-        <FormControl
-          type="text"
-          placeholder="recherche formation"
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </Form>
+    <Container>
+      <Heading as="h2" size="xl" mb={4}>
+        Formations
+      </Heading>
+      <Input
+        placeholder="Recherche formation"
+        mb={4}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
       <Carousel>
         {filteredFormations.map((formation) => (
-          <Carousel.Item key={formation._id}>
-             <Link to={`/formationdetails/${formation._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-            <div  style={{ height: '300px', background: '#eee' }}>
-              <h3>{formation.titre}</h3>
-              <p>{formation.description}</p>
-             
-            </div>
-            </Link>
-          </Carousel.Item>
+          <Box
+            key={formation._id}
+            as={Link}
+            to={`/formationdetails/${formation._id}`}
+            textDecoration="none"
+            color="inherit"
+            p={4}
+          >
+            <VStack spacing={4} align="stretch">
+              {formation.image ? (
+                <Image
+                  src={formation.image}
+                  alt={formation.titre}
+                  boxSize="300px"
+                  objectFit="cover"
+                />
+              ) : (
+                <Box boxSize="300px" bg="gray.200" />
+              )}
+              <Box>
+                <Heading as="h3" size="lg">
+                  {formation.titre}
+                </Heading>
+                <Text>
+                  {formation.description}
+                </Text>
+              </Box>
+            </VStack>
+          </Box>
         ))}
       </Carousel>
-    </div>
+    </Container>
   );
 };
 

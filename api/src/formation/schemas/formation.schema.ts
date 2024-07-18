@@ -1,7 +1,8 @@
 
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
+import { Niveau, NiveauSchema } from 'src/niveau/schemas/niveau.schema';
 
 @Schema()
 export class Formation extends Document {
@@ -25,6 +26,9 @@ export class Formation extends Document {
 
   @Prop({required:true})
   nbrNiveau:number;
+
+  @Prop({ type: [NiveauSchema], default: [] })
+  niveaux: Types.DocumentArray<Niveau>;
 }
 
 export const FormationSchema = SchemaFactory.createForClass(Formation);
