@@ -3,8 +3,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { FormationService } from './formation.service';
 import { FormationController } from './formation.controller';
 import { Formation, FormationSchema } from './schemas/formation.schema';
-import { AuthModule } from '../auth/auth.module';
-import { NiveauModule } from 'src/niveau/niveau.module';
+import { AuthModule } from '../../auth/auth.module';
+import { NiveauModule } from 'src/module/niveau/niveau.module';
 
 @Module({
   imports: [

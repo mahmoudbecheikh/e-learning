@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { Formation } from 'src/formation/schemas/formation.schema';
+import { Formation } from 'src/module/formation/schemas/formation.schema';
 export type UserDocument = User & Document;
 import {  Schema as MongooseSchema } from 'mongoose';
 

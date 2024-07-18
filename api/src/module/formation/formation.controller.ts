@@ -11,8 +11,8 @@ import {
 import { FormationService } from './formation.service';
 import { CreateFormationDto } from './dto/create-formation.dto';
 import { UpdateFormationDto } from './dto/update-formation.dto';
-import { CreateNiveauDto } from 'src/niveau/dto/create-niveau.dto';
-import { Niveau } from 'src/niveau/schemas/niveau.schema';
+import { CreateNiveauDto } from 'src/module/niveau/dto/create-niveau.dto';
+import { Niveau } from 'src/module/niveau/schemas/niveau.schema';
 @Controller('formation')
 export class FormationController {
   constructor(private readonly formationService: FormationService) {}

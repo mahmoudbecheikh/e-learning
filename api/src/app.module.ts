@@ -7,8 +7,8 @@ import { AuthModule } from './auth/auth.module';
 import { CoursModule } from './module/cours/cours.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { FormationModule } from './formation/formation.module';
-import { NiveauModule } from './niveau/niveau.module';
+import { FormationModule } from './module/formation/formation.module';
+import { NiveauModule } from './module/niveau/niveau.module';
 
 @Module({
   imports: [ConfigModule.forRoot({

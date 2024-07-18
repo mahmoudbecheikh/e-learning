@@ -1,16 +1,16 @@
 import "./App.css";
-import Sidebar from "./Sidebar";
+import Sidebar from "./components/Sidebar";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Formations from "./pages/clients/Formations";
 import UpdateFormationForm from "./pages/administrations/UpdateFormations";
 import AddFormationsForm from "./pages/administrations/AddFormation";
-import Registration from "./pages/Registration";
-import Login from "./pages/Login";
-import CoursItem from "./cours/CourseItem";
-import CreateCourse from "./cours/CreateCourse";
-import ListingCourse from "./cours/ListingCourse";
-import UpdateCourse from "./cours/UpdatingCourse";
-import NavbarC from "./Navbar";
+import Registration from "./pages/auth/Registration";
+import Login from "./pages/auth/Login";
+import CoursItem from "./pages/cours/CourseItem";
+import CreateCourse from "./pages/cours/CreateCourse";
+import ListingCourse from "./pages/cours/ListingCourse";
+import UpdateCourse from "./pages/cours/UpdatingCourse";
+import NavbarC from "./components/Navbar";
 function App() {
   return (
     <Router>

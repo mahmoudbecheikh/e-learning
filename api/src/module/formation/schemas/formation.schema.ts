@@ -2,7 +2,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 import { Document, Types } from 'mongoose';
-import { Niveau, NiveauSchema } from 'src/niveau/schemas/niveau.schema';
+import { Niveau, NiveauSchema } from 'src/module/niveau/schemas/niveau.schema';
 
 @Schema()
 export class Formation extends Document {

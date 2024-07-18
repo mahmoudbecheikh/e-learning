@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./Listing.css";
 // import { server } from "../../main";
-import Loading from "../utils/loading";
+import Loading from "../../utils/loading";
 import toast from "react-hot-toast";
 import { Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
