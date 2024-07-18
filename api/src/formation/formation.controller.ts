@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, Patch } from '@nestjs/common';
 import { FormationService } from './formation.service';
 import { CreateFormationDto } from './dto/create-formation.dto';
 import { UpdateFormationDto } from './dto/update-formation.dto';
+import { CreateNiveauDto } from 'src/niveau/dto/create-niveau.dto';
+import { Niveau } from 'src/niveau/schemas/niveau.schema';
 @Controller('formation')
 export class FormationController {
   constructor(private readonly formationService: FormationService) {}
@@ -25,5 +27,10 @@ export class FormationController {
   @Get(':id')
   async GetById(@Param('id') id:string){
     return this.formationService.getById(id);
+  }
+  @Patch(':id/niveaux')
+  async addLevel(@Param('id') id: number, @Body() createNiveauDto: CreateNiveauDto) {
+    const niveau = new Niveau(createNiveauDto);
+    return this.formationService.addLevel(id, niveau);
   }
 }

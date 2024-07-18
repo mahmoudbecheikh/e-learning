@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { FormationModule } from './formation/formation.module';
 import { DatabaseService } from './database.service';
 import { AuthModule } from './auth/auth.module';
+import { NiveauModule } from './niveau/niveau.module';
 
 @Module({
   imports: [
@@ -15,11 +16,14 @@ import { AuthModule } from './auth/auth.module';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get<string>('MONGODB_URI'),
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
       }),
       inject: [ConfigService],
     }),
     AuthModule,
     FormationModule,
+    NiveauModule,
   ],
   providers: [DatabaseService],
 })

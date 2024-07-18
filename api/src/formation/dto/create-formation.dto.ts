@@ -22,4 +22,6 @@ export class CreateFormationDto {
 
   @IsInt()
   nbrNiveau: number;
+
+  readonly niveau: { title: string}[];
 }

@@ -7,12 +7,16 @@ import { CreateFormationDto } from './dto/create-formation.dto';
 import { UpdateFormationDto } from './dto/update-formation.dto';
 import * as nodemailer from 'nodemailer';
 import { Client } from 'src/auth/schemas/user.schema';
+import { Niveau } from 'src/niveau/schemas/niveau.schema';
 
 @Injectable()
 export class FormationService {
+  findOne: any;
+  findById: any;
   constructor(
     @InjectModel(Formation.name) private formationModel: Model<Formation>,
     @InjectModel(Client.name) private clientModel: Model<Client>,
+    @InjectModel(Niveau.name) private readonly niveauModel: Model<Niveau>,
   ) {}
 
   async create(createFormationDto: CreateFormationDto): Promise<Formation> {
@@ -34,7 +38,7 @@ export class FormationService {
   }
 
   async update(id: string, updateFormationDto: UpdateFormationDto): Promise<Formation> {
-    return this.formationModel.findByIdAndUpdate(id, updateFormationDto, { new: true }).exec();
+    return this.formationModel.findByIdAndUpdate(id, updateFormationDto, { new: true }).populate('niveaux').exec();
   }
 
   async destroy(id: string): Promise<Formation> {
@@ -42,11 +46,16 @@ export class FormationService {
   }
 
   async getAll(): Promise<Formation[]> {
-    return this.formationModel.find().exec();
+    return this.formationModel.find().populate('niveaux').exec();
+  }
+  async addLevel(id: number, niveau: Niveau): Promise<Formation> {
+    const formation = await this.findById(id);
+    formation.niveau.push(niveau);
+    return formation.save();
   }
 
   async getById(id: string): Promise<Formation> {
-    return this.formationModel.findById(id).exec();
+    return this.formationModel.findById(id).populate('niveaux').exec();
   }
 
   private async sendEmailNotifications(clients: Client[], formation: Formation) {

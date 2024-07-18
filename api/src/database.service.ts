@@ -7,7 +7,9 @@ export class DatabaseService implements OnModuleInit {
   constructor(@InjectConnection() private readonly connection: Connection) {}
 
   onModuleInit() {
-    this.connection.on('connected', () => {
+    this.connection.on('connected', 
+      () => {
+      
       console.log('Database connection successful');
     });
     this.connection.on('error', (err) => {
