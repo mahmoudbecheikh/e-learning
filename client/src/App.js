@@ -4,19 +4,30 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Formations from "./pages/clients/Formations";
 import UpdateFormationForm from "./pages/administrations/UpdateFormations";
 import AddFormationsForm from "./pages/administrations/AddFormation";
-import Registration from "./pages/auth/Registration";
-import Login from "./pages/auth/Login";
 import CoursItem from "./pages/cours/CourseItem";
 import CreateCourse from "./pages/cours/CreateCourse";
 import ListingCourse from "./pages/cours/ListingCourse";
 import UpdateCourse from "./pages/cours/UpdatingCourse";
 import NavbarC from "./components/Navbar";
+import Home from "./components/Home";
+import Registration from "./pages/user/Registration";
+import Login from "./pages/user/Login";
+import ResetPasswordRequestForm from "./pages/user/ResetPasswordRequestForm";
+import ResetPasswordForm from "./pages/user/ResetPasswordForm";
+import Users from "./pages/user/users/userspage";
+import UserList from "./pages/user/users/listuser";
+import ClientList from "./pages/user/users/listclient";
+import EmployeurList from "./pages/user/users/listemployeur";
+import AdminList from "./pages/user/users/listadmin";
 function App() {
   return (
     <Router>
       <Routes>
+      <Route path="/home" element={<Home />} />
         <Route path="/registration" element={<Registration />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/reset-password-request" element={<ResetPasswordRequestForm />}  />
+        <Route path="/reset-password/:token" element={<ResetPasswordForm />}  />
         <Route path="/addformation" element={<AddFormationsForm />} />
         <Route path="/formations" element={<Formations />} />
         <Route path="/updateFormation/:id" element={<UpdateFormationForm />} />
@@ -34,10 +45,19 @@ function MainLayout() {
   return (
     <>
       <NavbarC />
-      <div className="container">
+      <div className="main-container" 
+        style={{display: "flex",
+        height: "100vh"
+        }}>
         <Sidebar className="sidebar" />
         <div className="content">
-          <Routes></Routes>
+          <Routes>
+          <Route path="/users" element={<Users />} />
+            <Route path="/listuser" element={<UserList />} />
+        <Route path="/listclient" element={<ClientList />} />
+        <Route path="/listemployeur" element={<EmployeurList />} />
+        <Route path="/listadmin" element={<AdminList />} />
+          </Routes>
         </div>
       </div>
     </>

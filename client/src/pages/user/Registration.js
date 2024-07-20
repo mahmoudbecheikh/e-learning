@@ -104,11 +104,12 @@ const Registration = () => {
             } else {
                 const responseData = await response.json();
                 console.log('Signup successful! Token received:', responseData.token);
-
                 localStorage.setItem('token', responseData.token);
                 setIsSignUpSuccess(true);
                 setSuccessMessage('You signed up to our application. Now you can sign in.');
                 resetForm();
+                alert('You signed up to our application. Now you can sign in.'); // Affiche une alerte lorsque la connexion est réussie
+                navigate('/login');
             }
         } catch (error) {
             console.error('Error during signup request:', error);
@@ -299,8 +300,7 @@ const Registration = () => {
                                                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in leo vel justo ullamcorper posuere. Sed accumsan iaculis fermentum.
                                                     </ModalBody>
                                                     <ModalFooter>
-                                                        <Button style={{ backgroundColor: '#4D6466', borderRadius: '50px', color: 'white', fontWeight: '400',paddingLeft: '30px',
-                                                paddingRight: '30px' }}
+                                                        <Button colorScheme='blue'
                                                             onClick={onClose}>
                                                             Close
                                                         </Button>

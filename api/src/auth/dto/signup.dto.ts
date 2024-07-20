@@ -2,9 +2,8 @@ import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, MinLength } from '
 
 export enum UserRole {
   Admin = 'admin',
-  ScrumMaster = 'scrum_master',
-  ProductOwner = 'product_owner',
-  SimpleUser = 'simple_user',
+  Employeur = 'employeur',
+  Client = 'client'
 }
 
 export class SignUpDto {

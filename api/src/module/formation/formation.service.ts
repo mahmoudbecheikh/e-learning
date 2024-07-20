@@ -6,8 +6,8 @@ import { Formation } from './schemas/formation.schema';
 import { CreateFormationDto } from './dto/create-formation.dto';
 import { UpdateFormationDto } from './dto/update-formation.dto';
 import * as nodemailer from 'nodemailer';
-import { Client } from 'src/auth/schemas/user.schema';
 import { Niveau } from 'src/module/niveau/schemas/niveau.schema';
+import { Client } from 'src/auth/schemas/user.schema';
 
 @Injectable()
 export class FormationService {

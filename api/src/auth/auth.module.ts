@@ -12,7 +12,10 @@ import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
-    PassportModule.register({ defaultStrategy: 'jwt', session: true }),
+    
+    
+    PassportModule.register({ defaultStrategy: 'jwt' , session: true}),
+   
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
@@ -24,15 +27,15 @@ import { JwtStrategy } from './jwt.strategy';
         };
       },
     }),
-    MongooseModule.forFeature([
-      { name: 'User', schema: UserSchema },
+    MongooseModule.forFeature([{ name: 'User', schema: UserSchema },
       { name: 'Client', schema: ClientSchema },
       { name: 'Employeur', schema: EmployeurSchema },
-      { name: 'Admin', schema: AdminSchema },
+      { name: 'Admin', schema: AdminSchema }
     ]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, LocalStrategy, SessionSerializer],
-  exports: [PassportModule, AuthService, MongooseModule],  
+  providers: [AuthService,JwtStrategy,LocalStrategy,SessionSerializer],
+  exports: [PassportModule,AuthService,MongooseModule],
+
 })
 export class AuthModule {}

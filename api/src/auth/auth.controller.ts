@@ -5,7 +5,7 @@ import { SignUpDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
 import { AuthenticatedGuard } from './utils/LocalGuard';
 import { AllowAllGuard } from './utils/AllowAllGuard';
-import { getUser } from './decorator/get-user.decorator';
+import { getAdmin, getClient, getEmployeur, getUser } from './decorator/get-user.decorator';
 import { JwtAuthGuard } from './guard/JwtAuthGuard';
 import { Admin, Client, Employeur, User } from './schemas/user.schema';
 import { changePassDto } from './dto/changePass.dto';
@@ -63,6 +63,7 @@ export class AuthController {
   async deleteUser(@Param('id') id: string): Promise<void> {
     return this.authService.delete(id);
   }
+  
 
   @Get("/usermail/:email")
   findEmail(@Param('email') email: string) {
@@ -129,12 +130,14 @@ export class AuthController {
     return user._id;
   }
 
+
   @UseGuards(JwtAuthGuard)
   @Patch('/changePass')
-  async changePass(@Body() changePassDto: changePassDto, @getUser() user: User) {
+  async changePass(@Body() changePassDto: changePassDto, @getUser() user: User, @getClient() client: Client, @getEmployeur() employeur: Employeur, @getAdmin() admin: Admin ) {
     try {
-      const updatedUser = await this.authService.changePass(changePassDto, user);
-      return { message: 'Password changed successfully', user: updatedUser };
+      const updatedUser = await this.authService.changePass(changePassDto, user,client,employeur,admin);
+
+      return { message: 'Password changed successfully', user: updatedUser, client:updatedUser,employeur:updatedUser, admin:updatedUser };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
@@ -181,6 +184,20 @@ async createAdmin(@Body() adminData: Partial<Admin>): Promise<Admin>{
 async GetAllAdmins(){
   return this.authService.findAdmins();
 }
+
+
+@Post('/reset-password-request')
+  async requestPasswordReset(@Body('email') email: string): Promise<void> {
+    return this.authService.requestPasswordReset(email);
+  }
+
+  @Post('/reset-password/:token')
+  async resetPassword(
+    @Param('token') token: string,
+    @Body('password') password: string,
+  ): Promise<void> {
+    return this.authService.resetPassword(token, password);
+  }
 
 
 }

@@ -9,10 +9,13 @@ import * as bcrypt from 'bcryptjs';
 import { Admin, Client, Employeur, User } from './schemas/user.schema';
 import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class AuthService {
   constructor(
+    private mailerService: MailerService,
+
     @InjectModel(User.name)
     private userModel: Model<User>,
     @InjectModel(Client.name) private clientModel: Model<Client>,
@@ -89,7 +92,7 @@ export class AuthService {
 
 
   async delete(id: string): Promise<void> {
-    let result = await this.userModel.deleteOne({ _id: id }).exec();
+    let result = await this.adminModel.deleteOne({ _id: id }).exec();
     if (result.deletedCount === 0) {
       result = await this.clientModel.deleteOne({ _id: id }).exec();
       if (result.deletedCount === 0) {
@@ -145,7 +148,7 @@ export class AuthService {
     }
   }
 
-  async changePass(changePassDto: changePassDto, user: User) {
+  async changePass(changePassDto: changePassDto, user: User, client: Client, employeur: Employeur, admin:Admin) {
     try {
       if (changePassDto.confirmNewPass !== changePassDto.newPass) {
         throw new HttpException(
@@ -153,7 +156,11 @@ export class AuthService {
           HttpStatus.BAD_REQUEST,
         );
       }
-      const currentUser = await this.userModel.findById(user._id);
+      const currentUser = await this.userModel.findById(user._id) ||
+                          await this.clientModel.findById(client._id) ||
+                          await this.employeurModel.findById(employeur._id) ||
+                          await this.adminModel.findById(admin._id);
+
       if (!currentUser) {
         throw new HttpException(
           'Utilisateur introuvable. Veuillez vous connecter à nouveau.',
@@ -283,6 +290,82 @@ export class AuthService {
   async findAdmins(): Promise<Admin[]> {
     return this.adminModel.find().exec();
   }
+
+
+
+
+
+
+
+
+
+
+  async requestPasswordReset(email: string): Promise<void> {
+    const user = await this.findUserByEmail(email);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+  
+    const token = this.jwtService.sign({ userId: user._id, role: user.role }, { expiresIn: '1h' });
+    const url = `http://localhost:3000/reset-password/${token}`;
+    const htmlContent = `
+      <p>Bonjour ${user.nom},</p>
+      <p>Vous avez demandé à réinitialiser votre mot de passe. Veuillez cliquer sur le lien ci-dessous pour réinitialiser votre mot de passe :</p>
+      <p><a href="${url}">Réinitialiser le mot de passe</a></p>
+      <p>Ce lien expire dans une heure.</p>
+    `;
+    await this.mailerService.sendMail({
+      to: email,
+      subject: 'Password Reset',
+      html: htmlContent,
+    });
+  }
+  
+  private async findUserByEmail(email: string): Promise<any> {
+    let user = await this.userModel.findOne({ email }).exec();
+    if (user) return { ...user.toObject(), role: 'user' };
+  
+    user = await this.clientModel.findOne({ email }).exec();
+    if (user) return { ...user.toObject(), role: 'client' };
+  
+    user = await this.employeurModel.findOne({ email }).exec();
+    if (user) return { ...user.toObject(), role: 'employeur' };
+  
+    user = await this.adminModel.findOne({ email }).exec();
+    if (user) return { ...user.toObject(), role: 'admin' };
+  
+    return null;
+  }
+
+  
+  
+  async resetPassword(token: string, newPassword: string): Promise<void> {
+    try {
+      const payload = this.jwtService.verify(token);
+      const { userId, role } = payload;
+  
+      let user;
+      if (role === 'user') {
+        user = await this.userModel.findById(userId).exec();
+      } else if (role === 'client') {
+        user = await this.clientModel.findById(userId).exec();
+      } else if (role === 'employeur') {
+        user = await this.employeurModel.findById(userId).exec();
+      } else if (role === 'admin') {
+        user = await this.adminModel.findById(userId).exec();
+      }
+  
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+  
+      user.password = await bcrypt.hash(newPassword, 10);
+      await user.save();
+    } catch (e) {
+      throw new BadRequestException('Invalid or expired token');
+    }
+  }
+  
 
 
 
