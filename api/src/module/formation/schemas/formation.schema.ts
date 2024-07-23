@@ -10,9 +10,6 @@ export type FormationDocument = HydratedDocument<Formation>;
 @Schema()
 export class Formation {
   @Prop({ required: true })
-  formationId: string;
-
-  @Prop({ required: true })
   titre: string;
 
   @Prop({ required: true })

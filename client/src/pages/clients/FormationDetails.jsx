@@ -11,6 +11,7 @@ import {
   Container,
   Spinner,
 } from "@chakra-ui/react";
+import Messagesection from "../message";
 
 const FormationDetails = () => {
   const { id } = useParams();
@@ -112,7 +113,9 @@ const FormationDetails = () => {
           )}
         </Box>
       </VStack>
+          <Messagesection></Messagesection>
     </Container>
+  
   );
 };
 

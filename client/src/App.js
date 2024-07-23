@@ -39,7 +39,6 @@ function App() {
         <Route path="/cours/:coursId" element={<CoursItem />} />
         <Route path="/cours/update/:coursId" element={<UpdateCourse />} />
         <Route path="/message" element={<Messagesection />} />
-        <Route path="/formationdetails/:id/message" element={<Messagesection />} />
         <Route path="/formationdetails/:id" element={<FormationDetails />} />
 
       </Routes>

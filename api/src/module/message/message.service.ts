@@ -13,10 +13,10 @@ import { CreateForumDto } from './dto/create-forum.dto';
 export class MessageService {
 
   constructor(
-    @InjectModel(Message.name) private readonly messageModel: Model<MessageDocument>,
+    @InjectModel(Message.name) private readonly messageModel: Model<Message>,
     @InjectModel(Client.name) private clientModel: Model<Client>,
     @InjectModel(Formation.name) private readonly formationModel: Model<FormationDocument>,
-    @InjectModel(Forum.name) private readonly forumModel: Model<ForumDocument>,
+    @InjectModel(Forum.name) private readonly forumModel: Model<Forum>,
 
   ) { }
 
@@ -26,42 +26,34 @@ export class MessageService {
       if (!user) {
         throw new Error('User not found');
       }
-
-      let forum = await this.forumModel.findOne({ formation: createMessageDto.formation, user: user._id }).exec();
-      if (!forum) {
-        const formation = await this.formationModel.findById(createMessageDto.formation).exec();
-        if (!formation) {
-          throw new Error('Formation not found');
-        }
-
-        forum = new this.forumModel({
-          formation: formation._id,
-          user: user._id,
-          messages: []
-        });
-      }
-
-      const newMessage = new this.messageModel({
+  
+      const newMessage = await new this.messageModel({
         user: user._id,
         contenu: createMessageDto.contenu,
         date: createMessageDto.date,
-      });
-      console.log(forum.messages);
-      forum.messages.push(newMessage);
-      console.log(forum.messages);
-      await forum.save();
-      await newMessage.save();
-
+      }).save();
+  
+      const forum = await this.forumModel.findByIdAndUpdate(
+        createMessageDto.forum,
+        { $push: { messages: newMessage } },
+        { new: true }
+      ).exec();
+  
+      if (!forum) {
+        throw new Error('Forum not found');
+      }
+  
       return newMessage.populate('user');
     } catch (error) {
       console.error('Error creating message:', error);
       return null;
     }
   }
-
+  
 
   async createForum(createForum: CreateForumDto): Promise<Forum | null> {
     try {
+
       const user = await this.clientModel.findOne({ email: createForum.user }).exec();
       if (!user) {
         throw new Error('User not found');
@@ -91,13 +83,19 @@ export class MessageService {
 
 
 
-  async findAll(): Promise<Message[]> {
-    return this.messageModel.find().exec();
+  async findAll(): Promise<Forum[]> {
+    return this.forumModel.find().populate({
+      path: 'messages',
+      populate: {
+        path: 'user',
+        model: 'Client',
+      },
+    });
   }
 
   async findForum(idClient: string, idFormation: string): Promise<Forum> {
     const forum = await this.forumModel.findOne({ user: idClient, formation: idFormation });
-    console.log(forum);
+    if(forum)
     return forum.populate({
       path: 'messages',
       populate: {
@@ -105,6 +103,7 @@ export class MessageService {
         model: 'Client',
       },
     });
+    return null
   }
 
 

@@ -8,7 +8,7 @@ const socket = io("http://localhost:5000");
 
 const Messagesection = () => {
   const [messages, setMessages] = useState([]);
-  const [forum, setForum] = useState([]);
+  const [forum, setForum] = useState(null);
   const [contenu, setContenu] = useState("");
   const params = useParams();
 
@@ -16,18 +16,41 @@ const Messagesection = () => {
     axios
       .get("http://localhost:5000/messages", {
         params: {
-          idClient: localStorage.getItem('id'),
+          idClient: localStorage.getItem("id"),
           idFormation: params.id,
         },
       })
-      .then((forum) => {
-        console.log(forum.data);
-        setForum(forum.data);
-        setMessages(forum.data.messages)
+      .then((response) => {
+        const forumData = response.data;
+        if (forumData && forumData.messages) {
+          setForum(forumData);
+          setMessages(forumData.messages);
+        } else {
+          console.log('Famech');
+          axios
+            .post("http://localhost:5000/messages/forum", {
+              user: localStorage.getItem("email"),
+              formation: params.id,
+            })
+            .then((response) => {
+              console.log(response);
+              setForum(response.data);
+            })
+            .catch((error) => {
+              console.error("Error creating forum:", error);
+            });
+
+          setForum(null);
+          setMessages([]);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching messages:", error);
+        setForum(null);
+        setMessages([]);
       });
 
     socket.on("newMessage", (msg) => {
-      console.log(msg);
       setMessages((prevMessages) => [...prevMessages, msg]);
     });
 
@@ -37,24 +60,13 @@ const Messagesection = () => {
   }, [params.id]);
 
   const handleSubmit = (e) => {
-    if(!forum){
-      axios
-      .post("http://localhost:5000/messages/forum", {
-        body: {
-          client: localStorage.getItem('id'),
-          formation: params.id,
-        },
-      })
-      .then((forum) => {
-        setForum(forum.data);
-      });
-    }
     e.preventDefault();
+
     const payload = {
       contenu: contenu,
       user: localStorage.getItem("email"),
-      formation: params.id,
-      date: Date.now().toString(),
+      forum: forum ? forum._id : null,
+      date: new Date().toISOString(),
     };
     socket.emit("newMessage", payload);
     setContenu("");
