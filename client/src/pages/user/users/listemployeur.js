@@ -3,8 +3,8 @@ import { Table, TableCaption, Thead, Tbody, Tr, Th, Td, Box, Button, Alert, Aler
 import { Profiler } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { AiOutlineArrowLeft, AiOutlineArrowRight, AiOutlinePlus } from 'react-icons/ai'; // Importer les icônes de flèche
-import AddEmployeur from './addemployeur';
 import { GlobalContext } from '../../../globalwrapper';
+import AddUser from './adduser';
 
 const EmployeurList = () => {
   const [employeurs, setEmployeurs] = useState([]);
@@ -104,15 +104,6 @@ const EmployeurList = () => {
     <Profiler id='RegisterForm' onRender={logTimes}>
       <Box p={6} borderRadius="lg" boxShadow="md" bg="white">
         <h2>Employeur List</h2>
-        <Button
-                colorScheme="teal"
-                variant="outline"
-                maxW={'300px'}
-                minW="150px"
-                onClick={onOpen}
-              >
-                Add New Employeur
-              </Button>
         <TableContainer>
           <Table>
             <TableCaption>Employeurs</TableCaption>
@@ -199,7 +190,6 @@ const EmployeurList = () => {
           <Button onClick={() => paginate(currentPage + 1)} disabled={indexOfLastEmployeur >= employeurs.length} rightIcon={<AiOutlineArrowRight />} mx={1}>
           </Button>
         </Flex>
-        <AddEmployeur/>
       </Box>
     </Profiler>
   );

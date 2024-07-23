@@ -3,7 +3,6 @@ import { Table, TableCaption, Thead, Tbody, Tr, Th, Td, Box, Button, Alert, Aler
 import { Profiler } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai'; // Importer les icônes de flèche
-import AddAdmin from './addadmin';
 import { GlobalContext } from '../../../globalwrapper';
 
 const AdminList = () => {
@@ -104,15 +103,6 @@ const AdminList = () => {
     <Profiler id='RegisterForm' onRender={logTimes}>
       <Box p={6} borderRadius="lg" boxShadow="md" bg="white">
         <h2>Admin List</h2>
-        <Button
-                colorScheme="teal"
-                variant="outline"
-                maxW={'300px'}
-                minW="150px"
-                onClick={onOpen}
-              >
-                Add New Admin
-              </Button>
         <TableContainer>
           <Table>
             <TableCaption>Admins</TableCaption>
@@ -193,8 +183,6 @@ const AdminList = () => {
           <Button onClick={() => paginate(currentPage + 1)} disabled={indexOfLastAdmin >= admins.length} rightIcon={<AiOutlineArrowRight />} mx={1}>
           </Button>
         </Flex>
-        <AddAdmin/>
-
       </Box>
     </Profiler>
   );

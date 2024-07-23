@@ -16,7 +16,6 @@ export class FormationService {
   findById: any;
   constructor(
     @InjectModel(Formation.name) private formationModel: Model<Formation>,
-    @InjectModel(Client.name) private clientModel: Model<Client>,
     @InjectModel(Niveau.name) private readonly niveauModel: Model<Niveau>,
   ) { }
 
@@ -40,6 +39,13 @@ export class FormationService {
 
     console.log('Formation created:', savedFormation);
 
+  // If related data is required, validate it here
+  // const clients = await this.clientModel.find().exec();
+  // if (clients.length === 0) {
+  //   throw new Error('No clients found to notify');
+  // }
+    
+  //   await this.sendEmailNotifications(clients, savedFormation);
     // If related data is required, validate it here
     const clients = await this.clientModel.find().exec();
     if (clients.length === 0) {
@@ -101,15 +107,31 @@ export class FormationService {
       .exec();
   }
 
-  private async sendEmailNotifications(clients: Client[], formation: Formation) {
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'eyabenamara288@gmail.com',
-        pass: 'qwfw xoyf bxlt ezdm',
-      },
-    });
+  // private async sendEmailNotifications(clients: Client[], formation: Formation) {
+  //   const transporter = nodemailer.createTransport({
+  //     service: 'gmail',
+  //     auth: {
+  //       user: 'eyabenamara288@gmail.com',
+  //       pass: 'qwfw xoyf bxlt ezdm',
+  //     },
+  //   });
 
+  //   for (const client of clients) {
+  //     const mailOptions = {
+  //       from: 'eyabenamara288@gmail.com', 
+  //       to: client.email,
+  //       subject: `New Formation Available: ${formation.titre}`,
+  //       text: `A new formation titled "${formation.titre}" is now available. Check it out!`,
+  //     };
+
+  //     try {
+  //       await transporter.sendMail(mailOptions);
+  //       console.log(`Email sent to ${client.email}`);
+  //     } catch (error) {
+  //       console.error(`Failed to send email to ${client.email}:`, error);
+  //     }
+  //   }
+  // }
     for (const client of clients) {
       const mailOptions = {
         from: 'eyabenamara288@gmail.com',

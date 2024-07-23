@@ -4,7 +4,8 @@ import { AuthController } from './auth.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { AdminSchema, ClientSchema, EmployeurSchema, UserSchema } from './schemas/user.schema';
+// import { AdminSchema, ClientSchema, EmployeurSchema, UserSchema } from './schemas/user.schema';
+import {UserSchema } from './schemas/user.schema';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './utils/LocalStrategy';
 import { SessionSerializer } from './utils/SessionSerializer';
@@ -28,9 +29,6 @@ import { JwtStrategy } from './jwt.strategy';
       },
     }),
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema },
-      { name: 'Client', schema: ClientSchema },
-      { name: 'Employeur', schema: EmployeurSchema },
-      { name: 'Admin', schema: AdminSchema }
     ]),
   ],
   controllers: [AuthController],
