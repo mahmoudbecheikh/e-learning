@@ -1,0 +1,135 @@
+[33mcommit ffbb0a0896f8b287c4b4d0636490be96a345447e[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: eyabenamara <eyabenamara288@gmail.com>
+Date:   Tue Jul 23 14:02:58 2024 +0100
+
+    formationdetails
+
+[33mcommit 44dfe822d8324561eb4e5f2b658158ce396441ae[m
+Author: eyabenamara <eyabenamara288@gmail.com>
+Date:   Tue Jul 23 13:10:44 2024 +0100
+
+    formationdetails
+
+[33mcommit d7097ab894abddac2f727ed79c9db3e35a844eb4[m
+Merge: ff72c01 dba0549
+Author: eyabenamara <eyabenamara288@gmail.com>
+Date:   Tue Jul 23 11:56:48 2024 +0100
+
+    Merge branch 'main' of https://github.com/mahmoudbecheikh/e-learning
+
+[33mcommit ff72c010bb4ff134a04039729975db81107c8d23[m
+Author: eyabenamara <eyabenamara288@gmail.com>
+Date:   Tue Jul 23 11:55:46 2024 +0100
+
+    fix
+
+[33mcommit dba0549b6d63a210bd792f2c1573252176d8cfa9[m
+Author: mahmoudbecheikh <becheikh.mahmoud.3@gmail.com>
+Date:   Tue Jul 23 11:54:42 2024 +0100
+
+    fix all
+
+[33mcommit 2082669da359c1f3f312585d4c8fcfb3658adb81[m
+Merge: de8de87 58531d3
+Author: mahmoudbecheikh <becheikh.mahmoud.3@gmail.com>
+Date:   Tue Jul 23 11:48:52 2024 +0100
+
+    fix
+
+[33mcommit de8de8768c236f3396c53cab40d3eb5e0cf5b054[m
+Author: mahmoudbecheikh <becheikh.mahmoud.3@gmail.com>
+Date:   Tue Jul 23 11:39:51 2024 +0100
+
+    forum
+
+[33mcommit 58531d352d973382d3660ac7002f9a0f19050a7c[m
+Merge: 46ec898 47524b8
+Author: eyabenamara <eyabenamara288@gmail.com>
+Date:   Tue Jul 23 11:16:53 2024 +0100
+
+    cours/niveau integration
+
+[33mcommit 46ec898583531569e0cdc529dda0c2fb3788255a[m
+Author: eyabenamara <eyabenamara288@gmail.com>
+Date:   Tue Jul 23 11:11:14 2024 +0100
+
+    cours/niveau integration
+
+[33mcommit 47524b837774f8485973c69009211cff143f3efe[m
+Author: chadhahannachi <chadha.hannachi@esprit.tn>
+Date:   Sat Jul 20 17:39:05 2024 +0100
+
+    update login file
+
+[33mcommit bb3ed064dc3c60bd806d82e699ac4d8ab0d78d46[m
+Author: chadhahannachi <chadha.hannachi@esprit.tn>
+Date:   Sat Jul 20 15:41:56 2024 +0100
+
+    gestion user
+
+[33mcommit 438086c0790fb39bd595e82813e215f830cc550c[m
+Author: mahmoudbecheikh <becheikh.mahmoud.3@gmail.com>
+Date:   Thu Jul 18 13:11:33 2024 +0100
+
+    fix
+
+[33mcommit 8f5012c20aa8fde5b18aa64611fcad657a34dc47[m
+Author: mahmoudbecheikh <becheikh.mahmoud.3@gmail.com>
+Date:   Thu Jul 18 12:53:45 2024 +0100
+
+    integration
+
+[33mcommit 7b1b5f7cbe041b91efb2093523783fa5c8ea7253[m
+Merge: a3fca78 1ac0fb2
+Author: BenAmaraEya <115041621+BenAmaraEya@users.noreply.github.com>
+Date:   Thu Jul 18 10:48:33 2024 +0100
+
+    Merge pull request #2 from mahmoudbecheikh/eya
+    
+    gestion des niveaux
+
+[33mcommit 1ac0fb2daff82c5b1b99f1860931fb8cddddbe4a[m[33m ([m[1;31morigin/eya[m[33m)[m
+Author: eyabenamara <eyabenamara288@gmail.com>
+Date:   Thu Jul 18 10:47:15 2024 +0100
+
+    gestion des niveaux
+
+[33mcommit a3fca78c643df25b5999b66ea3d7ef28c1a3c527[m
+Merge: 517368f afa630f
+Author: BenAmaraEya <115041621+BenAmaraEya@users.noreply.github.com>
+Date:   Sun Jul 14 13:28:50 2024 +0100
+
+    Merge pull request #1 from mahmoudbecheikh/eya
+    
+    sprint1
+
+[33mcommit afa630f3774e2442b27517c35bc333dd202ced03[m
+Merge: 7523480 517368f
+Author: eyabenamara <eyabenamara288@gmail.com>
+Date:   Sun Jul 14 13:26:17 2024 +0100
+
+    second commit
+
+[33mcommit 7523480f7967f451f079208859d67225be99b4a9[m
+Author: eyabenamara <eyabenamara288@gmail.com>
+Date:   Sun Jul 14 12:38:47 2024 +0100
+
+    S1 v0
+
+[33mcommit 517368f1b9f661d6f078e721348a49bbdcfcd16e[m
+Author: chadhahannachi <chadha.hannachi@esprit.tn>
+Date:   Wed Jul 10 14:28:28 2024 +0100
+
+    Gestion User
+
+[33mcommit 0fa37595923ea5167265a520d34a430f1ab776d7[m
+Author: eyabenamara <eyabenamara288@gmail.com>
+Date:   Wed Jul 10 00:03:51 2024 +0100
+
+    gestion formation v1
+
+[33mcommit 127bc24ba30b7aee04068f75125d2b7b5b54dddd[m
+Author: mahmoudbecheikh <becheikh.mahmoud.3@gmail.com>
+Date:   Fri Jul 5 19:00:00 2024 +0100
+
+    first commit
