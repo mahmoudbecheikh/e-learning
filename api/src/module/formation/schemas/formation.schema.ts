@@ -9,7 +9,8 @@ export type FormationDocument = HydratedDocument<Formation>;
 
 @Schema()
 export class Formation {
-
+  @Prop({ required: true })
+  formationId: string;
 
   @Prop({ required: true })
   titre: string;
@@ -29,8 +30,6 @@ export class Formation {
   @Prop({ required: true })
   nbrNiveau: number;
 
-  @Prop({ type: [NiveauSchema], default: [] })
-  niveaux: Types.DocumentArray<Niveau>;
 
   @Prop({ type: [MessageSchema], default: [] })
   forums: Types.DocumentArray<Message>;

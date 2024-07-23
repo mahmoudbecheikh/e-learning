@@ -162,7 +162,7 @@ export class FormationService {
       throw new Error('No clients found to notify');
     }
 
-    await this.sendEmailNotifications(clients, savedFormation);
+    //await this.sendEmailNotifications(clients, savedFormation);
 
     return savedFormation;
   }
@@ -199,39 +199,42 @@ export class FormationService {
     return this.formationModel.findByIdAndDelete(objectId).exec();
   }*/
 
-    async destroy(id: string): Promise<Formation> {
+    async destroy(id: string): Promise<{ message: string }>  {
       id = id.trim();
-  
+    
       if (!Types.ObjectId.isValid(id)) {
         throw new NotFoundException(`Invalid ID format: ${id}`);
       }
-  
+    
       const objectId = new Types.ObjectId(id);
-  
+    
       const formation = await this.formationModel.findById(objectId).exec();
       if (!formation) {
         throw new NotFoundException(`Formation with id ${id} not found`);
       }
-  
+    
       // Delete associated Niveaux and their Cours
       if (formation.niveau && formation.niveau.length > 0) {
-        const niveauIds = formation.niveau.map(niveau => niveau instanceof Document ? (niveau as any)._id : niveau).filter(id => id !== null);
+        const niveauIds = formation.niveau.map(niveau => new Types.ObjectId(niveau._id as any));
         if (niveauIds.length > 0) {
-          console.log('Deleting Niveaux with IDs:', niveauIds); 
+          console.log('Deleting Niveaux with IDs:', niveauIds);
           await Promise.all(
             niveauIds.map(async (niveauId) => {
               const niveau = await this.niveauModel.findById(niveauId).exec();
               if (niveau && niveau.cours.length > 0) {
-                await this.coursModel.deleteMany({ _id: { $in: niveau.cours } }).exec();
+                const coursIds = niveau.cours.map(coursId => new Types.ObjectId(coursId as any));
+                await this.coursModel.deleteMany({ _id: { $in: coursIds } }).exec();
               }
             }),
           );
           await this.niveauModel.deleteMany({ _id: { $in: niveauIds } }).exec();
         }
       }
-  
-      return this.formationModel.findByIdAndDelete(objectId).exec();
+    
+      await this.formationModel.findByIdAndDelete(objectId).exec();
+      return { message: 'Formation, niveaux, and courses successfully deleted' };
     }
+    
 
   async getAll(): Promise<Formation[]> {
     return this.formationModel.find().populate('niveau').exec();
@@ -247,7 +250,7 @@ export class FormationService {
     return this.formationModel.findById(id).populate('niveau').exec();
   }
 
-  private async sendEmailNotifications(clients: Client[], formation: Formation) {
+  /*private async sendEmailNotifications(clients: Client[], formation: Formation) {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -271,5 +274,5 @@ export class FormationService {
         console.error(`Failed to send email to ${client.email}:`, error);
       }
     }
-  }
+  }*/
 }
