@@ -42,7 +42,7 @@ export class FormationController {
   }
   @Patch(':id/niveaux')
   async addLevel(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Body() createNiveauDto: CreateNiveauDto,
   ) {
     const niveau = new Niveau(createNiveauDto);

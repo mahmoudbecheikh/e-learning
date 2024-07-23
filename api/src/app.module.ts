@@ -11,6 +11,7 @@ import { FormationModule } from './module/formation/formation.module';
 import { NiveauModule } from './module/niveau/niveau.module';
 import { MailerConfigModule } from './auth/mailer.module';
 import { EvaluationsModule } from './module/evaluation/evaluation.module';
+import { MessageModule } from './module/message/message.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -28,6 +29,8 @@ import { EvaluationsModule } from './module/evaluation/evaluation.module';
     NiveauModule,
     MailerConfigModule,
     EvaluationsModule
+
+    MessageModule,
 
   ],
   controllers: [AppController],

@@ -1,28 +1,36 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-import { Box, Text, Image, Heading, Input, VStack, Container } from '@chakra-ui/react';
-import { Carousel } from 'react-responsive-carousel';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import {
+  Box,
+  Text,
+  Image,
+  Heading,
+  Input,
+  VStack,
+  Container,
+} from "@chakra-ui/react";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const Formations = () => {
   const [formations, setFormations] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const getFormation = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/formation');
+        const response = await axios.get("http://localhost:5000/formation");
         setFormations(response.data);
       } catch (error) {
-        console.error('Erreur de recuperation des formations', error);
+        console.error("Erreur de recuperation des formations", error);
       }
     };
 
     getFormation();
   }, []);
 
-  const filteredFormations = formations.filter(formation =>
+  const filteredFormations = formations.filter((formation) =>
     formation.titre.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -61,9 +69,7 @@ const Formations = () => {
                 <Heading as="h3" size="lg">
                   {formation.titre}
                 </Heading>
-                <Text>
-                  {formation.description}
-                </Text>
+                <Text>{formation.description}</Text>
               </Box>
             </VStack>
           </Box>
