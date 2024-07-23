@@ -94,7 +94,7 @@ const AddFormationsForm = () => {
     });
   };
 
- const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:5000/formation", formationData);
@@ -202,19 +202,6 @@ const AddFormationsForm = () => {
                     type="text"
                     placeholder="Nom du cours"
                     value={cours.nom}
-                    readOnly
-                    size="sm"
-                  />
-                  <Textarea
-                    placeholder="Description du cours"
-                    value={cours.description}
-                    readOnly
-                    size="sm"
-                  />
-                  <Input
-                    type="text"
-                    placeholder="URL de la vidéo"
-                    value={cours.video}
                     readOnly
                     size="sm"
                   />

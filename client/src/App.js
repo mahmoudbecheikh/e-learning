@@ -20,6 +20,7 @@ import ClientList from "./pages/user/users/listclient";
 import EmployeurList from "./pages/user/users/listemployeur";
 import AdminList from "./pages/user/users/listadmin";
 import Messagesection from "./pages/message";
+import FormationDetails from "./pages/clients/FormationDetails";
 function App() {
   return (
     <Router>
@@ -39,6 +40,7 @@ function App() {
         <Route path="/cours/update/:coursId" element={<UpdateCourse />} />
         <Route path="/message" element={<Messagesection />} />
         <Route path="/formationdetails/:id/message" element={<Messagesection />} />
+        <Route path="/formationdetails/:id" element={<FormationDetails />} />
 
       </Routes>
     </Router>

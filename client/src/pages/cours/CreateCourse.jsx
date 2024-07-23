@@ -54,6 +54,7 @@ const CreateCourse = () => {
       if (data) {
         setBtnLoading(false);
         const newCourse = {
+          id: data._id,  // Assuming the backend returns the course ID
           nom,
           description,
           video: data.videoUrl,  // Assuming the backend returns the video URL
