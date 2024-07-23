@@ -1,32 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   Box,
   FormControl,
   FormLabel,
   Input,
   Textarea,
-  Select,
   NumberInput,
+  NumberInputField,
   Button,
   Stack,
   HStack,
-  VStack,
   IconButton,
 } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
 
 const AddFormationsForm = () => {
   const [formationData, setFormationData] = useState({
-    formationId: "",
     titre: "",
     objectif: "",
     description: "",
     competenceAquises: "",
     resultatSouhaites: "",
     nbrNiveau: 0,
-    niveaux: []
+    niveau: [],
   });
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (location.state && location.state.formationData) {
+      setFormationData(location.state.formationData);
+      if (location.state.niveauIndex !== undefined && location.state.newCourse) {
+        handleCoursAdded(location.state.niveauIndex, location.state.newCourse);
+      }
+    }
+  }, [location.state]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,17 +50,17 @@ const AddFormationsForm = () => {
   const handleAddNiveau = () => {
     setFormationData((prevState) => ({
       ...prevState,
-      niveaux: [...prevState.niveaux, { title: "" }],
+      niveau: [...prevState.niveau, { title: "", cours: [] }],
       nbrNiveau: prevState.nbrNiveau + 1,
     }));
   };
 
   const handleRemoveNiveau = (index) => {
     setFormationData((prevState) => {
-      const niveaux = prevState.niveaux.filter((_, i) => i !== index);
+      const niveau = prevState.niveau.filter((_, i) => i !== index);
       return {
         ...prevState,
-        niveaux,
+        niveau,
         nbrNiveau: prevState.nbrNiveau - 1,
       };
     });
@@ -57,30 +68,37 @@ const AddFormationsForm = () => {
 
   const handleNiveauChange = (index, value) => {
     setFormationData((prevState) => {
-      const niveaux = prevState.niveaux.map((niveau, i) =>
-        i === index ? { ...niveau, title: value } : niveau
+      const niveau = prevState.niveau.map((niv, i) =>
+        i === index ? { ...niv, title: value } : niv
       );
       return {
         ...prevState,
-        niveaux,
+        niveau,
       };
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleAddCours = (niveauIndex) => {
+    navigate(`/cours/add/${niveauIndex}`, { state: { formationData } });
+  };
 
+  const handleCoursAdded = (niveauIndex, newCours) => {
+    setFormationData((prevState) => {
+      const niveau = prevState.niveau.map((niv, i) =>
+        i === niveauIndex ? { ...niv, cours: [...niv.cours, newCours] } : niv
+      );
+      return {
+        ...prevState,
+        niveau,
+      };
+    });
+  };
+
+ const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       const response = await axios.post("http://localhost:5000/formation", formationData);
       console.log("Response:", response.data);
-
-      const formationId = response.data._id;
-      for (const niveau of formationData.niveaux) {
-        await axios.post(`http://localhost:5000/niveau`, {
-          ...niveau,
-          formation: formationId
-        });
-      }
     } catch (error) {
       if (error.response) {
         console.error("Erreur d'ajout de la formation:", {
@@ -99,18 +117,6 @@ const AddFormationsForm = () => {
       <Box as="h2">Ajouter une formation</Box>
       <Stack spacing={4}>
         <FormControl isRequired>
-          <FormLabel htmlFor="formationId">Id</FormLabel>
-          <Input
-            type="text"
-            name="formationId"
-            value={formationData.formationId}
-            onChange={handleChange}
-            placeholder="formation id"
-          />
-        </FormControl>
-
-      
-        <FormControl isRequired>
           <FormLabel htmlFor="titre">Titre</FormLabel>
           <Input
             type="text"
@@ -120,8 +126,6 @@ const AddFormationsForm = () => {
             placeholder="titre"
           />
         </FormControl>
-         
-       
         <FormControl isRequired>
           <FormLabel htmlFor="objectif">Objectif</FormLabel>
           <Input
@@ -132,8 +136,6 @@ const AddFormationsForm = () => {
             placeholder="objectif"
           />
         </FormControl>
-
-        
         <FormControl isRequired>
           <FormLabel htmlFor="description">Description</FormLabel>
           <Input
@@ -144,8 +146,6 @@ const AddFormationsForm = () => {
             placeholder="description"
           />
         </FormControl>
-
-       
         <FormControl isRequired>
           <FormLabel htmlFor="competenceAquises">Compétences Acquises</FormLabel>
           <Input
@@ -156,8 +156,6 @@ const AddFormationsForm = () => {
             placeholder="Compétences Acquises"
           />
         </FormControl>
-
-        
         <FormControl isRequired>
           <FormLabel htmlFor="resultatSouhaites">Résultats Souhaités</FormLabel>
           <Input
@@ -168,43 +166,71 @@ const AddFormationsForm = () => {
             placeholder="Résultats Souhaités"
           />
         </FormControl>
-        
-
-        
-       
-
-
-       
         <Stack spacing={2}>
-  <Box as="label" htmlFor="niveaux">
-    Niveaux
-  </Box>
-  {formationData.niveaux.map((niveau, index) => (
-    <HStack key={index} spacing={4} alignItems="center" className="niveau-entry">
-      <Input
-        type="text"
-        name={`niveau-${index}`} // Use a unique name for each level input
-        value={niveau.title}
-        onChange={(e) => handleNiveauChange(index, e.target.value)}
-        placeholder={`Niveau ${index + 1} Titre`}
-        size="sm"
-      />
-      <IconButton icon={<CloseIcon />} size="sm" colorScheme="red" onClick={() => handleRemoveNiveau(index)} />
-    </HStack>
-  ))}
-  <Button colorScheme="teal" size="sm" onClick={handleAddNiveau}>
-    Add Niveau
-  </Button>
-</Stack>
+          <Box as="label" htmlFor="niveau">
+            Niveaux
+          </Box>
+          {formationData.niveau.map((niv, index) => (
+            <Box key={index} className="niveau-entry" mb={4}>
+              <HStack spacing={4} alignItems="center">
+                <Input
+                  type="text"
+                  name={`niveau-${index}`}
+                  value={niv.title}
+                  onChange={(e) => handleNiveauChange(index, e.target.value)}
+                  placeholder={`Niveau ${index + 1} Titre`}
+                  size="sm"
+                />
+                <IconButton
+                  icon={<CloseIcon />}
+                  size="sm"
+                  colorScheme="red"
+                  onClick={() => handleRemoveNiveau(index)}
+                />
+              </HStack>
+              <Button
+                mt={2}
+                size="sm"
+                colorScheme="teal"
+                onClick={() => handleAddCours(index)}
+              >
+                Ajouter Cours
+              </Button>
+              {niv.cours.map((cours, coursIndex) => (
+                <Box key={coursIndex} mt={2} pl={4} borderLeft="2px solid teal">
+                  <Input
+                    type="text"
+                    placeholder="Nom du cours"
+                    value={cours.nom}
+                    readOnly
+                    size="sm"
+                  />
+                  <Textarea
+                    placeholder="Description du cours"
+                    value={cours.description}
+                    readOnly
+                    size="sm"
+                  />
+                  <Input
+                    type="text"
+                    placeholder="URL de la vidéo"
+                    value={cours.video}
+                    readOnly
+                    size="sm"
+                  />
+                </Box>
+              ))}
+            </Box>
+          ))}
+          <Button colorScheme="teal" size="sm" onClick={handleAddNiveau}>
+            Ajouter Niveau
+          </Button>
+        </Stack>
         <FormControl>
           <FormLabel htmlFor="nbrNiveau">Nombre des Niveaux</FormLabel>
-          <NumberInput
-            name="nbrNiveau"
-            value={formationData.nbrNiveau}
-            readOnly
-            isDisabled 
-           
-          />
+          <NumberInput name="nbrNiveau" value={formationData.nbrNiveau} readOnly isDisabled>
+            <NumberInputField />
+          </NumberInput>
         </FormControl>
         <Button type="submit" colorScheme="blue" variant="solid">
           Ajouter

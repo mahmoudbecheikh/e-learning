@@ -1,9 +1,11 @@
 
-import { IsString, IsInt } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsString, IsInt, IsArray, ValidateNested } from 'class-validator';
+import { CreateNiveauDto } from 'src/module/niveau/dto/create-niveau.dto';
 
 export class CreateFormationDto {
-  @IsString()
-  formationId: string;
+ /* @IsString()
+  formationId: string;*/
 
   @IsString()
   titre: string;
@@ -23,5 +25,8 @@ export class CreateFormationDto {
   @IsInt()
   nbrNiveau: number;
 
-  readonly niveau: { title: string}[];
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateNiveauDto)
+  niveau: CreateNiveauDto[];
 }

@@ -14,61 +14,6 @@ const Login = () => {
     const [loginData, setLoginData] = useState({}); // État pour stocker les données de connexion des utilisateurs
 
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     let isvalid = true;
-    //     let validationErrors = {};
-
-    //     if (!formData.email) {
-    //         isvalid = false;
-    //         validationErrors.email = "Email requis";
-    //     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-    //         isvalid = false;
-    //         validationErrors.email = "Format d'email incorrect";
-    //     }
-
-    //     if (!formData.password) {
-    //         isvalid = false;
-    //         validationErrors.password = "Mot de passe requis";
-    //     } else if (formData.password.length < 6) {
-    //         isvalid = false;
-    //         validationErrors.password = "Le mot de passe doit comporter au moins 6 caractères";
-    //     }
-
-    //     if (!isvalid) {
-    //         setErrors(validationErrors);
-    //         setValid(isvalid);
-    //         return;
-    //     }
-
-    //     try {
-    //         const result = await axios.get('http://localhost:5001/auth/login');
-    //         let userFound = false;
-    //         result.data.forEach(user => {
-    //             if (user.email === formData.email) {
-    //                 userFound = true;
-    //                 if (user.password === formData.password) {
-    //                     alert("Connexion réussie");
-    //                     localStorage.setItem('userId', user.id); // Stocker l'ID de l'utilisateur dans le localStorage
-    //                     navigate('/'); // Redirection vers la page d'accueil ou une autre page
-    //                 } else {
-    //                     isvalid = false;
-    //                     validationErrors.password = "Mot de passe incorrect";
-    //                 }
-    //             }
-    //         });
-    //         if (!userFound) {
-    //             isvalid = false;
-    //             validationErrors.email = "Email incorrect";
-    //         }
-    //         setErrors(validationErrors);
-    //         setValid(isvalid);
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // };
-
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         let isvalid = true;
@@ -108,22 +53,21 @@ const Login = () => {
             if (!response.ok) {
               const errorData = await response.json();
               console.error('Error during login:', errorData.message || 'Failed to sign in. Please try again later.');
+              alert('mot de passe incorrect! Réessayez'); // Affiche une alerte lorsque la connexion est réussie
+
             } else {
               const responseData = await response.json();
               console.log('Login successful! Received token:', responseData.token);
     
               localStorage.setItem('token', responseData.token);
               alert('Connexion réussie !'); // Affiche une alerte lorsque la connexion est réussie
-              navigate('/home');
+              navigate('/');
             }
           } catch (err) {
             console.error('Error during login:', err.message);
         }
     };
-    
-    
 
-     
 
     return (
         <div>
@@ -177,7 +121,7 @@ const Login = () => {
                                                 <FormErrorMessage position="absolute" bottom="0" fontSize="xs">{errors.password}</FormErrorMessage>
                                             </Box>
                                         </FormControl>
-                                        <Link to="/resetpwd" style={{ marginLeft: '6px' }}>
+                                        <Link to="/reset-password-request" style={{ marginLeft: '6px' }}>
 
                                     <button style={{ color: 'red' }} >mot de passe oublié</button></Link>
                                     </div>

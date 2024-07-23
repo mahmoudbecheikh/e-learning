@@ -11,7 +11,10 @@ const Registration = () => {
         password: '',
         cpassword: '',
         numtel: '',
-        cin: ''
+        cin: '',
+        secteur: '',
+        nomEntreprise: '',
+        poste: ''
     });
 
     const resetForm = () => {
@@ -22,7 +25,10 @@ const Registration = () => {
           password: '',
           cpassword: '',
           numtel: '',
-          cin: ''
+          cin: '',
+          secteur: '',
+          nomEntreprise: '',
+          poste: ''
         });
       };
     const [errors, setErrors] = useState({});
@@ -77,7 +83,18 @@ const Registration = () => {
         isvalid = false;
         validationErrors.cin = "cin required";
     }
-
+    if (!formData.secteur) {
+        isvalid = false;
+        validationErrors.secteur = "secteur required";
+    }
+    if (!formData.nomEntreprise) {
+        isvalid = false;
+        validationErrors.nomEntreprise = "nomEntreprise required";
+    }
+    if (!formData.poste) {
+        isvalid = false;
+        validationErrors.poste = "poste required";
+    }
 
 
     if (!isSwitchChecked) {
@@ -104,11 +121,12 @@ const Registration = () => {
             } else {
                 const responseData = await response.json();
                 console.log('Signup successful! Token received:', responseData.token);
-
                 localStorage.setItem('token', responseData.token);
                 setIsSignUpSuccess(true);
                 setSuccessMessage('You signed up to our application. Now you can sign in.');
                 resetForm();
+                alert('You signed up to our application. Now you can sign in.'); // Affiche une alerte lorsque la connexion est réussie
+                navigate('/login');
             }
         } catch (error) {
             console.error('Error during signup request:', error);
@@ -203,6 +221,21 @@ const Registration = () => {
                                             </Box>
                                         </FormControl>
                                     </div>
+
+                                    <div className="mb-3 col-md-6">
+                                        <FormControl isInvalid={!!errors.cin}>
+                                            <FormLabel>cin <span className="text-danger">*</span></FormLabel>
+                                            <Input
+                                                type="text"
+                                                name="cin"
+                                                placeholder="Enter cin"
+                                                onChange={(event) => setFormData({ ...formData, cin: event.target.value })}
+                                            />
+                                            <Box height="20px" position="relative">
+                                                <FormErrorMessage position="absolute" bottom="0" fontSize="xs">{errors.cin}</FormErrorMessage>
+                                            </Box>
+                                        </FormControl>
+                                    </div>
                                     
                                     {/* Email */}
                                     <div className="mb-3 col-md-6">
@@ -249,7 +282,9 @@ const Registration = () => {
                                                 <FormErrorMessage position="absolute" bottom="0" fontSize="xs">{errors.cpassword}</FormErrorMessage>
                                             </Box>
                                         </FormControl>
+                                        </div>
 
+                                        <div className="mb-3 col-md-6">
                                         <FormControl isInvalid={!!errors.numtel}>
                                             <FormLabel>numtel <span className="text-danger">*</span></FormLabel>
                                             <Input
@@ -262,20 +297,55 @@ const Registration = () => {
                                                 <FormErrorMessage position="absolute" bottom="0" fontSize="xs">{errors.numtel}</FormErrorMessage>
                                             </Box>
                                         </FormControl>
+                                        </div>
+                                        
 
-                                        <FormControl isInvalid={!!errors.cin}>
-                                            <FormLabel>cin <span className="text-danger">*</span></FormLabel>
+                                    <div className="mb-3 col-md-6">
+                                        <FormControl isInvalid={!!errors.secteur}>
+                                            <FormLabel>secteur <span className="text-danger">*</span></FormLabel>
                                             <Input
                                                 type="text"
-                                                name="cin"
-                                                placeholder="Enter cin"
-                                                onChange={(event) => setFormData({ ...formData, cin: event.target.value })}
+                                                name="secteur"
+                                                placeholder="Enter secteur"
+                                                onChange={(event) => setFormData({ ...formData, secteur: event.target.value })}
                                             />
                                             <Box height="20px" position="relative">
-                                                <FormErrorMessage position="absolute" bottom="0" fontSize="xs">{errors.cin}</FormErrorMessage>
+                                                <FormErrorMessage position="absolute" bottom="0" fontSize="xs">{errors.secteur}</FormErrorMessage>
                                             </Box>
                                         </FormControl>
                                     </div>
+
+                                    <div className="mb-3 col-md-6">
+                                        <FormControl isInvalid={!!errors.nomEntreprise}>
+                                            <FormLabel>nom Entreprise <span className="text-danger">*</span></FormLabel>
+                                            <Input
+                                                type="text"
+                                                name="nomEntreprise"
+                                                placeholder="Enter nom Entreprise"
+                                                onChange={(event) => setFormData({ ...formData, nomEntreprise: event.target.value })}
+                                            />
+                                            <Box height="20px" position="relative">
+                                                <FormErrorMessage position="absolute" bottom="0" fontSize="xs">{errors.nomEntreprise}</FormErrorMessage>
+                                            </Box>
+                                        </FormControl>
+                                    </div>
+
+                                    <div className="mb-3 col-md-6">
+                                        <FormControl isInvalid={!!errors.poste}>
+                                            <FormLabel>poste <span className="text-danger">*</span></FormLabel>
+                                            <Input
+                                                type="text"
+                                                name="poste"
+                                                placeholder="Enter poste"
+                                                onChange={(event) => setFormData({ ...formData, poste: event.target.value })}
+                                            />
+                                            <Box height="20px" position="relative">
+                                                <FormErrorMessage position="absolute" bottom="0" fontSize="xs">{errors.poste}</FormErrorMessage>
+                                            </Box>
+                                        </FormControl>
+                                    </div>
+
+
                                     <div className="mb-3 col-md-12">
                                         <FormControl isInvalid={!!errors.terms}>
                                             <HStack justify="center" align="center">
@@ -299,8 +369,7 @@ const Registration = () => {
                                                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in leo vel justo ullamcorper posuere. Sed accumsan iaculis fermentum.
                                                     </ModalBody>
                                                     <ModalFooter>
-                                                        <Button style={{ backgroundColor: '#4D6466', borderRadius: '50px', color: 'white', fontWeight: '400',paddingLeft: '30px',
-                                                paddingRight: '30px' }}
+                                                        <Button colorScheme='blue'
                                                             onClick={onClose}>
                                                             Close
                                                         </Button>

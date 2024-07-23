@@ -2,15 +2,18 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Button } from "@chakra-ui/react";
 import "./CreateCourse.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import * as moment from 'moment';
 
 const CreateCourse = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { niveauIndex } = useParams();
+  const { formationData } = location.state || {};
 
   const [nom, setNom] = useState("");
   const [description, setDescription] = useState("");
-  const [video, setvideo] = useState("");
+  const [video, setVideo] = useState("");
   const [files, setFiles] = useState([]);
   const [videoPrev, setVideoPrev] = useState("");
   const [btnLoading, setBtnLoading] = useState(false);
@@ -23,7 +26,7 @@ const CreateCourse = () => {
 
     reader.onloadend = () => {
       setVideoPrev(reader.result);
-      setvideo(video);
+      setVideo(video);
     };
   };
 
@@ -35,32 +38,41 @@ const CreateCourse = () => {
     setBtnLoading(true);
     e.preventDefault();
     const myForm = new FormData();
-    let dateCreation = (moment(Date.now())).format('DD-MMM-YYYY HH:mm:ss')
+    let dateCreation = moment(Date.now()).format('DD-MMM-YYYY HH:mm:ss');
 
     myForm.append("nom", nom);
     myForm.append("description", description);
     myForm.append("files", video);
-    myForm.append("dateCreation",dateCreation)
+    myForm.append("dateCreation", dateCreation);
 
     for (let index = 0; index < files.length; index++) {
       myForm.append("files", files[index]);
     }
 
     try {
-      const { data } = await axios.post(`http://localhost:5000/cours`, myForm);
+      const { data } = await axios.post('http://localhost:5000/cours', myForm);
       if (data) {
         setBtnLoading(false);
-        setNom("");
-        setDescription("");
-        setvideo("");
-        setVideoPrev("");
-        navigate(`/cours`);
+        const newCourse = {
+          nom,
+          description,
+          video: data.videoUrl,  // Assuming the backend returns the video URL
+          dateCreation,
+        };
+        navigate('/addformation', {
+          state: {
+            formationData,
+            niveauIndex: parseInt(niveauIndex, 10),
+            newCourse,
+          },
+        });
       }
     } catch (error) {
       console.log(error);
       setBtnLoading(false);
     }
   };
+
   return (
     <div className="form-container">
       <h2>Add Course</h2>

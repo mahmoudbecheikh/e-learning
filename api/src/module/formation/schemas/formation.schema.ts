@@ -6,8 +6,8 @@ import { Niveau, NiveauSchema } from 'src/module/niveau/schemas/niveau.schema';
 
 @Schema()
 export class Formation extends Document {
-  @Prop({ required: true })
-  formationId: string;
+  /*@Prop({ required: true })
+  formationId: string;*/
 
   @Prop({ required: true })
   titre: string;
@@ -27,8 +27,8 @@ export class Formation extends Document {
   @Prop({required:true})
   nbrNiveau:number;
 
-  @Prop({ type: [NiveauSchema], default: [] })
-  niveaux: Types.DocumentArray<Niveau>;
+  @Prop({ type: [Types.ObjectId], ref: 'Niveau', required: true })
+  niveau: Niveau[];
 }
 
 export const FormationSchema = SchemaFactory.createForClass(Formation);

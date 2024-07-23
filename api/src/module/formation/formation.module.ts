@@ -1,20 +1,21 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { FormationService } from './formation.service';
 import { FormationController } from './formation.controller';
 import { Formation, FormationSchema } from './schemas/formation.schema';
 import { AuthModule } from '../../auth/auth.module';
-import { NiveauModule } from 'src/module/niveau/niveau.module';
+import { NiveauModule } from '../niveau/niveau.module';
+import { CoursModule } from '../cours/cours.module';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: Formation.name, schema: FormationSchema },
-    ]),
+    MongooseModule.forFeature([{ name: Formation.name, schema: FormationSchema }]),
     AuthModule,
-    NiveauModule,
+    forwardRef(() => NiveauModule),
+    CoursModule  // Use forwardRef to resolve circular dependency
   ],
   providers: [FormationService],
   controllers: [FormationController],
+  exports: [FormationService, MongooseModule.forFeature([{ name: Formation.name, schema: FormationSchema }])],  // Export FormationService if needed in other modules
 })
 export class FormationModule {}

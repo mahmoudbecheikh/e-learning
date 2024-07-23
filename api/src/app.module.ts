@@ -9,6 +9,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { FormationModule } from './module/formation/formation.module';
 import { NiveauModule } from './module/niveau/niveau.module';
+import { MailerConfigModule } from './auth/mailer.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -24,6 +25,7 @@ import { NiveauModule } from './module/niveau/niveau.module';
     CoursModule,
     FormationModule,
     NiveauModule,
+    MailerConfigModule
 
   ],
   controllers: [AppController],
