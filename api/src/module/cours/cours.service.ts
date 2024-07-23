@@ -26,8 +26,6 @@ export class CoursService {
   }
 
   update(id: string, updateCourDto: any) {
-    console.log(updateCourDto);
-    console.log(id);
     return this.coursModel.findByIdAndUpdate(id, updateCourDto);
   }
 

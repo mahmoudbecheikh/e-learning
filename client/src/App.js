@@ -19,6 +19,7 @@ import UserList from "./pages/user/users/listuser";
 import ClientList from "./pages/user/users/listclient";
 import EmployeurList from "./pages/user/users/listemployeur";
 import AdminList from "./pages/user/users/listadmin";
+import Messagesection from "./pages/message";
 function App() {
   return (
     <Router>
@@ -36,6 +37,9 @@ function App() {
         <Route path="/cours/add/:niveauIndex" element={<CreateCourse />} />
         <Route path="/cours/:coursId" element={<CoursItem />} />
         <Route path="/cours/update/:coursId" element={<UpdateCourse />} />
+        <Route path="/message" element={<Messagesection />} />
+        <Route path="/formationdetails/:id/message" element={<Messagesection />} />
+
       </Routes>
     </Router>
   );
