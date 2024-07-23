@@ -51,13 +51,15 @@ const CreateCourse = () => {
 
     try {
       const { data } = await axios.post('http://localhost:5000/cours', myForm);
+      console.log(data)
       if (data) {
         setBtnLoading(false);
         const newCourse = {
-          id: data._id,  // Assuming the backend returns the course ID
+          id: data._id,  
           nom,
           description,
-          video: data.videoUrl,  // Assuming the backend returns the video URL
+          video: data.video, 
+          files:data.files,
           dateCreation,
         };
         navigate('/addformation', {

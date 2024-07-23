@@ -99,6 +99,7 @@ const AddFormationsForm = () => {
     try {
       const response = await axios.post("http://localhost:5000/formation", formationData);
       console.log("Response:", response.data);
+       navigate('/formations')
     } catch (error) {
       if (error.response) {
         console.error("Erreur d'ajout de la formation:", {
@@ -203,6 +204,23 @@ const AddFormationsForm = () => {
                     placeholder="Nom du cours"
                     value={cours.nom}
                     readOnly
+                    isDisabled
+                    size="sm"
+                  />
+                   <Input
+                    type="text"
+                    placeholder="description"
+                    value={cours.description}
+                    readOnly
+                    isDisabled
+                    size="sm"
+                  />
+                   <Input
+                    type="text"
+                    placeholder="video"
+                    value={cours.video.originalname}
+                    readOnly
+                    isDisabled
                     size="sm"
                   />
                 </Box>
