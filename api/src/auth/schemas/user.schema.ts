@@ -2,6 +2,11 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 export type UserDocument = User & Document;
 
+export enum Role {
+  Admin = 'admin',
+  Employeur = 'employeur',
+  Client = 'client'
+}
 
 @Schema({
   timestamps: true,
@@ -27,12 +32,7 @@ export class User extends Document {
 
   @Prop()
   datelastcnx: Date;
-}
 
-export const UserSchema = SchemaFactory.createForClass(User);
-
-@Schema()
-export class Client extends User {
   @Prop()
   secteur: string;
 
@@ -41,19 +41,36 @@ export class Client extends User {
 
   @Prop()
   poste: string;
-}
 
-export const ClientSchema = SchemaFactory.createForClass(Client);
-
-@Schema()
-export class Employeur extends User {
   @Prop()
-  poste: string;
+  role: Role;
 }
 
-export const EmployeurSchema = SchemaFactory.createForClass(Employeur);
+export const UserSchema = SchemaFactory.createForClass(User);
 
-@Schema()
-export class Admin extends User {}
+// @Schema()
+// export class Client extends User {
+//   @Prop()
+//   secteur: string;
 
-export const AdminSchema = SchemaFactory.createForClass(Admin);
+//   @Prop()
+//   nomEntreprise: string;
+
+//   @Prop()
+//   poste: string;
+// }
+
+// export const ClientSchema = SchemaFactory.createForClass(Client);
+
+// @Schema()
+// export class Employeur extends User {
+//   @Prop()
+//   poste: string;
+// }
+
+// export const EmployeurSchema = SchemaFactory.createForClass(Employeur);
+
+// @Schema()
+// export class Admin extends User {}
+
+// export const AdminSchema = SchemaFactory.createForClass(Admin);

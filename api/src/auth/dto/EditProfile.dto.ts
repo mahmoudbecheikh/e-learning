@@ -1,5 +1,5 @@
 import { IsEmail, IsNotEmpty, IsNumber, IsString, MinLength, validate } from 'class-validator';
-import { UserRole } from './signup.dto';
+import { Role } from './signup.dto';
 
 
 export class EditProfileDto {
