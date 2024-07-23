@@ -34,7 +34,7 @@ function App() {
         <Route path="/updateFormation/:id" element={<UpdateFormationForm />} />
         <Route path="/*" element={<MainLayout />} />
         <Route path="/cours" element={<ListingCourse />} />
-        <Route path="/cours/add" element={<CreateCourse />} />
+        <Route path="/cours/add/:niveauIndex" element={<CreateCourse />} />
         <Route path="/cours/:coursId" element={<CoursItem />} />
         <Route path="/cours/update/:coursId" element={<UpdateCourse />} />
         <Route path="/message" element={<Messagesection />} />
