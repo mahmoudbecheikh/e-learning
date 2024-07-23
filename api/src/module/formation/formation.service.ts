@@ -17,7 +17,7 @@ export class FormationService {
     @InjectModel(Formation.name) private formationModel: Model<Formation>,
     @InjectModel(Client.name) private clientModel: Model<Client>,
     @InjectModel(Niveau.name) private readonly niveauModel: Model<Niveau>,
-  ) {}
+  ) { }
 
   async create(createFormationDto: CreateFormationDto): Promise<Formation> {
     console.log('Creating formation with data:', createFormationDto);
@@ -26,12 +26,12 @@ export class FormationService {
 
     console.log('Formation created:', savedFormation);
 
-  // If related data is required, validate it here
-  const clients = await this.clientModel.find().exec();
-  if (clients.length === 0) {
-    throw new Error('No clients found to notify');
-  }
-    
+    // If related data is required, validate it here
+    const clients = await this.clientModel.find().exec();
+    if (clients.length === 0) {
+      throw new Error('No clients found to notify');
+    }
+
     await this.sendEmailNotifications(clients, savedFormation);
 
     return savedFormation;
@@ -55,7 +55,13 @@ export class FormationService {
   }
 
   async getById(id: string): Promise<Formation> {
-    return this.formationModel.findById(id).populate('niveaux').exec();
+    return this.formationModel.findById(id)
+      .populate('niveaux')
+      .populate({
+        path: 'forums.user',
+        model: 'Client'
+      })
+      .exec();
   }
 
   private async sendEmailNotifications(clients: Client[], formation: Formation) {
@@ -69,7 +75,7 @@ export class FormationService {
 
     for (const client of clients) {
       const mailOptions = {
-        from: 'eyabenamara288@gmail.com', 
+        from: 'eyabenamara288@gmail.com',
         to: client.email,
         subject: `New Formation Available: ${formation.titre}`,
         text: `A new formation titled "${formation.titre}" is now available. Check it out!`,
