@@ -40,10 +40,7 @@ export class FormationService {
 
     console.log('Formation created:', savedFormation);
 
-<<<<<<< HEAD
     // If related data is required, validate it here
-=======
->>>>>>> 58531d352d973382d3660ac7002f9a0f19050a7c
     const clients = await this.clientModel.find().exec();
     if (clients.length === 0) {
       throw new Error('No clients found to notify');

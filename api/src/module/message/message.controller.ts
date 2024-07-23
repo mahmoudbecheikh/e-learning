@@ -1,20 +1,28 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
+import { CreateForumDto } from './dto/create-forum.dto';
 
 @Controller('messages')
 export class MessageController {
-  constructor(private readonly messageService: MessageService) {}
+  constructor(private readonly messageService: MessageService) { }
 
   @Post()
   create(@Body() createMessageDto: CreateMessageDto) {
     return this.messageService.create(createMessageDto);
   }
 
+  @Post('/forum')
+  createForum(@Body() createForumDto: CreateForumDto) {
+    return this.messageService.createForum(createForumDto);
+  }
+
   @Get()
-  findAll() {
-    return this.messageService.findAll();
+  findByForum(@Body() data: any,
+    @Query('idClient') idClient: string,
+    @Query('idFormation') idFormation: string,) {
+    return this.messageService.findForum(idClient,idFormation);
   }
 
 
