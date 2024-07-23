@@ -10,6 +10,7 @@ import { join } from 'path';
 import { FormationModule } from './module/formation/formation.module';
 import { NiveauModule } from './module/niveau/niveau.module';
 import { MailerConfigModule } from './auth/mailer.module';
+import { EvaluationsModule } from './module/evaluation/evaluation.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -25,7 +26,8 @@ import { MailerConfigModule } from './auth/mailer.module';
     CoursModule,
     FormationModule,
     NiveauModule,
-    MailerConfigModule
+    MailerConfigModule,
+    EvaluationsModule
 
   ],
   controllers: [AppController],
