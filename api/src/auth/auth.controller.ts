@@ -5,9 +5,9 @@ import { SignUpDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
 import { AuthenticatedGuard } from './utils/LocalGuard';
 import { AllowAllGuard } from './utils/AllowAllGuard';
-import { getAdmin, getClient, getEmployeur, getUser } from './decorator/get-user.decorator';
+import {getUser } from './decorator/get-user.decorator';
 import { JwtAuthGuard } from './guard/JwtAuthGuard';
-import { Admin, Client, Employeur, User } from './schemas/user.schema';
+import {User } from './schemas/user.schema';
 import { changePassDto } from './dto/changePass.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -60,7 +60,7 @@ export class AuthController {
 
 
   @Delete('users/:id')
-  async deleteUser(@Param('id') id: string): Promise<void> {
+  async deleteUser(@Param('id') id: string): Promise<any> {
     return this.authService.delete(id);
   }
   
@@ -130,14 +130,13 @@ export class AuthController {
     return user._id;
   }
 
-
   @UseGuards(JwtAuthGuard)
   @Patch('/changePass')
-  async changePass(@Body() changePassDto: changePassDto, @getUser() user: User, @getClient() client: Client, @getEmployeur() employeur: Employeur, @getAdmin() admin: Admin ) {
+  async changePass(@Body() changePassDto: changePassDto, @getUser() user: User) {
     try {
-      const updatedUser = await this.authService.changePass(changePassDto, user,client,employeur,admin);
+      const updatedUser = await this.authService.changePass(changePassDto, user);
 
-      return { message: 'Password changed successfully', user: updatedUser, client:updatedUser,employeur:updatedUser, admin:updatedUser };
+      return { message: 'Password changed successfully', user: updatedUser};
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
@@ -150,41 +149,32 @@ export class AuthController {
 
 
   //add client
-  @Post('/client')
-  async createClient(@Body() clientData: Partial<Client>): Promise<Client> {
-    return this.authService.addClient(clientData);
+  @Post('/user')
+  async createUser(@Body() userData: Partial<User>): Promise<User> {
+    return this.authService.addUser(userData);
   }
 
-  //find all clients
-  @Get('/client')
-  async GetAllClient(){
-    return this.authService.findClients();
+  //find all users
+  @Get('/allusers')
+  async GetAllUsers(){
+    return this.authService.findUsers();
   }
   
-//add employeur
-@Post('/employeur')
-async createEmployeur(@Body() employeurData: Partial<Employeur>): Promise<Employeur>{
-  return this.authService.addEmployeur(employeurData);
-}
+  @Get('/client')
+  async getClients(): Promise<User[]> {
+    return this.authService.findClients();
+  }
 
-//find all employeurs
-@Get('/employeur')
-async GetAllEmployeurs(){
-  return this.authService.findEmployeurs();
-}
+  @Get('/employeur')
+  async getEmployeurs(): Promise<User[]> {
+    return this.authService.findEmployeurs();
+  }
 
-//add admin
-@Post('/admin')
-async createAdmin(@Body() adminData: Partial<Admin>): Promise<Admin>{
-  return this.authService.addAdmin(adminData);
-}
 
-//find all admins
-@Get('/admin')
-async GetAllAdmins(){
-  return this.authService.findAdmins();
-}
-
+  @Get('/admin')
+  async getAdmins(): Promise<User[]> {
+    return this.authService.findAdmins();
+  }
 
 @Post('/reset-password-request')
   async requestPasswordReset(@Body('email') email: string): Promise<void> {

@@ -1,12 +1,12 @@
 import { Injectable, BadRequestException, HttpException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { SignUpDto } from './dto/signup.dto';
+import { Role, SignUpDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
 import { changePassDto } from './dto/changePass.dto';
 import { EditProfileDto } from './dto/EditProfile.dto';
 import * as bcrypt from 'bcryptjs';
-import { Admin, Client, Employeur, User } from './schemas/user.schema';
+import {User } from './schemas/user.schema';
 import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { MailerService } from '@nestjs-modules/mailer';
@@ -18,9 +18,6 @@ export class AuthService {
 
     @InjectModel(User.name)
     private userModel: Model<User>,
-    @InjectModel(Client.name) private clientModel: Model<Client>,
-    @InjectModel(Employeur.name) private employeurModel: Model<Employeur>,
-    @InjectModel(Admin.name) private adminModel: Model<Admin>,
     private jwtService: JwtService,
   
   ) {}
@@ -32,7 +29,7 @@ export class AuthService {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const client = await this.clientModel.create({
+    const user = await this.userModel.create({
       nom,
       prenom,
       email,
@@ -42,10 +39,12 @@ export class AuthService {
       datelastcnx,
       secteur,
       nomEntreprise,
-      poste
+      poste,
+      role: Role.Client, // Assign the role 'client' automatically
+
     });
 
-    const token = this.jwtService.sign({ id: client._id.toString() });
+    const token = this.jwtService.sign({ id: user._id.toString() });
 
     return { token };
   }
@@ -54,10 +53,7 @@ export class AuthService {
   async login(loginDto: LoginDto): Promise<{ id: string, token: string }> {
     const { email, password } = loginDto;
 
-    const user = await this.userModel.findOne({ email }).exec() ||
-                 await this.clientModel.findOne({ email }).exec() ||
-                 await this.employeurModel.findOne({ email }).exec() ||
-                 await this.adminModel.findOne({ email }).exec();
+    const user = await this.userModel.findOne({ email }).exec();
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException('Invalid credentials');
@@ -91,16 +87,17 @@ export class AuthService {
   }
 
 
-  async delete(id: string): Promise<void> {
-    let result = await this.adminModel.deleteOne({ _id: id }).exec();
-    if (result.deletedCount === 0) {
-      result = await this.clientModel.deleteOne({ _id: id }).exec();
+  async delete(id: string) {
+    try {
+      const result = await this.userModel.deleteOne({ _id: id });
+  
       if (result.deletedCount === 0) {
-        result = await this.employeurModel.deleteOne({ _id: id }).exec();
-        if (result.deletedCount === 0) {
-          throw new NotFoundException(`User with ID ${id} not found`);
-        }
+        throw new NotFoundException(`Utilisateur avec l'ID ${id} non trouvé`);
       }
+  
+      return { success: true, message: 'Utilisateur supprimé avec succès' };
+    } catch (error) {
+      throw new Error(`Erreur lors de la suppression de l'utilisateur : ${error.message}`);
     }
   }
   
@@ -139,6 +136,7 @@ export class AuthService {
       if (body.datelastcnx) {
         user.datelastcnx = body.datelastcnx;
       }
+      
 
       await user.save();
 
@@ -148,7 +146,8 @@ export class AuthService {
     }
   }
 
-  async changePass(changePassDto: changePassDto, user: User, client: Client, employeur: Employeur, admin:Admin) {
+
+  async changePass(changePassDto: changePassDto, user: User) {
     try {
       if (changePassDto.confirmNewPass !== changePassDto.newPass) {
         throw new HttpException(
@@ -156,10 +155,7 @@ export class AuthService {
           HttpStatus.BAD_REQUEST,
         );
       }
-      const currentUser = await this.userModel.findById(user._id) ||
-                          await this.clientModel.findById(client._id) ||
-                          await this.employeurModel.findById(employeur._id) ||
-                          await this.adminModel.findById(admin._id);
+      const currentUser = await this.userModel.findById(user._id);
 
       if (!currentUser) {
         throw new HttpException(
@@ -183,6 +179,7 @@ export class AuthService {
       );
     }
   }
+
 
   async updateUserValue(id: string, updatedFields: Record<string, any>): Promise<User> {
     try {
@@ -240,64 +237,31 @@ export class AuthService {
   }
 
 
-  //client
-  async addClient(clientData: Partial<Client>): Promise<Client> {
+  async addUser(userData: Partial<User>): Promise<User> {
     try {
-      const newClient = new this.clientModel(clientData);
-      return await newClient.save();
+      const newUser = new this.userModel(userData);
+      return await newUser.save();
     } catch (error) {
-      throw new BadRequestException(`Erreur lors de l'ajout du client : ${error.message}`);
+      throw new BadRequestException(`Erreur lors de l'ajout du user : ${error.message}`);
     }
   }
-
-  async findClients(): Promise<Client[]> {
-    return this.clientModel.find().exec();
+  async findUsers(): Promise<User[]> {
+    return this.userModel.find().exec();
   }
 
+//employeur 
+async findClients(): Promise<User[]> {
+  return this.userModel.find({ role: Role.Client }).exec();
+}
+  //employeur 
+  async findEmployeurs(): Promise<User[]> {
+    return this.userModel.find({ role: Role.Employeur }).exec();
+  }
 
   //employeur 
-  async addEmployeur(employeurData: Partial<Employeur>): Promise<Employeur> {
-    try {
-      if (employeurData.password) {
-        const hashedPassword = await bcrypt.hash(employeurData.password, 10);
-        employeurData.password = hashedPassword;
-      }
-      const newEmployeur = new this.employeurModel(employeurData);
-      return await newEmployeur.save();
-    } catch (error) {
-      throw new BadRequestException(`Erreur lors de l'ajout du employeur : ${error.message}`);
-    }
+  async findAdmins(): Promise<User[]> {
+    return this.userModel.find({ role: Role.Admin }).exec();
   }
-
-  async findEmployeurs(): Promise<Employeur[]> {
-    return this.employeurModel.find().exec();
-  }
-
-  //admin
-  async addAdmin(adminData: Partial<Admin>): Promise<Admin> {
-    try {
-      if (adminData.password) {
-        const hashedPassword = await bcrypt.hash(adminData.password, 10);
-        adminData.password = hashedPassword;
-      }
-      const newAdmin = new this.adminModel(adminData);
-      return await newAdmin.save();
-    } catch (error) {
-      throw new BadRequestException(`Erreur lors de l'ajout du admin : ${error.message}`);
-    }
-  }
-
-  async findAdmins(): Promise<Admin[]> {
-    return this.adminModel.find().exec();
-  }
-
-
-
-
-
-
-
-
 
 
   async requestPasswordReset(email: string): Promise<void> {
@@ -325,15 +289,6 @@ export class AuthService {
     let user = await this.userModel.findOne({ email }).exec();
     if (user) return { ...user.toObject(), role: 'user' };
   
-    user = await this.clientModel.findOne({ email }).exec();
-    if (user) return { ...user.toObject(), role: 'client' };
-  
-    user = await this.employeurModel.findOne({ email }).exec();
-    if (user) return { ...user.toObject(), role: 'employeur' };
-  
-    user = await this.adminModel.findOne({ email }).exec();
-    if (user) return { ...user.toObject(), role: 'admin' };
-  
     return null;
   }
 
@@ -347,13 +302,7 @@ export class AuthService {
       let user;
       if (role === 'user') {
         user = await this.userModel.findById(userId).exec();
-      } else if (role === 'client') {
-        user = await this.clientModel.findById(userId).exec();
-      } else if (role === 'employeur') {
-        user = await this.employeurModel.findById(userId).exec();
-      } else if (role === 'admin') {
-        user = await this.adminModel.findById(userId).exec();
-      }
+      } 
   
       if (!user) {
         throw new NotFoundException('User not found');

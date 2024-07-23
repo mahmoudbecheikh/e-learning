@@ -99,9 +99,16 @@ const FormationDetails = () => {
                   niveau.cours.map((cours, coursIndex) => (
                     <Box key={coursIndex} pl={4} borderLeft="2px solid teal">
                       <Text fontSize="md" mb={1}>
-                        {cours.nom}
+                       {cours.nom}
+                       
                       </Text>
-                    </Box>
+                   
+                    <Text fontSize="md" mb={1}>
+                    {cours.description}
+                     
+                    </Text>
+                  </Box>
+                     
                   ))
                 ) : (
                   <Text fontSize="md">Aucun cours disponible.</Text>
