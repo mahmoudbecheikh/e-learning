@@ -4,7 +4,7 @@ import { UpdateMessageDto } from './dto/update-message.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Message, MessageDocument } from './entities/message.entity';
 import { Model } from 'mongoose';
-import { Client, User, UserDocument } from 'src/auth/schemas/user.schema';
+import { User, UserDocument } from 'src/auth/schemas/user.schema';
 import { Formation, FormationDocument } from '../formation/schemas/formation.schema';
 import { Forum, ForumDocument } from './entities/forum.entity';
 import { CreateForumDto } from './dto/create-forum.dto';
@@ -14,7 +14,7 @@ export class MessageService {
 
   constructor(
     @InjectModel(Message.name) private readonly messageModel: Model<Message>,
-    @InjectModel(Client.name) private clientModel: Model<Client>,
+    @InjectModel(User.name) private userModel: Model<User>,
     @InjectModel(Formation.name) private readonly formationModel: Model<FormationDocument>,
     @InjectModel(Forum.name) private readonly forumModel: Model<Forum>,
 
@@ -22,39 +22,39 @@ export class MessageService {
 
   async create(createMessageDto: CreateMessageDto): Promise<Message | null> {
     try {
-      const user = await this.clientModel.findOne({ email: createMessageDto.user }).exec();
+      const user = await this.userModel.findOne({ email: createMessageDto.user }).exec();
       if (!user) {
         throw new Error('User not found');
       }
-  
+
       const newMessage = await new this.messageModel({
         user: user._id,
         contenu: createMessageDto.contenu,
         date: createMessageDto.date,
       }).save();
-  
+
       const forum = await this.forumModel.findByIdAndUpdate(
         createMessageDto.forum,
         { $push: { messages: newMessage } },
         { new: true }
       ).exec();
-  
+
       if (!forum) {
         throw new Error('Forum not found');
       }
-  
+
       return newMessage.populate('user');
     } catch (error) {
       console.error('Error creating message:', error);
       return null;
     }
   }
-  
+
 
   async createForum(createForum: CreateForumDto): Promise<Forum | null> {
     try {
 
-      const user = await this.clientModel.findOne({ email: createForum.user }).exec();
+      const user = await this.userModel.findOne({ email: createForum.user }).exec();
       if (!user) {
         throw new Error('User not found');
       }
@@ -71,7 +71,7 @@ export class MessageService {
         path: 'messages',
         populate: {
           path: 'user',
-          model: 'Client',
+          model: 'User',
         },
       });;
 
@@ -84,28 +84,56 @@ export class MessageService {
 
 
   async findAll(): Promise<Forum[]> {
-    return this.forumModel.find().populate({
-      path: 'messages',
-      populate: {
+    return this.forumModel.find().populate([
+      {
         path: 'user',
-        model: 'Client',
+        model: 'User',
       },
-    });
+      {
+        path: 'messages',
+        populate: {
+          path: 'user',
+          model: 'User',
+        },
+      },
+      {
+        path: 'formation',
+        model: 'Formation',
+      },
+    ]);
   }
 
   async findForum(idClient: string, idFormation: string): Promise<Forum> {
     const forum = await this.forumModel.findOne({ user: idClient, formation: idFormation });
-    if(forum)
-    return forum.populate({
-      path: 'messages',
-      populate: {
-        path: 'user',
-        model: 'Client',
-      },
-    });
+    if (forum)
+      return forum.populate({
+        path: 'messages',
+        populate: {
+          path: 'user',
+          model: 'User',
+        },
+      });
     return null
   }
 
+  async findForumById(id: string): Promise<Forum> {
+    const forum = (await this.forumModel.findById(id));
+    if (forum)
+      return forum.populate([
+        {
+          path: 'messages',
+          populate: {
+            path: 'user',
+            model: 'User',
+          },
+        },
+        {
+          path: 'formation',
+          model: 'Formation',
+        },
+      ]);
+    return null
+  }
 
   update(id: number, updateMessageDto: UpdateMessageDto) {
     return `This action updates a #${id} message`;

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Stack, Input, FormControl, FormErrorMessage, FormLabel, Avatar, Select } from '@chakra-ui/react';
-import { GlobalContext } from '../../../globalwrapper';
+import { GlobalContext } from '../../globalwrapper';
 export default function AddUser() {
   const { isOpen, onClose, AddUser, Update, errors, setErrors, user } = useContext(GlobalContext);
   const [form, setForm] = useState({});

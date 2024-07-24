@@ -18,13 +18,22 @@ export class MessageController {
     return this.messageService.createForum(createForumDto);
   }
 
+  @Get('forums')
+  async getAll() {
+    return this.messageService.findAll();
+  }
   @Get()
   findByForum(@Body() data: any,
     @Query('idClient') idClient: string,
     @Query('idFormation') idFormation: string,) {
     return this.messageService.findForum(idClient,idFormation);
   }
+  
 
+  @Get(':id')
+  async GetById(@Param('id') id: string) {
+    return this.messageService.findForumById(id);
+  }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateMessageDto: UpdateMessageDto) {

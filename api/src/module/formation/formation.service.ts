@@ -8,7 +8,7 @@ import { UpdateFormationDto } from './dto/update-formation.dto';
 import * as nodemailer from 'nodemailer';
 import { Niveau } from 'src/module/niveau/schemas/niveau.schema';
 import { Cours } from '../cours/entities/cours.entity';
-import { Client } from 'src/auth/schemas/user.schema';
+import { User } from 'src/auth/schemas/user.schema';
 
 /*@Injectable()
 export class FormationService {
@@ -154,7 +154,7 @@ export class FormationService {
   findById: any;
   constructor(
     @InjectModel(Formation.name) private formationModel: Model<Formation>,
-    @InjectModel(Client.name) private clientModel: Model<Client>,
+    @InjectModel(User.name) private clientModel: Model<User>,
     @InjectModel(Niveau.name) private niveauModel: Model<Niveau>,
     @InjectModel(Cours.name) private coursModel: Model<Niveau>,
   ) {}

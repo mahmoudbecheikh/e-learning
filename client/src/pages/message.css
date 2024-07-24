@@ -17,6 +17,10 @@
   .message-list.empty {
     height: auto; 
   }
+
+  strong{
+    text-transform: capitalize;
+  }
   
   .message-list.not-empty {
     height: 300px; 

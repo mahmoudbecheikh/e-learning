@@ -28,8 +28,7 @@ import { MessageModule } from './module/message/message.module';
     FormationModule,
     NiveauModule,
     MailerConfigModule,
-    EvaluationsModule
-
+    EvaluationsModule,
     MessageModule,
 
   ],

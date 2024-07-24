@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { Box, Button, Collapse, Text, useDisclosure } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import AddUser from "./adduser";
-import { GlobalContext } from "../../../globalwrapper";
+import { GlobalContext } from "../../globalwrapper";
 
 const Users = () => {
     const [isAdminOpen, setAdminOpen] = useState(false);

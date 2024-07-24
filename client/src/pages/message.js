@@ -21,25 +21,13 @@ const Messagesection = () => {
         },
       })
       .then((response) => {
+        console.log(response);
         const forumData = response.data;
         if (forumData && forumData.messages) {
           setForum(forumData);
           setMessages(forumData.messages);
         } else {
-          console.log('Famech');
-          axios
-            .post("http://localhost:5000/messages/forum", {
-              user: localStorage.getItem("email"),
-              formation: params.id,
-            })
-            .then((response) => {
-              console.log(response);
-              setForum(response.data);
-            })
-            .catch((error) => {
-              console.error("Error creating forum:", error);
-            });
-
+          console.log("Famech");
           setForum(null);
           setMessages([]);
         }
@@ -60,17 +48,41 @@ const Messagesection = () => {
   }, [params.id]);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const payload = {
-      contenu: contenu,
-      user: localStorage.getItem("email"),
-      forum: forum ? forum._id : null,
-      date: new Date().toISOString(),
-    };
-    socket.emit("newMessage", payload);
-    setContenu("");
+    e.preventDefault(); 
+    
+    if (!forum) {
+      axios
+        .post("http://localhost:5000/messages/forum", {
+          user: localStorage.getItem("email"),
+          formation: params.id,
+        })
+        .then((response) => {
+          setForum(response.data);
+          
+          const payload = {
+            contenu: contenu,
+            user: localStorage.getItem("email"),
+            forum: response.data._id, // Utilisez l'ID du forum nouvellement créé
+            date: new Date().toISOString(),
+          };
+          socket.emit("newMessage", payload);
+          setContenu("");
+        })
+        .catch((error) => {
+          console.error("Error creating forum:", error);
+        });
+    } else {
+      const payload = {
+        contenu: contenu,
+        user: localStorage.getItem("email"),
+        forum: forum._id,
+        date: new Date().toISOString(),
+      };
+      socket.emit("newMessage", payload);
+      setContenu("");
+    }
   };
+  
 
   return (
     <div className="message-section">
@@ -91,13 +103,13 @@ const Messagesection = () => {
       <form onSubmit={handleSubmit} className="message-form">
         <input
           type="text"
-          placeholder="Your comment"
+          placeholder="Message"
           value={contenu}
           onChange={(e) => setContenu(e.target.value)}
           className="message-input"
         />
         <button type="submit" className="message-button">
-          Submit
+          Enovyer
         </button>
       </form>
     </div>
