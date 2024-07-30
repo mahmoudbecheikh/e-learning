@@ -13,5 +13,8 @@ export class CreateMessageDto {
     readonly formation: string;
 
     @IsNotEmpty()
+    readonly forum: string;
+
+    @IsNotEmpty()
     readonly date: string;
 }

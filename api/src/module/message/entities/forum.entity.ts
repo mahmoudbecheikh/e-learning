@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
-import { Client, User } from 'src/auth/schemas/user.schema';
+import {  User } from 'src/auth/schemas/user.schema';
 import { Formation } from 'src/module/formation/schemas/formation.schema';
 import { Message, MessageSchema } from './message.entity';
 
@@ -11,8 +11,8 @@ export type ForumDocument = HydratedDocument<Forum>;
 export class Forum {
 
 
-    @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Client' })
-    user: Client;
+    @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
+    user: User;
 
     @Prop({default: [] })
     messages: Types.DocumentArray<Message>;

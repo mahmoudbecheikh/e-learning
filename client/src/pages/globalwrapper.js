@@ -5,8 +5,8 @@ import { useDisclosure, useToast } from '@chakra-ui/react';
 export const GlobalContext = createContext();
 
 export default function Wrapper({ children }) {
-    const [employeurs, setEmployeurs] = useState([]);
-    const [employeur, setEmployeur] = useState({}); // pour la fonction update 
+    const [users, setUsers] = useState([]);
+    const [user, setUser] = useState({}); // pour la fonction update 
     
     const [admins, setAdmins] = useState([]);
     const [admin, setAdmin] = useState({}); // pour la fonction update 
@@ -16,20 +16,20 @@ export default function Wrapper({ children }) {
 
     const toast = useToast();
     
-    // const FetchEmployeurs = async () => {
+    // const FetchUsers = async () => {
     //     try {
-    //         const res = await axios.get('/employeur');
-    //         setEmployeurs(res.data);
+    //         const res = await axios.get('/user');
+    //         setUsers(res.data);
     //     } catch (err) {
     //         console.log(err.response.data);
     //     }
     // };
 
-    // const DeleteEmployeur = (id) => {
+    // const DeleteUser = (id) => {
     //     axios
-    //       .delete(`/employeur/${id}`)
+    //       .delete(`/user/${id}`)
     //       .then((res) => {
-    //         setEmployeurs(employeurs.filter((u) => u._id !== id));
+    //         setUsers(users.filter((u) => u._id !== id));
     //         toast({
     //           title: 'User Deleted',
     //           status: 'success',
@@ -42,13 +42,13 @@ export default function Wrapper({ children }) {
     //       });
     // };
 
-    const AddEmployeur = (form, setForm) => {
+    const AddUser = (form, setForm) => {
         axios
-          .post('http://localhost:5000/auth/employeur', form)
+          .post('http://localhost:5000/auth/user', form)
           .then((res) => {
-            setEmployeurs([...employeurs, res.data])
+            setUsers([...users, res.data])
             toast({
-              title: 'Employeur Added',
+              title: 'User Added',
               status: 'success',
               duration: 4000,
               isClosable: true,
@@ -63,30 +63,10 @@ export default function Wrapper({ children }) {
     };
 
 
-    const AddAdmin = (form, setForm) => {
-      axios
-        .post('http://localhost:5000/auth/admin', form)
-        .then((res) => {
-          setAdmins([...admins, res.data])
-          toast({
-            title: 'Admin Added',
-            status: 'success',
-            duration: 4000,
-            isClosable: true,
-          });
-          setErrors({});
-          setForm({});
-          onClose();
-        })
-        .catch((err) => {
-          setErrors(err.response.data.error);
-        });
-  };
-
-//     const FindOneEmployeur = async (id) => {
+//     const FindOneUser = async (id) => {
 //       try {
-//           const res = await axios.get(`/employeur/${id}`);
-//           setEmployeur(res.data);
+//           const res = await axios.get(`/user/${id}`);
+//           setUser(res.data);
 //       } catch (err) {
 //           console.log(err.response.data);
 //       }
@@ -95,7 +75,7 @@ export default function Wrapper({ children }) {
 
 //     const Update = (form, setForm, id) => {
 //       axios
-//         .put(`/employeur/${id}`, form)
+//         .put(`/user/${id}`, form)
 //         .then((res) => {
 //           toast({
 //             title: 'User Updated',
@@ -106,7 +86,7 @@ export default function Wrapper({ children }) {
 //           setErrors({});
 //           setForm({});
 //           onClose();
-//           FetchEmployeurs();
+//           FetchUsers();
 //         })
 //         .catch((err) => {
 //           setErrors(err.response.data.error);
@@ -115,20 +95,15 @@ export default function Wrapper({ children }) {
     
     return (
         <GlobalContext.Provider value={{ 
-            // FetchEmployeurs, 
-            employeurs, 
-            // DeleteEmployeur, 
-            AddEmployeur, 
+            users, 
+            AddUser, 
             isOpen,
             onOpen,
             onClose,
             errors,
             setErrors,
-            // FindOneEmployeur,
-            employeur,
-            setEmployeur,
-            // Update
-            AddAdmin
+            user,
+            setUser,
   
         }}>
             {children}

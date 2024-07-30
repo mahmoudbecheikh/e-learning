@@ -1,18 +1,31 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Box, Button, Collapse, Text, useDisclosure } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import AddUser from "./adduser";
+import { GlobalContext } from "../../globalwrapper";
 
 const Users = () => {
     const [isAdminOpen, setAdminOpen] = useState(false);
     const [isEmployeurOpen, setEmployeurOpen] = useState(false);
     const [isClientOpen, setClientOpen] = useState(false);
-  
+    const { onOpen} = useContext(GlobalContext);
+
     const toggleAdmin = () => setAdminOpen(!isAdminOpen);
     const toggleEmployeur = () => setEmployeurOpen(!isEmployeurOpen);
     const toggleClient = () => setClientOpen(!isClientOpen);
   
     return (
       <>
+
+              <Button
+                colorScheme="teal"
+                variant="outline"
+                maxW={'300px'}
+                minW="150px"
+                onClick={onOpen}
+              >
+                Add New Employeur
+              </Button>
         <Box>
           <Button onClick={toggleAdmin} width={300}>Administrateurs</Button>
           <Collapse in={isAdminOpen} animateOpacity>
@@ -42,6 +55,9 @@ const Users = () => {
             </Box>
           </Collapse>
         </Box>
+
+        <AddUser/>
+
       </>
     );
   }

@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import { Evaluation } from 'src/module/evaluation/model/evaluation.models';
 
 export type CoursDocument = HydratedDocument<Cours>;
 @Schema()
@@ -38,6 +39,9 @@ export class Cours {
 
   @Prop()
   dateCreation: string;
+
+  @Prop()
+  evaluations: Evaluation[];
 }
 
 export const CoursSchema = SchemaFactory.createForClass(Cours);

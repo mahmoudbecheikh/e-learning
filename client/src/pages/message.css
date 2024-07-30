@@ -1,6 +1,5 @@
 .message-section {
     max-width: 600px;
-    margin: 0 auto;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -17,6 +16,10 @@
   
   .message-list.empty {
     height: auto; 
+  }
+
+  strong{
+    text-transform: capitalize;
   }
   
   .message-list.not-empty {

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Stack, Input, FormControl, FormErrorMessage, FormLabel, Avatar } from '@chakra-ui/react';
-import { GlobalContext } from '../../../globalwrapper';
-export default function AddAdmin() {
-  const { isOpen, onClose, AddAdmin, Update, errors, setErrors, admin } = useContext(GlobalContext);
+import { Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Stack, Input, FormControl, FormErrorMessage, FormLabel, Avatar, Select } from '@chakra-ui/react';
+import { GlobalContext } from '../../globalwrapper';
+export default function AddUser() {
+  const { isOpen, onClose, AddUser, Update, errors, setErrors, user } = useContext(GlobalContext);
   const [form, setForm] = useState({});
 
 
@@ -25,7 +25,7 @@ export default function AddAdmin() {
   const onSave = () => {
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length === 0) {
-      AddAdmin(form, setForm);
+      AddUser(form, setForm);
     } else {
       setErrors(validationErrors);
     }
@@ -42,10 +42,10 @@ export default function AddAdmin() {
   };
 
   useEffect(() => {
-    if (admin) {
-      setForm(admin);
+    if (user) {
+      setForm(user);
     }
-  }, [isOpen, admin]);
+  }, [isOpen, user]);
 
   return (
     <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
@@ -56,18 +56,18 @@ export default function AddAdmin() {
           setErrors({});
           setForm({});
         }} />
-        <DrawerHeader>{form._id ? 'Update Admin' : 'Create Admin'}</DrawerHeader>
+        <DrawerHeader>{form._id ? 'Update User' : 'Create User'}</DrawerHeader>
 
         <DrawerBody>
           <Stack spacing={'24px'}>
             <FormControl isInvalid={!!errors.nom}>
-              <FormLabel>nom admin</FormLabel>
+              <FormLabel>nom user</FormLabel>
               <Input name="nom" onChange={onChangeHandler} value={form?.nom || ''} />
               <FormErrorMessage>{errors.nom}</FormErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={!!errors.prenom}>
-              <FormLabel>prenom admin</FormLabel>
+              <FormLabel>prenom user</FormLabel>
               <Input name="prenom" onChange={onChangeHandler} value={form?.prenom || ''} />
               <FormErrorMessage>{errors.prenom}</FormErrorMessage>
             </FormControl>
@@ -88,6 +88,29 @@ export default function AddAdmin() {
               <FormLabel>cin</FormLabel>
               <Input name="cin" onChange={onChangeHandler} value={form?.cin || ''} />
               <FormErrorMessage>{errors.cin}</FormErrorMessage>
+            </FormControl>
+
+            <FormControl isInvalid={!!errors.poste}>
+              <FormLabel>poste</FormLabel>
+              <Input name="poste" onChange={onChangeHandler} value={form?.poste || ''} />
+              <FormErrorMessage>{errors.poste}</FormErrorMessage>
+            </FormControl>
+
+            <FormControl isInvalid={!!errors.role}>
+              <FormLabel>role</FormLabel>
+
+              <Select
+      placeholder='Select role'
+      name="role"
+      onChange={onChangeHandler}
+      value={form.role}
+    >
+      <option value='admin'>Admin</option>
+      <option value='employeur'>Employeur</option>
+      <option value='client'>Client</option>
+    </Select>
+              {/* <Input name="role" onChange={onChangeHandler} value={form?.role || ''} /> */}
+              <FormErrorMessage>{errors.role}</FormErrorMessage>
             </FormControl>
 
             
