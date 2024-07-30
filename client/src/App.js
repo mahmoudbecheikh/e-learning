@@ -22,6 +22,7 @@ import AdminList from "./pages/user/users/listadmin";
 import Messagesection from "./pages/message";
 import FormationDetails from "./pages/clients/FormationDetails";
 import Forums from "./pages/forums";
+import FormationsList from "./pages/administrations/ListeFormations";
 function App() {
   return (
     <Router>
@@ -36,12 +37,13 @@ function App() {
         <Route path="/updateFormation/:id" element={<UpdateFormationForm />} />
         <Route path="/*" element={<MainLayout />} />
         <Route path="/cours" element={<ListingCourse />} />
-        <Route path="/cours/add/:niveauIndex" element={<CreateCourse />} />
+        <Route path="/cours/add" element={<CreateCourse />} />
         <Route path="/cours/:coursId" element={<CoursItem />} />
         <Route path="/cours/update/:coursId" element={<UpdateCourse />} />
         <Route path="/message" element={<Messagesection />} />
         <Route path="/formationdetails/:id" element={<FormationDetails />} />
         <Route path="/forums" element={<Forums />} />
+        <Route path="/listformations" element={<FormationsList />} />
 
       </Routes>
     </Router>

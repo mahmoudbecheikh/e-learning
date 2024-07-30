@@ -13,6 +13,7 @@ import {
   Stack,
   HStack,
   IconButton,
+  Select,
 } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
 
@@ -26,7 +27,8 @@ const AddFormationsForm = () => {
     nbrNiveau: 0,
     niveau: [],
   });
-
+  const [existingCourses, setExistingCourses] = useState([]);
+  const [newCourseName, setNewCourseName] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -37,7 +39,17 @@ const AddFormationsForm = () => {
         handleCoursAdded(location.state.niveauIndex, location.state.newCourse);
       }
     }
+    fetchCourses();
   }, [location.state]);
+
+  const fetchCourses = async () => {
+    try {
+      const { data } = await axios.get("http://localhost:5000/cours");
+      setExistingCourses(data);
+    } catch (error) {
+      console.error("Erreur lors du chargement des cours:", error.message);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -78,10 +90,6 @@ const AddFormationsForm = () => {
     });
   };
 
-  const handleAddCours = (niveauIndex) => {
-    navigate(`/cours/add/${niveauIndex}`, { state: { formationData } });
-  };
-
   const handleCoursAdded = (niveauIndex, newCours) => {
     setFormationData((prevState) => {
       const niveau = prevState.niveau.map((niv, i) =>
@@ -94,22 +102,28 @@ const AddFormationsForm = () => {
     });
   };
 
+  const handleAddCours = (niveauIndex, course) => {
+    if (course === "new") {
+      navigate(`/cours/add`, {
+        state: { formationData, niveauIndex },
+      });
+    } else {
+      const selectedCourse = existingCourses.find((c) => c._id === course);
+      handleCoursAdded(niveauIndex, selectedCourse);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/formation", formationData);
+      const response = await axios.post(
+        "http://localhost:5000/formation",
+        formationData
+      );
       console.log("Response:", response.data);
-       navigate('/formations')
+      navigate("/formations");
     } catch (error) {
-      if (error.response) {
-        console.error("Erreur d'ajout de la formation:", {
-          status: error.response.status,
-          statusText: error.response.statusText,
-          data: error.response.data,
-        });
-      } else {
-        console.error("Erreur d'ajout de la formation:", error.message);
-      }
+      console.error("Erreur d'ajout de la formation:", error.message);
     }
   };
 
@@ -189,14 +203,18 @@ const AddFormationsForm = () => {
                   onClick={() => handleRemoveNiveau(index)}
                 />
               </HStack>
-              <Button
+              <Select
                 mt={2}
-                size="sm"
-                colorScheme="teal"
-                onClick={() => handleAddCours(index)}
+                placeholder="Select existing course or add new"
+                onChange={(e) => handleAddCours(index, e.target.value)}
               >
-                Ajouter Cours
-              </Button>
+                {existingCourses.map((course) => (
+                  <option key={course._id} value={course._id}>
+                    {course.nom}
+                  </option>
+                ))}
+                <option value="new">Add new course</option>
+              </Select>
               {niv.cours.map((cours, coursIndex) => (
                 <Box key={coursIndex} mt={2} pl={4} borderLeft="2px solid teal">
                   <Input
@@ -207,18 +225,18 @@ const AddFormationsForm = () => {
                     isDisabled
                     size="sm"
                   />
-                   <Input
+                  <Input
                     type="text"
-                    placeholder="description"
+                    placeholder="Description"
                     value={cours.description}
                     readOnly
                     isDisabled
                     size="sm"
                   />
-                   <Input
+                  <Input
                     type="text"
-                    placeholder="video"
-                    value={cours.video.originalname}
+                    placeholder="Video"
+                    value={cours.video ? cours.video.originalname : ""}
                     readOnly
                     isDisabled
                     size="sm"

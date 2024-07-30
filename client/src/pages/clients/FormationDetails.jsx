@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import {
   Box,
@@ -99,16 +99,12 @@ const FormationDetails = () => {
                   niveau.cours.map((cours, coursIndex) => (
                     <Box key={coursIndex} pl={4} borderLeft="2px solid teal">
                       <Text fontSize="md" mb={1}>
-                       {cours.nom}
-                       
+                        <Link to={`/cours/${cours.id}`}>{cours.nom}</Link>
                       </Text>
-                   
-                    <Text fontSize="md" mb={1}>
-                    {cours.description}
-                     
-                    </Text>
-                  </Box>
-                     
+                      <Text fontSize="md" mb={1}>
+                        {cours.description}
+                      </Text>
+                    </Box>
                   ))
                 ) : (
                   <Text fontSize="md">Aucun cours disponible.</Text>
@@ -120,9 +116,8 @@ const FormationDetails = () => {
           )}
         </Box>
       </VStack>
-          <Messagesection></Messagesection>
+      <Messagesection />
     </Container>
-  
   );
 };
 
