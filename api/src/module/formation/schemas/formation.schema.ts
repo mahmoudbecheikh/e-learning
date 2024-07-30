@@ -32,6 +32,7 @@ export class Formation {
 
   @Prop({ type: [MessageSchema], default: [] })
   forums: Types.DocumentArray<Message>;
+  
   @Prop({ type: [Types.ObjectId], ref: 'Niveau', required: true })
   niveau: Niveau[];
 }
