@@ -235,12 +235,12 @@ export class FormationService {
         throw new NotFoundException(`Formation with id ${id} not found`);
       }
     
-      // Delete associated Niveaux and their Cours
+      // Delete associated Niveaux 
       if (formation.niveau && formation.niveau.length > 0) {
         const niveauIds = formation.niveau.map(niveau => new Types.ObjectId(niveau._id as any));
         if (niveauIds.length > 0) {
           console.log('Deleting Niveaux with IDs:', niveauIds);
-          await Promise.all(
+          /*await Promise.all(
             niveauIds.map(async (niveauId) => {
               const niveau = await this.niveauModel.findById(niveauId).exec();
               if (niveau && niveau.cours.length > 0) {
@@ -248,13 +248,13 @@ export class FormationService {
                 await this.coursModel.deleteMany({ _id: { $in: coursIds } }).exec();
               }
             }),
-          );
+          );*/
           await this.niveauModel.deleteMany({ _id: { $in: niveauIds } }).exec();
         }
       }
     
       await this.formationModel.findByIdAndDelete(objectId).exec();
-      return { message: 'Formation, niveaux, and courses successfully deleted' };
+      return { message: 'Formation, niveaux successfully deleted' };
     }
     
 
