@@ -62,13 +62,14 @@ const CreateCourse = () => {
           files:data.files,
           dateCreation,
         };
-        navigate('/addformation', {
-          state: {
-            formationData,
-            niveauIndex: parseInt(niveauIndex, 10),
-            newCourse,
-          },
-        });
+        // navigate('/addformation', {
+        //   state: {
+        //     formationData,
+        //     niveauIndex: parseInt(niveauIndex, 10),
+        //     newCourse,
+        //   },
+        // });
+                navigate('/cours');
       }
     } catch (error) {
       console.log(error);
@@ -78,7 +79,7 @@ const CreateCourse = () => {
 
   return (
     <div className="form-container">
-      <h2>Add Course</h2>
+      <h2>Ajouter Cours</h2>
       <form onSubmit={submitHandler}>
         <label htmlFor="text">Nom</label>
         <input
@@ -114,7 +115,7 @@ const CreateCourse = () => {
         />
 
         <Button disabled={btnLoading} type="submit" className="common-btn">
-          {btnLoading ? "Please Wait..." : "Add"}
+          {btnLoading ? "Please Wait..." : "Ajouter"}
         </Button>
       </form>
     </div>

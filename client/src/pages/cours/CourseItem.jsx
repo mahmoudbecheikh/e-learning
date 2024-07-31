@@ -35,9 +35,9 @@ export default function CoursItem() {
 
   return (
     <main>
-      {loading && <p className="text-center my-7 text-2xl">Loading...</p>}
+      {loading && <p className="text-center my-7 text-2xl">Chargement...</p>}
       {error && (
-        <p className="text-center my-7 text-2xl">Something went wrong!</p>
+        <p className="text-center my-7 text-2xl">Probléme!</p>
       )}
       {cours && !loading && !error && (
         <div className="video-display">
