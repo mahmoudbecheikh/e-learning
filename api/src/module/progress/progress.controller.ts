@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Put } from '@nestjs/common';
 import { ProgressService } from './progress.service';
 import { CreateProgressDto } from './dto/create-progress.dto';
 import { UpdateProgressDto } from './dto/update-progress.dto';
@@ -15,18 +15,18 @@ export class ProgressController {
 
 
   @Get()
-  findOne(@Query('idUser') idUser: string,
-    @Query('idFormation') idFormation: string) {
-    return this.progressService.find(idUser, idFormation);
+  findOne(@Query('idUser') user: string,
+    @Query('idFormation') formation: string) {
+    return this.progressService.find(user, formation);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateProgressDto: UpdateProgressDto) {
-  //   return this.progressService.update(+id, updateProgressDto);
+  @Put(':id')
+  update(@Param('id') id: string, @Body() updateProgressDto: UpdateProgressDto) {
+    return this.progressService.addCours(id, updateProgressDto);
+  }
+
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.progressService.remove(+id);
   // }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.progressService.remove(+id);
-  }
 }

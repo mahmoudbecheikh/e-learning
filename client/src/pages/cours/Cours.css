@@ -7,6 +7,12 @@
   background-color: #f9f9f9;
 }
 
+.video-js {
+  width: 100%; /* Ajuste la largeur du lecteur */
+  max-width: 800px; /* Limite la largeur maximale du lecteur */
+  height: auto; /* Conserve les proportions de la vidéo */
+}
+
 .video-display h1 {
   font-size: 2em;
   margin-bottom: 10px;
