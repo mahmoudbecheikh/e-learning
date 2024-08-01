@@ -14,8 +14,18 @@ export class Niveau extends Document {
   @Prop({ required: true })
   title: string;
 
-  @Prop({type:Types.ObjectId, ref:'Formation',required:true})
-  formation:Formation[];
+ 
+  @Prop({
+    required: true
+        //formationId: { type: Types.ObjectId, ref: 'Formation', required: true },
+       
+      
+    
+  })
+  formationTitle: string
+  
+    
+ 
 
   @Prop({type:[Types.ObjectId], ref:'Cours',required:true})
   cours:Cours[];

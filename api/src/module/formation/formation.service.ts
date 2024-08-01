@@ -161,14 +161,31 @@ export class FormationService {
 
   async create(createFormationDto: CreateFormationDto): Promise<Formation> {
     console.log('Creating formation with data:', createFormationDto);
+   
+   /* const formations = await this.formationModel.find().exec();
 
+    const formationInfos = formations.map((formations) => ({
+     
+      formationTitle: formations.titre,
+    }));
+    console.log(formationInfos);*/
+
+    const formation = await this.formationModel.find().exec();
+    const formationid=formation.map((formation=>formation._id))
+    console.log(formationid);
     // Create and save Niveau objects
     const niveaux = await Promise.all(
       createFormationDto.niveau.map(async (niveauDto) => {
-        const newNiveau = new this.niveauModel(niveauDto);
+        // Add the formation title to each Niveau
+        const newNiveau = new this.niveauModel({
+          ...niveauDto,
+          formationTitle: createFormationDto.titre,
+          
+        });
         return newNiveau.save();
       }),
     );
+  
 
     // Create Formation with Niveau IDs
     const createdFormation = new this.formationModel({

@@ -1,11 +1,9 @@
-
 import { Type } from 'class-transformer';
 import { IsString, IsInt, IsArray, ValidateNested } from 'class-validator';
 import { CreateNiveauDto } from 'src/module/niveau/dto/create-niveau.dto';
 
 export class CreateFormationDto {
- /* @IsString()
-  formationId: string;*/
+ 
 
   @IsString()
   titre: string;
