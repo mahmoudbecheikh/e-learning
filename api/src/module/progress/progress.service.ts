@@ -6,14 +6,17 @@ import { Formation, FormationDocument } from '../formation/schemas/formation.sch
 import { Model } from 'mongoose';
 import { CreateProgressDto } from './dto/create-progress.dto';
 import { UpdateProgressDto } from './dto/update-progress.dto';
+import { Cours, CoursDocument } from '../cours/entities/cours.entity';
 
 @Injectable()
 export class ProgressService {
+
 
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
     @InjectModel(Formation.name) private readonly formationModel: Model<FormationDocument>,
     @InjectModel(Progress.name) private readonly progressModel: Model<ProgressDocument>,
+    @InjectModel(Cours.name) private readonly coursModel: Model<CoursDocument>,
 
 
   ) { }
@@ -44,36 +47,54 @@ export class ProgressService {
   }
 
 
-  async find(idUser: string, idFormation: string): Promise<Progress> {
-    const progress = await this.progressModel.findOne({ user: idUser, formation: idFormation });
+  async find(user: string, formation: string): Promise<Progress> {
+    console.log(user);
+    console.log(formation);
+    const progress = await this.progressModel.findOne({ user: user, formation: formation });
     if (progress)
       return progress.populate([
         {
           path: 'niveauActually',
           model: 'Niveau',
         },
-
+        {
+          path: 'formation',
+          model: 'Formation',
+        },
       ]);
     return null
   }
 
-  async addCours(id: string, cours: string) {
+  async addCours(id: string, updateProgressDto: UpdateProgressDto) {
 
     const progress = await this.progressModel.findById(
       id,
-      { $push: { cours: cours } },
-      { new: true }
-    );
+      // { $push: { cours: updateProgressDto.cours } },
+      // { new: true }
+    ).populate([{
+      path: 'niveauActually',
+      model: 'Niveau',
+    },{
+      path:'formation',
+      model:'Formation'
+    }
+  ],);
 
-    if (progress)
+    if (progress) {
+      const cours = await this.coursModel.findById(updateProgressDto.cours).exec()
+      progress.completedCours.push(cours)
       if (progress.niveauActually.cours.length == progress.completedCours.length) {
         progress.completedCours = []
         progress.completedNiveau.push(progress.niveauActually)
-        if (progress.completedNiveau.length<progress.formation.nbrNiveau)
+        if (progress.completedNiveau.length < progress.formation.nbrNiveau)
           progress.niveauActually = progress.formation.niveau[progress.completedNiveau.length];
         else progress.finish = true
-        progress.save()
       }
+      console.log(progress.completedNiveau.length);
+      console.log( progress.formation.niveau[progress.completedNiveau.length-1]);
+      progress.save()
+    }
+
 
     return progress;
 
@@ -81,7 +102,4 @@ export class ProgressService {
 
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} progress`;
-  }
 }

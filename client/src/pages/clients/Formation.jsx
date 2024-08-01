@@ -13,21 +13,33 @@ import {
 } from "@chakra-ui/react";
 import Messagesection from "../message";
 
-const FormationDetails = () => {
+const Formation = () => {
   const { idFormation } = useParams();
   const navigate = useNavigate();
   const [formation, setFormation] = useState(null);
+  const [progress, setProgress] = useState(null);
+
   const [loading, setLoading] = useState(true);
-  const userId =  localStorage.getItem("email") ; 
+  const idUser = localStorage.getItem("id");
 
   useEffect(() => {
     const fetchFormation = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/progress/${userId}/${idFormation}`);
-        setFormation(response.data);
+        const response = await axios.get(`http://localhost:5000/progress`, {
+          params: {
+            idUser: localStorage.getItem("id"),
+            idFormation: idFormation,
+          },
+        });
+        setProgress(response.data);
+        setFormation(response.data.formation);
+        console.log(response);
       } catch (error) {
-        console.error("Erreur de récupération des détails de la formation", error);
-        navigate("/"); 
+        console.error(
+          "Erreur de récupération des détails de la formation",
+          error
+        );
+        navigate("/");
       } finally {
         setLoading(false);
       }
@@ -43,8 +55,7 @@ const FormationDetails = () => {
       </Container>
     );
   }
-
-  if (!formation) {
+  if (!formation)
     return (
       <Container centerContent>
         <Heading as="h2" size="xl" mb={4}>
@@ -52,7 +63,6 @@ const FormationDetails = () => {
         </Heading>
       </Container>
     );
-  }
 
   return (
     <Container maxW="container.lg">
@@ -90,7 +100,25 @@ const FormationDetails = () => {
           <Heading as="h3" size="lg" mb={2}>
             Niveaux
           </Heading>
-          {formation.niveau && formation.niveau.length > 0 ? (
+
+          {progress.niveauActually.cours &&
+          progress.niveauActually.cours.length > 0 ? (
+            progress.niveauActually.cours.map((cours, coursIndex) => (
+              <Box key={coursIndex} pl={4} borderLeft="2px solid teal">
+                <Text
+                  fontSize="md"
+                  onClick={() => navigate(`/cours/${cours._id}`)}
+                  mb={1}
+                >
+                  {cours.nom}
+                </Text>
+              </Box>
+            ))
+          ) : (
+            <Text fontSize="md">Aucun cours disponible.</Text>
+          )}
+
+          {/* {formation.niveau && formation.niveau.length > 0 ? (
             formation.niveau.map((niveau, index) => (
               <Box key={index} mb={4}>
                 <Heading as="h4" size="md" mb={2}>
@@ -118,13 +146,12 @@ const FormationDetails = () => {
             ))
           ) : (
             <Text fontSize="md">Aucun niveau disponible.</Text>
-          )}
+          )} */}
         </Box>
       </VStack>
-          <Messagesection></Messagesection>
+      <Messagesection></Messagesection>
     </Container>
-  
   );
 };
 
-export default FormationDetails;
+export default Formation;
