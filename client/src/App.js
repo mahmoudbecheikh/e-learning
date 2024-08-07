@@ -21,6 +21,12 @@ import EmployeurList from "./pages/user/users/listemployeur";
 import AdminList from "./pages/user/users/listadmin";
 import Messagesection from "./pages/message";
 import FormationDetails from "./pages/clients/FormationDetails";
+import EvaluationsList from "./pages/evaluation/EvaluationsList";
+import EvaluationForm from "./pages/evaluation/EvaluationForm";
+import EvaluationDetails from "./pages/evaluation/EvaluationDetails";
+import QuizzList from "./pages/evaluation/QuizzList";
+import QuizzForm from "./pages/evaluation/QuizzForm";
+import QuizzDetails from "./pages/evaluation/QuizzDetails";
 function App() {
   return (
     <Router>
@@ -41,6 +47,19 @@ function App() {
         <Route path="/message" element={<Messagesection />} />
         <Route path="/formationdetails/:id/message" element={<Messagesection />} />
         <Route path="/formationdetails/:id" element={<FormationDetails />} />
+
+
+        <Route path="/evaluations" element={<EvaluationsList/>} />
+        <Route path="/evaluations/new" element={<EvaluationForm isEdit={false} />} />
+        <Route path="/evaluations/:id/edit" element={<EvaluationForm isEdit={true} />} />
+        <Route path="/evaluations/:id" element={<EvaluationDetails />} />
+
+        <Route path="/quizz" element={<QuizzList/>} />
+                <Route path="/quizz" element={<QuizzList/>} />
+
+      <Route path="/quizz/create" element={<QuizzForm/>} />
+      <Route path="/quizz/edit/:id" element={<QuizzForm/>} />
+      <Route path="/quizz/:id" element={<QuizzDetails />} />
 
       </Routes>
     </Router>
@@ -63,6 +82,7 @@ function MainLayout() {
         <Route path="/listclient" element={<ClientList />} />
         <Route path="/listemployeur" element={<EmployeurList />} />
         <Route path="/listadmin" element={<AdminList />} />
+
           </Routes>
         </div>
       </div>

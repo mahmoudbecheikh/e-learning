@@ -1,21 +1,23 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Box, Button } from '@chakra-ui/react';
 import "./Cours.css";
+import EvaluationsList from "../evaluation/EvaluationsList";
+import EvaluationForm from "../evaluation/EvaluationForm";
 
 export default function CoursItem() {
   const [cours, setCours] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [showEvaluations, setShowEvaluations] = useState(false);
+  const [showAddEvaluationForm, setShowAddEvaluationForm] = useState(false); // New state
   const params = useParams();
 
   useEffect(() => {
     const fetchCours = async () => {
       try {
         setLoading(true);
-        const res = await fetch(
-          `http://localhost:5000/cours/${params.coursId}`
-        );
-
+        const res = await fetch(`http://localhost:5000/cours/${params.coursId}`);
         const data = await res.json();
         if (data.success === false) {
           setError(true);
@@ -51,15 +53,12 @@ export default function CoursItem() {
             disablePictureInPicture
             disableRemotePlayback
             autoPlay
-            // onEnded={() => addProgress(lecture._id)}
           ></video>
           <div className="files-list">
             <h2>Files</h2>
             <ul>
               {cours.files.map((file, index) => (
-                <li key={index}
-                //  onClick={() => downloadFile(file.filename)}
-                >
+                <li key={index}>
                   <a
                     href={`http://localhost:5000/uploads/${file.filename}`}
                     target="_blank" rel="noreferrer"
@@ -70,19 +69,21 @@ export default function CoursItem() {
               ))}
             </ul>
           </div>
+
+          
+          {/* <Button onClick={() => setShowEvaluations(!showEvaluations)} mt="4" colorScheme="teal">
+            {showEvaluations ? 'Masquer les Questions' : 'Afficher les Questions'}
+          </Button>
+          
+          {showEvaluations && (
+            <Box mt="4">
+              <EvaluationsList courseId={params.coursId} />
+            </Box>
+          )} */}
+
+
         </div>
       )}
     </main>
   );
 }
-
-// const downloadFile = async (file) => {
-//   var body = { filename: file };
-//   const data = await axios.post(`http://localhost:5000/download`, body, {
-//     responseType: "blob",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   });
-//   return data;
-// };

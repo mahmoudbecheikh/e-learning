@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import {
   Box,
@@ -11,12 +11,23 @@ import {
   Container,
   Spinner,
 } from "@chakra-ui/react";
+import Messagesection from "../message";
+import EvaluationsList from "../evaluation/EvaluationsList";
+import QuizList from "../evaluation/QuizzList";
+import Questions from "../evaluation/Questions";
 
 const FormationDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [formation, setFormation] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const [showEvaluations, setShowEvaluations] = useState(false);
+  const [showQuizzes, setShowQuizzes] = useState(false);
+
+  const [showAddEvaluationForm, setShowAddEvaluationForm] = useState(false); // New state
+  const params = useParams();
+// const niveauId={formation.niveau._id}
 
   useEffect(() => {
     const fetchFormation = async () => {
@@ -98,20 +109,54 @@ const FormationDetails = () => {
                   niveau.cours.map((cours, coursIndex) => (
                     <Box key={coursIndex} pl={4} borderLeft="2px solid teal">
                       <Text fontSize="md" mb={1}>
-                       {cours.nom}
-                       
+                        <Link to={`/cours/${cours._id}`}>{cours.nom}</Link>
                       </Text>
-                   
-                    <Text fontSize="md" mb={1}>
-                    {cours.description}
-                     
-                    </Text>
-                  </Box>
-                     
+                      <Text fontSize="md" mb={1}>
+                        {cours.description}
+                      </Text>
+                    </Box>
                   ))
                 ) : (
                   <Text fontSize="md">Aucun cours disponible.</Text>
                 )}
+
+
+
+<Button onClick={() => setShowEvaluations(!showEvaluations)} mt="4" colorScheme="teal">
+            {showEvaluations ? 'Masquer les Questions' : 'Afficher les Questions'}
+          </Button>
+          {/* <Button onClick={() => setShowAddEvaluationForm(!showAddEvaluationForm)} mt="4" colorScheme="teal">
+            {showAddEvaluationForm ? 'Annuler' : 'Ajouter une nouvelle question'}
+          </Button>
+          {showAddEvaluationForm && (
+            <Box mt="4">
+              <EvaluationForm
+                isEdit={false} // Assuming it's for adding a new evaluation
+                courseId={params.coursId} // Pass the course ID
+              />
+            </Box>
+          )} */}
+          {showEvaluations && (
+            <Box mt="4">
+              {/* <EvaluationsList niveauId={params.niveauId} /> */}
+              <Questions niveauId={niveau._id} />
+            </Box>
+          )}
+
+
+
+        {/* <Button onClick={() => setShowQuizzes(!showQuizzes)} mt="4" colorScheme="teal">
+                  {showQuizzes? 'Masquer le Quizz' : 'Afficher le Quizz'}
+                </Button>
+                {showQuizzes && (
+                  <Box mt="4">
+                    <QuizList niveauId={niveau._id}/>
+                  </Box>
+                )} */}
+
+
+
+
               </Box>
             ))
           ) : (
@@ -119,6 +164,7 @@ const FormationDetails = () => {
           )}
         </Box>
       </VStack>
+      <Messagesection />
     </Container>
   );
 };

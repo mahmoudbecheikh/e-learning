@@ -8,7 +8,7 @@ import { UpdateFormationDto } from './dto/update-formation.dto';
 import * as nodemailer from 'nodemailer';
 import { Niveau } from 'src/module/niveau/schemas/niveau.schema';
 import { Cours } from '../cours/entities/cours.entity';
-import { Client } from 'src/auth/schemas/user.schema';
+import { User } from 'src/auth/schemas/user.schema';
 
 /*@Injectable()
 export class FormationService {
@@ -40,19 +40,19 @@ export class FormationService {
     console.log('Formation created:', savedFormation);
 
   // If related data is required, validate it here
-  // const clients = await this.clientModel.find().exec();
-  // if (clients.length === 0) {
-  //   throw new Error('No clients found to notify');
+  // const users = await this.userModel.find().exec();
+  // if (users.length === 0) {
+  //   throw new Error('No users found to notify');
   // }
     
-  //   await this.sendEmailNotifications(clients, savedFormation);
+  //   await this.sendEmailNotifications(users, savedFormation);
     // If related data is required, validate it here
-    const clients = await this.clientModel.find().exec();
-    if (clients.length === 0) {
-      throw new Error('No clients found to notify');
+    const users = await this.userModel.find().exec();
+    if (users.length === 0) {
+      throw new Error('No users found to notify');
     }
 
-    await this.sendEmailNotifications(clients, savedFormation);
+    await this.sendEmailNotifications(users, savedFormation);
 
     return savedFormation;
   }
@@ -102,12 +102,12 @@ export class FormationService {
       .populate('niveaux')
       .populate({
         path: 'forums.user',
-        model: 'Client'
+        model: 'User'
       })
       .exec();
   }
 
-  // private async sendEmailNotifications(clients: Client[], formation: Formation) {
+  // private async sendEmailNotifications(users: User[], formation: Formation) {
   //   const transporter = nodemailer.createTransport({
   //     service: 'gmail',
   //     auth: {
@@ -116,35 +116,35 @@ export class FormationService {
   //     },
   //   });
 
-  //   for (const client of clients) {
+  //   for (const user of users) {
   //     const mailOptions = {
   //       from: 'eyabenamara288@gmail.com', 
-  //       to: client.email,
+  //       to: user.email,
   //       subject: `New Formation Available: ${formation.titre}`,
   //       text: `A new formation titled "${formation.titre}" is now available. Check it out!`,
   //     };
 
   //     try {
   //       await transporter.sendMail(mailOptions);
-  //       console.log(`Email sent to ${client.email}`);
+  //       console.log(`Email sent to ${user.email}`);
   //     } catch (error) {
-  //       console.error(`Failed to send email to ${client.email}:`, error);
+  //       console.error(`Failed to send email to ${user.email}:`, error);
   //     }
   //   }
   // }
-    for (const client of clients) {
+    for (const user of users) {
       const mailOptions = {
         from: 'eyabenamara288@gmail.com',
-        to: client.email,
+        to: user.email,
         subject: `New Formation Available: ${formation.titre}`,
         text: `A new formation titled "${formation.titre}" is now available. Check it out!`,
       };
 
       try {
         await transporter.sendMail(mailOptions);
-        console.log(`Email sent to ${client.email}`);
+        console.log(`Email sent to ${user.email}`);
       } catch (error) {
-        console.error(`Failed to send email to ${client.email}:`, error);
+        console.error(`Failed to send email to ${user.email}:`, error);
       }
     }
   }
@@ -154,7 +154,7 @@ export class FormationService {
   findById: any;
   constructor(
     @InjectModel(Formation.name) private formationModel: Model<Formation>,
-    @InjectModel(Client.name) private clientModel: Model<Client>,
+    @InjectModel(User.name) private userModel: Model<User>,
     @InjectModel(Niveau.name) private niveauModel: Model<Niveau>,
     @InjectModel(Cours.name) private coursModel: Model<Niveau>,
   ) {}
@@ -179,12 +179,12 @@ export class FormationService {
 
     console.log('Formation created:', savedFormation);
 
-    const clients = await this.clientModel.find().exec();
-    if (clients.length === 0) {
-      throw new Error('No clients found to notify');
+    const users = await this.userModel.find().exec();
+    if (users.length === 0) {
+      throw new Error('No users found to notify');
     }
 
-    //await this.sendEmailNotifications(clients, savedFormation);
+    //await this.sendEmailNotifications(users, savedFormation);
 
     return savedFormation;
   }
@@ -272,7 +272,7 @@ export class FormationService {
     return this.formationModel.findById(id).populate('niveau').exec();
   }
 
-  /*private async sendEmailNotifications(clients: Client[], formation: Formation) {
+  /*private async sendEmailNotifications(users: User[], formation: Formation) {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -281,19 +281,19 @@ export class FormationService {
       },
     });
 
-    for (const client of clients) {
+    for (const user of users) {
       const mailOptions = {
         from: 'eyabenamara288@gmail.com',
-        to: client.email,
+        to: user.email,
         subject: `New Formation Available: ${formation.titre}`,
         text: `A new formation titled "${formation.titre}" is now available. Check it out!`,
       };
 
       try {
         await transporter.sendMail(mailOptions);
-        console.log(`Email sent to ${client.email}`);
+        console.log(`Email sent to ${user.email}`);
       } catch (error) {
-        console.error(`Failed to send email to ${client.email}:`, error);
+        console.error(`Failed to send email to ${user.email}:`, error);
       }
     }
   }*/

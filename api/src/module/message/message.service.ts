@@ -4,7 +4,7 @@ import { UpdateMessageDto } from './dto/update-message.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Message, MessageDocument } from './entities/message.entity';
 import { Model } from 'mongoose';
-import { Client, User, UserDocument } from 'src/auth/schemas/user.schema';
+import { User, UserDocument } from 'src/auth/schemas/user.schema';
 import { Formation, FormationDocument } from '../formation/schemas/formation.schema';
 import { Forum, ForumDocument } from './entities/forum.entity';
 
@@ -13,7 +13,7 @@ export class MessageService {
 
   constructor(
     @InjectModel(Message.name) private readonly messageModel: Model<MessageDocument>,
-    @InjectModel(Client.name) private clientModel: Model<Client>,
+    @InjectModel(User.name) private clientModel: Model<User>,
     @InjectModel(Formation.name) private readonly formationModel: Model<FormationDocument>,
     @InjectModel(Forum.name) private readonly forumModel: Model<ForumDocument>,
 

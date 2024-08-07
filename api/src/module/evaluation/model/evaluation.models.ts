@@ -3,42 +3,46 @@ import { Document ,Schema as MongooseSchema} from "mongoose";
 
 
 export enum typeEvaluation {
-    PARAGRAPH = 'Paragraph',
-    SHORTRESPONSE = 'Shortresponse'
+  Paragraph = 'paragraph',
+  Shortresponse = 'shortresponse'
   }
 
 export type EvaluationDocument = Evaluation & Document;
+export type QuizzDocument = Quizz & Document;
 
 @Schema()
 export class Evaluation {
  
-    @Prop({ required: true })
+    @Prop()
     titre: string;
 
-    @Prop({ required: true })
+    @Prop()
     description: string;
 
-    @Prop({ required: true })
+    @Prop()
     question: string;
 
-    @Prop({ required: true })
+    @Prop()
     type: typeEvaluation;
 
-    @Prop({ required: true })
-    courseId: string;
+    @Prop()
+    niveauId: string;
   
-    @Prop({ required: true })
+    @Prop()
     userId: string;
   
-    @Prop({ required: true })
+    @Prop()
     score: number;
-  
-    @Prop({ required: true })
-    maxScore: number;
+
+    @Prop()
+    isValidated: boolean;
+
+    
 
 }
 
 export const EvaluationSchema = SchemaFactory.createForClass(Evaluation);
+
 
 @Schema()
 export class Quizz extends Evaluation {
@@ -53,6 +57,9 @@ export class Quizz extends Evaluation {
 
   @Prop()
   option4: string;
+
+  @Prop()
+  correctOption: string;
 }
 
 export const QuizzSchema = SchemaFactory.createForClass(Quizz);

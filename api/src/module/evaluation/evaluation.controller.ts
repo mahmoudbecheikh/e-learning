@@ -37,18 +37,12 @@ export class EvaluationsController {
         return this.service.Delete(id);
     }
 
-    @Post('/search')
-    Search(@Query('key')  key)
-    {
-        return this.service.Search();
-    }
+    
 
-
-
-  @Post(':coursId')
-  async addEvaluationToCours(@Param('coursId') coursId: string, @Body() evaluationDto: EvaluationDto) {
+  @Post(':niveauId')
+  async addEvaluationToNiveau(@Param('niveauId') niveauId: string, @Body() evaluationDto: EvaluationDto) {
     try {
-      return await this.service.addEvaluationToCours(coursId, evaluationDto);
+      return await this.service.addEvaluationToNiveau(niveauId, evaluationDto);
     } catch (error) {
       throw new NotFoundException(error.message);
     }
@@ -56,7 +50,14 @@ export class EvaluationsController {
 
 
 
-
+  @Get('/niveau/:niveauId')
+  async getEvaluationsByNiveau(@Param('niveauId') niveauId: string) {
+    try {
+      return await this.service.getEvaluationsByNiveau(niveauId);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
     
 }
 
