@@ -2,7 +2,6 @@ import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 // import { File } from '../entities/cours.entity';
 export class CreateCourDto {
   @IsString()
-  @MaxLength(30)
   @IsNotEmpty()
   readonly nom: string;
 
@@ -14,7 +13,6 @@ export class CreateCourDto {
   files: any[];
 
   @IsString()
-  @MaxLength(30)
   @IsNotEmpty()
   readonly description: string;
 

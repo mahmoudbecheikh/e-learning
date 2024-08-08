@@ -27,6 +27,9 @@ import EvaluationDetails from "./pages/evaluation/EvaluationDetails";
 import QuizzList from "./pages/evaluation/QuizzList";
 import QuizzForm from "./pages/evaluation/QuizzForm";
 import QuizzDetails from "./pages/evaluation/QuizzDetails";
+import Forums from "./pages/forums";
+import FormationsList from "./pages/administrations/ListeFormations";
+import Formation from "./pages/clients/Formation";
 function App() {
   return (
     <Router>
@@ -42,11 +45,14 @@ function App() {
         <Route path="/*" element={<MainLayout />} />
         <Route path="/cours" element={<ListingCourse />} />
         <Route path="/cours/add/:niveauIndex" element={<CreateCourse />} />
+        <Route path="/cours/addCours" element={<CreateCourse />} />
         <Route path="/cours/:coursId" element={<CoursItem />} />
         <Route path="/cours/update/:coursId" element={<UpdateCourse />} />
         <Route path="/message" element={<Messagesection />} />
-        <Route path="/formationdetails/:id/message" element={<Messagesection />} />
         <Route path="/formationdetails/:id" element={<FormationDetails />} />
+        <Route path="/forums" element={<Forums />} />
+        <Route path="/listformations" element={<FormationsList />} />
+        <Route path="/formations/:idFormation" element={<Formation />} />
 
 
         <Route path="/evaluations" element={<EvaluationsList/>} />

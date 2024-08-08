@@ -17,7 +17,7 @@ import {
   ModalCloseButton,
   ModalBody,
 } from '@chakra-ui/react';
-import { GlobalContext } from '../../globalwrapper';
+import { GlobalContext } from '../globalwrapper';
 
 const EvaluationForm = ({ isEdit, evaluation, niveauId, isOpen, onClose }) => {
   const { updateEvaluation, addEvaluationToNiveau } = useContext(GlobalContext);

@@ -12,6 +12,7 @@ import { NiveauModule } from './module/niveau/niveau.module';
 import { MailerConfigModule } from './auth/mailer.module';
 import { EvaluationsModule } from './module/evaluation/evaluation.module';
 import { MessageModule } from './module/message/message.module';
+import { ProgressModule } from './module/progress/progress.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -29,8 +30,10 @@ import { MessageModule } from './module/message/message.module';
     NiveauModule,
     MailerConfigModule,
     EvaluationsModule,
+    EvaluationsModule,
 
     MessageModule,
+    ProgressModule,
 
   ],
   controllers: [AppController],

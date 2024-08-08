@@ -9,8 +9,6 @@ export type FormationDocument = HydratedDocument<Formation>;
 
 @Schema()
 export class Formation {
-  
-
   @Prop({ required: true })
   titre: string;
 
@@ -32,6 +30,7 @@ export class Formation {
 
   @Prop({ type: [MessageSchema], default: [] })
   forums: Types.DocumentArray<Message>;
+  
   @Prop({ type: [Types.ObjectId], ref: 'Niveau', required: true })
   niveau: Niveau[];
 }

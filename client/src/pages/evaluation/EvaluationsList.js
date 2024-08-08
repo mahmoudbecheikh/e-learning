@@ -16,10 +16,10 @@ import {
   VStack,
   Collapse,
 } from '@chakra-ui/react';
-import { GlobalContext } from '../../globalwrapper';
 import EvaluationForm from './EvaluationForm';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { GlobalContext } from '../globalwrapper';
 
 const EvaluationsList = ({ niveauId,fetchEvaluations }) => {
   const { getEvaluationsByNiveauId, deleteEvaluation } = useContext(GlobalContext);

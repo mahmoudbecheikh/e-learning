@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { format } from "date-fns";
+
 const Cours = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -40,7 +42,6 @@ const Cours = () => {
     }
   };
 
-
   useEffect(() => {
     fetchCourses();
   }, []);
@@ -50,8 +51,11 @@ const Cours = () => {
         <Loading />
       ) : (
         <div>
-          <Button className="common-btn" onClick={() => navigate(`/cours/add`)}>
-            Add Course
+          <Button
+            className="common-btn"
+            onClick={() => navigate(`/cours/addCours`)}
+          >
+            Ajouter Cours
           </Button>
           <div className="courses-table">
             {courses && courses.length > 0 ? (
@@ -71,7 +75,7 @@ const Cours = () => {
                       <td>
                         <Link to={`/cours/${course._id}`}>{course.nom}</Link>
                       </td>
-                      <td>{course.dateCreation}</td>
+                      <td>{format(course.dateCreation,'dd/MM/yyyy HH:mm')}</td>
                       <td>
                         <FontAwesomeIcon
                           className="action-button"

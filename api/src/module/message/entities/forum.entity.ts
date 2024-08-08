@@ -13,6 +13,7 @@ export class Forum {
 
     @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Client' })
     user: User;
+    
 
     @Prop({default: [] })
     messages: Types.DocumentArray<Message>;

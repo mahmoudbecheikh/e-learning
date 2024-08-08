@@ -17,6 +17,38 @@ export default function UpdateCourse() {
   const [videoPrev, setVideoPrev] = useState("");
   const [btnLoading, setBtnLoading] = useState(false);
 
+
+  useEffect(() => {
+    const fetchCours = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(
+          `http://localhost:5000/cours/${params.coursId}`
+        );
+
+        const data = await res.json();
+        if (data.success === false) {
+          setError(true);
+          setLoading(false);
+          return;
+        }
+        setCours(data);
+        setNom(data.nom);
+        setDescription(data.description)
+        setFiles(data.files)
+        setvideo(data.video)
+        setVideoPrev(`http://localhost:5000/uploads/${data.video.filename}`);
+        setLoading(false);
+        setError(false);
+      } catch (error) {
+        setError(true);
+        setLoading(false);
+      }
+    };
+    fetchCours();
+  }, [params.coursId]);
+
+
   const changeVideoHandler = (e) => {
     const video = e.target.files[0];
     const reader = new FileReader();
@@ -50,7 +82,7 @@ export default function UpdateCourse() {
 
     try {
       const { data } = await axios.patch(
-        `http://localhost:4500/cours/${cours._id}`,
+        `http://localhost:5000/cours/${cours._id}`,
         myForm
       );
       if(data){
@@ -67,36 +99,6 @@ export default function UpdateCourse() {
       setBtnLoading(false);
     }
   };
-
-  useEffect(() => {
-    const fetchCours = async () => {
-      try {
-        setLoading(true);
-        const res = await fetch(
-          `http://localhost:4500/cours/${params.coursId}`
-        );
-
-        const data = await res.json();
-        if (data.success === false) {
-          setError(true);
-          setLoading(false);
-          return;
-        }
-        setCours(data);
-        setNom(data.nom);
-        setDescription(data.description)
-        setFiles(data.files)
-        setvideo(data.video)
-        setVideoPrev(`http://localhost:4500/uploads/${data.video.filename}`);
-        setLoading(false);
-        setError(false);
-      } catch (error) {
-        setError(true);
-        setLoading(false);
-      }
-    };
-    fetchCours();
-  }, [params.coursId]);
 
   return (
     <div className="form-container">
@@ -144,7 +146,7 @@ export default function UpdateCourse() {
                   //  onClick={() => downloadFile(file.filename)}
                 >
                   <a
-                    href={`http://localhost:4500/uploads/${file.filename}`}
+                    href={`http://localhost:5000/uploads/${file.filename}`}
                     target="_blank"
                     rel="noreferrer"
                   >

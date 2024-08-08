@@ -164,7 +164,6 @@ const FormationDetails = () => {
           )}
         </Box>
       </VStack>
-      <Messagesection />
     </Container>
   );
 };

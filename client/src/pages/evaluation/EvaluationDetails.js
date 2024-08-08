@@ -8,7 +8,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import { GlobalContext } from '../../globalwrapper';
+import { GlobalContext } from '../globalwrapper';
 
 const EvaluationDetails = () => {
   const { id } = useParams(); // Assure-toi d'extraire l'ID correctement

@@ -79,6 +79,7 @@ const Login = () => {
         try {
             const decodedToken = jwtDecode(responseData.token);
             localStorage.setItem("email", decodedToken.email);
+            localStorage.setItem("id", decodedToken.sub);
           } catch (error) {
             console.error('Invalid token:', error);
           }

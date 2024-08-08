@@ -1,23 +1,25 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { Box, Button } from '@chakra-ui/react';
+import ReactPlayer from 'react-player';
 import "./Cours.css";
-import EvaluationsList from "../evaluation/EvaluationsList";
-import EvaluationForm from "../evaluation/EvaluationForm";
 
 export default function CoursItem() {
   const [cours, setCours] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [showEvaluations, setShowEvaluations] = useState(false);
-  const [showAddEvaluationForm, setShowAddEvaluationForm] = useState(false); // New state
+  const [playedSeconds, setPlayedSeconds] = useState(0);
+  const [videoDuration, setVideoDuration] = useState(0);
+  const playerRef = useRef(null); // Référence pour ReactPlayer
   const params = useParams();
 
   useEffect(() => {
     const fetchCours = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:5000/cours/${params.coursId}`);
+        const res = await fetch(
+          `http://localhost:5000/cours/${params.coursId}`
+        );
+
         const data = await res.json();
         if (data.success === false) {
           setError(true);
@@ -35,25 +37,54 @@ export default function CoursItem() {
     fetchCours();
   }, [params.coursId]);
 
+  const handleProgress = (progress) => {
+    setPlayedSeconds(progress.playedSeconds);
+  };
+
+  const handleDuration = (duration) => {
+    setVideoDuration(duration);
+  };
+
+  const handleSeek = (newTime) => {
+    // Réinitialiser la position si l'utilisateur tente d'avancer
+    if (newTime > playedSeconds) {
+      playerRef.current.seekTo(playedSeconds, 'seconds');
+    }
+  };
+
+  const isVideoComplete = playedSeconds >= videoDuration;
+
   return (
     <main>
-      {loading && <p className="text-center my-7 text-2xl">Loading...</p>}
+      {loading && <p className="text-center my-7 text-2xl">Chargement...</p>}
       {error && (
-        <p className="text-center my-7 text-2xl">Something went wrong!</p>
+        <p className="text-center my-7 text-2xl">Problème!</p>
       )}
       {cours && !loading && !error && (
         <div className="video-display">
           <h1>{cours.nom}</h1>
           <p>{cours.description}</p>
-          <video
+          <ReactPlayer
+            ref={playerRef}
+            url={`http://localhost:5000/uploads/${cours.video.filename}`}
+            width="100%"
             controls
-            src={`http://localhost:5000/uploads/${cours.video.filename}`}
-            width={"100%"}
-            controlsList="nodownload noremoteplayback"
-            disablePictureInPicture
-            disableRemotePlayback
             autoPlay
-          ></video>
+            config={{ file: { attributes: { controlsList: 'nodownload noremoteplayback' } } }}
+            onProgress={handleProgress}
+            onDuration={handleDuration}
+            onSeek={handleSeek}
+            progressInterval={1000}
+            playIcon={<button>Play</button>}
+            light
+          />
+          <div className="video-status">
+            <p>Temps visionné: {Math.floor(playedSeconds)} secondes</p>
+            <p>Temps total: {Math.floor(videoDuration)} secondes</p>
+            <p>
+              {isVideoComplete ? "Vidéo terminée" : "Vidéo en cours"}
+            </p>
+          </div>
           <div className="files-list">
             <h2>Files</h2>
             <ul>
@@ -69,19 +100,6 @@ export default function CoursItem() {
               ))}
             </ul>
           </div>
-
-          
-          {/* <Button onClick={() => setShowEvaluations(!showEvaluations)} mt="4" colorScheme="teal">
-            {showEvaluations ? 'Masquer les Questions' : 'Afficher les Questions'}
-          </Button>
-          
-          {showEvaluations && (
-            <Box mt="4">
-              <EvaluationsList courseId={params.coursId} />
-            </Box>
-          )} */}
-
-
         </div>
       )}
     </main>

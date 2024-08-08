@@ -17,7 +17,7 @@ import EvaluationsList from "./EvaluationsList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus, faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 import QuizForm from "./QuizzForm";
-import { GlobalContext } from "../../globalwrapper";
+import { GlobalContext } from "../globalwrapper";
 import EvaluationForm from "./EvaluationForm";
 
 const Questions = ({ niveauId }) => {

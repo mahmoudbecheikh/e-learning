@@ -3,6 +3,7 @@ import { Document, Types } from 'mongoose';
 import * as mongoose from 'mongoose';
 import * as AutoIncrementFactory from 'mongoose-sequence';
 import { Cours } from 'src/module/cours/entities/cours.entity';
+import { Formation } from 'src/module/formation/schemas/formation.schema';
 import { Evaluation } from 'src/module/evaluation/model/evaluation.models';
 
 const AutoIncrement = AutoIncrementFactory(mongoose);
@@ -14,6 +15,20 @@ export class Niveau extends Document {
   
   @Prop({ required: true })
   title: string;
+
+ 
+  @Prop({
+    required: true
+        //formationId: { type: Types.ObjectId, ref: 'Formation', required: true },
+       
+      
+    
+  })
+  formationTitle: string
+  
+    
+ 
+
   @Prop({type:[Types.ObjectId], ref:'Cours',required:true})
   cours:Cours[];
 

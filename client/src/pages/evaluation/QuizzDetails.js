@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Box, Button, Heading, Text, VStack } from '@chakra-ui/react';
-import { GlobalContext } from '../../globalwrapper';
+import { GlobalContext } from '../globalwrapper';
 
 const QuizzDetails = () => {
     const { getQuizzById } = useContext(GlobalContext);

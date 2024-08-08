@@ -13,7 +13,7 @@ import {
     Flex,
     Tooltip,
 } from '@chakra-ui/react';
-import { GlobalContext } from '../../globalwrapper';
+import { GlobalContext } from '../globalwrapper';
 import QuizForm from './QuizzForm';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';

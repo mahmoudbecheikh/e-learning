@@ -3,7 +3,7 @@ import { Table, TableCaption, Thead, Tbody, Tr, Th, Td, Box, Button, Alert, Aler
 import { Profiler } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { AiOutlineArrowLeft, AiOutlineArrowRight, AiOutlinePlus } from 'react-icons/ai'; // Importer les icônes de flèche
-import { GlobalContext } from '../../../globalwrapper';
+import { GlobalContext } from '../../globalwrapper';
 import AddUser from './adduser';
 
 const EmployeurList = () => {
