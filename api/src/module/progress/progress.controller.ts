@@ -7,10 +7,10 @@ import { UpdateProgressDto } from './dto/update-progress.dto';
 export class ProgressController {
   constructor(private readonly progressService: ProgressService) { }
 
-  @Post()
-  create(@Body() createProgressDto: CreateProgressDto) {
-    return this.progressService.create(createProgressDto);
-  }
+  // @Post()
+  // create(@Body() createProgressDto: CreateProgressDto) {
+  //   return this.progressService.create(createProgressDto);
+  // }
 
 
 
@@ -20,7 +20,7 @@ export class ProgressController {
     return this.progressService.find(user, formation);
   }
 
-  @Put(':id')
+  @Patch(':id')
   update(@Param('id') id: string, @Body() updateProgressDto: UpdateProgressDto) {
     return this.progressService.addCours(id, updateProgressDto);
   }

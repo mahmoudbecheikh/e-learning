@@ -11,13 +11,14 @@ const Messagesection = () => {
   const [forum, setForum] = useState(null);
   const [contenu, setContenu] = useState("");
   const params = useParams();
+  const { idFormation } = useParams();
 
   useEffect(() => {
     axios
       .get("http://localhost:5000/messages", {
         params: {
           idClient: localStorage.getItem("id"),
-          idFormation: params.id,
+          idFormation: idFormation,
         },
       })
       .then((response) => {
@@ -54,9 +55,10 @@ const Messagesection = () => {
       axios
         .post("http://localhost:5000/messages/forum", {
           user: localStorage.getItem("email"),
-          formation: params.id,
+          formation: idFormation,
         })
         .then((response) => {
+          console.log(response);
           setForum(response.data);
           
           const payload = {

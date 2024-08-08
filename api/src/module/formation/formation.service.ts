@@ -161,31 +161,14 @@ export class FormationService {
 
   async create(createFormationDto: CreateFormationDto): Promise<Formation> {
     console.log('Creating formation with data:', createFormationDto);
-   
-   /* const formations = await this.formationModel.find().exec();
 
-    const formationInfos = formations.map((formations) => ({
-     
-      formationTitle: formations.titre,
-    }));
-    console.log(formationInfos);*/
-
-    const formation = await this.formationModel.find().exec();
-    const formationid=formation.map((formation=>formation._id))
-    console.log(formationid);
     // Create and save Niveau objects
     const niveaux = await Promise.all(
       createFormationDto.niveau.map(async (niveauDto) => {
-        // Add the formation title to each Niveau
-        const newNiveau = new this.niveauModel({
-          ...niveauDto,
-          formationTitle: createFormationDto.titre,
-          
-        });
+        const newNiveau = new this.niveauModel(niveauDto);
         return newNiveau.save();
       }),
     );
-  
 
     // Create Formation with Niveau IDs
     const createdFormation = new this.formationModel({
@@ -252,12 +235,12 @@ export class FormationService {
         throw new NotFoundException(`Formation with id ${id} not found`);
       }
     
-      // Delete associated Niveaux 
+      // Delete associated Niveaux and their Cours
       if (formation.niveau && formation.niveau.length > 0) {
         const niveauIds = formation.niveau.map(niveau => new Types.ObjectId(niveau._id as any));
         if (niveauIds.length > 0) {
           console.log('Deleting Niveaux with IDs:', niveauIds);
-          /*await Promise.all(
+          await Promise.all(
             niveauIds.map(async (niveauId) => {
               const niveau = await this.niveauModel.findById(niveauId).exec();
               if (niveau && niveau.cours.length > 0) {
@@ -265,13 +248,13 @@ export class FormationService {
                 await this.coursModel.deleteMany({ _id: { $in: coursIds } }).exec();
               }
             }),
-          );*/
+          );
           await this.niveauModel.deleteMany({ _id: { $in: niveauIds } }).exec();
         }
       }
     
       await this.formationModel.findByIdAndDelete(objectId).exec();
-      return { message: 'Formation, niveaux successfully deleted' };
+      return { message: 'Formation, niveaux, and courses successfully deleted' };
     }
     
 

@@ -14,28 +14,18 @@ export class ProgressService {
 
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
-    @InjectModel(Formation.name) private readonly formationModel: Model<FormationDocument>,
-    @InjectModel(Progress.name) private readonly progressModel: Model<ProgressDocument>,
-    @InjectModel(Cours.name) private readonly coursModel: Model<CoursDocument>,
+    @InjectModel(Formation.name) private readonly formationModel: Model<Formation>,
+    @InjectModel(Progress.name) private readonly progressModel: Model<Progress>,
+    @InjectModel(Cours.name) private readonly coursModel: Model<Cours>,
 
 
   ) { }
 
 
-  async create(createProgressDto: CreateProgressDto): Promise<Progress | null> {
+  async create(user: User, formation: Formation): Promise<Progress | null> {
     try {
-
-      const user = await this.userModel.findById(createProgressDto.user).exec();
-      if (!user) {
-        throw new Error('User not found');
-      }
-      const formation = await this.formationModel.findById(createProgressDto.formation).exec();
-      if (!formation) {
-        throw new Error('Formation not found');
-      }
-
       return (await new this.progressModel({
-        formation: formation._id,
+        formation: formation,
         niveauActually: formation.niveau[0],
         user: user._id,
       }).save())
@@ -58,48 +48,79 @@ export class ProgressService {
           model: 'Niveau',
         },
         {
-          path: 'formation',
-          model: 'Formation',
+          path: 'completedNiveau',
+          model: 'Niveau'
         },
+        {
+          path: 'formation',
+          populate: {
+            path: 'niveau',
+            model:'Niveau'
+          }
+        }
+
       ]);
+    console.log(progress);
     return null
   }
 
   async addCours(id: string, updateProgressDto: UpdateProgressDto) {
-
-    const progress = await this.progressModel.findById(
-      id,
-      // { $push: { cours: updateProgressDto.cours } },
-      // { new: true }
-    ).populate([{
-      path: 'niveauActually',
-      model: 'Niveau',
-    },{
-      path:'formation',
-      model:'Formation'
-    }
-  ],);
-
-    if (progress) {
-      const cours = await this.coursModel.findById(updateProgressDto.cours).exec()
-      progress.completedCours.push(cours)
-      if (progress.niveauActually.cours.length == progress.completedCours.length) {
-        progress.completedCours = []
-        progress.completedNiveau.push(progress.niveauActually)
-        if (progress.completedNiveau.length < progress.formation.nbrNiveau)
-          progress.niveauActually = progress.formation.niveau[progress.completedNiveau.length];
-        else progress.finish = true
+    try {
+      // Trouver le progrès en cours avec les informations nécessaires
+      const progress = await this.progressModel.findById(id)
+        .populate({
+          path: 'niveauActually',
+          model: 'Niveau'
+        })
+        .populate({
+          path: 'formation',
+          model: 'Formation',
+          populate: {
+            path: 'niveau',
+            model: 'Niveau'
+          }
+        })
+        .exec();
+    
+      if (!progress) {
+        throw new Error('Progress not found');
       }
-      console.log(progress.completedNiveau.length);
-      console.log( progress.formation.niveau[progress.completedNiveau.length-1]);
-      progress.save()
+  
+      const cours = await this.coursModel.findById(updateProgressDto.cours).exec();
+      if (!cours) {
+        throw new Error('Course not found');
+      }
+  
+      progress.completedCours.push(cours);
+  
+      const allCoursesCompleted = progress.niveauActually.cours.every(course =>
+        progress.completedCours.some(completedCourse => completedCourse._id.equals(course._id))
+      );
+
+      if (allCoursesCompleted) {
+        progress.completedCours = [];
+  
+        const completedNiveau = progress.formation.niveau[progress.completedNiveau.length];
+        if (completedNiveau) {
+          progress.completedNiveau.push(completedNiveau._id);
+        }
+  
+        if (progress.completedNiveau.length < progress.formation.nbrNiveau) {
+          progress.niveauActually = progress.formation.niveau[progress.completedNiveau.length];
+        } else {
+          progress.niveauActually=null
+          progress.finish = true;
+        }
+      }
+  
+      await progress.save();
+  
+      return progress;
+    } catch (error) {
+      console.error('Error in addCours:', error);
+      throw error;
     }
-
-
-    return progress;
-
-
-
   }
-
+  
+  
 }

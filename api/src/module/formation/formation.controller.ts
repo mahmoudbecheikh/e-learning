@@ -16,24 +16,7 @@ import { Niveau } from 'src/module/niveau/schemas/niveau.schema';
 @Controller('formation')
 export class FormationController {
   constructor(private readonly formationService: FormationService) {}
-/* @Post('upload')
-  @UseInterceptors(FileInterceptor('file', {
-    storage: diskStorage({
-      destination: './uploads',
-      filename: (req, file, cb) => {
-        const randomName = Array(32)
-          .fill(null)
-          .map(() => Math.round(Math.random() * 16).toString(16))
-          .join('');
-        cb(null, `${randomName}${extname(file.originalname)}`);
-      },
-    }),
-  }))
-  async uploadFile(@UploadedFile() file, @Body() createFormationDto: CreateFormationDto) {
-    createFormationDto.imageUrl = file.path;
-    return this.formationService.create(createFormationDto);
-  }
-}*/
+
   @Post()
   async create(@Body() createFormationDto: CreateFormationDto) {
     return this.formationService.create(createFormationDto);

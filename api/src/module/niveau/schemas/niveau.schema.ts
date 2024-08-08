@@ -13,6 +13,7 @@ export type NiveauDocument = Niveau & Document;
 @Schema()
 export class Niveau extends Document {
   
+
   @Prop({ required: true })
   title: string;
 

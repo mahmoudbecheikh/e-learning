@@ -31,6 +31,7 @@ import Forums from "./pages/forums";
 import FormationsList from "./pages/administrations/Formation/ListeFormations";
 import Formation from "./pages/clients/Formation";
 import FormationAdminDetails from "./pages/administrations/Formation/FormationDetails";
+import VideoPlayer from "./components/VideoPlayer";
 function App() {
   return (
     <Router>
@@ -55,6 +56,7 @@ function App() {
         
 
         <Route path="/formations/:idFormation" element={<Formation />} />
+        <Route path="/video" element={<VideoPlayer />} />
 
 
         

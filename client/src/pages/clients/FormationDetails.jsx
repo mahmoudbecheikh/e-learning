@@ -32,11 +32,16 @@ const FormationDetails = () => {
   useEffect(() => {
     const fetchFormation = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/formation/${id}`);
+        const response = await axios.get(
+          `http://localhost:5000/formation/${id}`
+        );
         setFormation(response.data);
       } catch (error) {
-        console.error("Erreur de récupération des détails de la formation", error);
-        navigate("/"); 
+        console.error(
+          "Erreur de récupération des détails de la formation",
+          error
+        );
+        navigate("/");
       } finally {
         setLoading(false);
       }
@@ -44,6 +49,26 @@ const FormationDetails = () => {
 
     fetchFormation();
   }, [id, navigate]);
+
+  const subscribe = async () => {
+    const idUser = localStorage.getItem("id");
+    const myForm = {
+      user: idUser,
+    };
+
+    try {
+      const { data } = await axios.put(
+        `http://localhost:5000/formation/subscribe/${id}`,
+        myForm
+      );
+      if (data) {
+        localStorage.setItem('progress',data._id)
+        navigate(`/formations/${id}`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   if (loading) {
     return (
@@ -138,6 +163,7 @@ const FormationDetails = () => {
           ) : (
             <Text fontSize="md">Aucun niveau disponible.</Text>
           )}
+          <Button onClick={() => subscribe()}>S'inscrire</Button>
         </Box>
       </VStack>
     </Container>

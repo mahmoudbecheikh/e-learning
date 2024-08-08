@@ -12,7 +12,7 @@ export type ProgressDocument = HydratedDocument<Progress>;
 @Schema()
 export class Progress {
 
-
+z
     @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
     user: User;
 
@@ -23,10 +23,11 @@ export class Progress {
     niveauActually : Niveau
 
     @Prop({type:[Types.ObjectId], ref:'Niveau', default:[]})
-    completedNiveau:Niveau[];
+    completedNiveau:any[];
 
     @Prop({type:[Types.ObjectId], ref:'Cours', default:[]})
     completedCours:Cours[] ;
+    
 
     @Prop({type:Boolean , default : false})
     finish:boolean ;

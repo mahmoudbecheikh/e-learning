@@ -42,6 +42,8 @@ export class Cours {
 
   @Prop()
   evaluations: Evaluation[];
+  
+  _id: any;
 }
 
 export const CoursSchema = SchemaFactory.createForClass(Cours);
