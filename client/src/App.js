@@ -24,6 +24,7 @@ import FormationDetails from "./pages/clients/FormationDetails";
 import Forums from "./pages/forums";
 import FormationsList from "./pages/administrations/ListeFormations";
 import Formation from "./pages/clients/Formation";
+import VideoPlayer from "./components/VideoPlayer";
 function App() {
   return (
     <Router>
@@ -47,6 +48,7 @@ function App() {
         <Route path="/forums" element={<Forums />} />
         <Route path="/listformations" element={<FormationsList />} />
         <Route path="/formations/:idFormation" element={<Formation />} />
+        {/* <Route path="/video" element={<VideoPlayer />} /> */}
 
       </Routes>
     </Router>

@@ -10,16 +10,20 @@ import {
   Button,
   Container,
   Spinner,
+  Collapse,
 } from "@chakra-ui/react";
 import Messagesection from "../message";
+import "./formation.css";
 
 const Formation = () => {
   const { idFormation } = useParams();
   const navigate = useNavigate();
   const [formation, setFormation] = useState(null);
   const [progress, setProgress] = useState(null);
-
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [openLevel, setOpenLevel] = useState(null); // État pour gérer le niveau ouvert
+  const [showMessages, setShowMessages] = useState(false); // État pour afficher/cacher les messages
   const idUser = localStorage.getItem("id");
 
   useEffect(() => {
@@ -27,26 +31,27 @@ const Formation = () => {
       try {
         const response = await axios.get(`http://localhost:5000/progress`, {
           params: {
-            idUser: localStorage.getItem("id"),
+            idUser: idUser,
             idFormation: idFormation,
           },
         });
         setProgress(response.data);
         setFormation(response.data.formation);
-        console.log(response);
       } catch (error) {
         console.error(
           "Erreur de récupération des détails de la formation",
           error
         );
-        navigate("/");
+        setError(
+          "Une erreur est survenue lors de la récupération des données."
+        );
       } finally {
         setLoading(false);
       }
     };
 
     fetchFormation();
-  }, [idFormation, navigate]);
+  }, [idFormation, navigate, idUser]);
 
   if (loading) {
     return (
@@ -55,7 +60,18 @@ const Formation = () => {
       </Container>
     );
   }
-  if (!formation)
+
+  if (error) {
+    return (
+      <Container centerContent>
+        <Heading as="h2" size="xl" mb={4}>
+          {error}
+        </Heading>
+      </Container>
+    );
+  }
+
+  if (!formation) {
     return (
       <Container centerContent>
         <Heading as="h2" size="xl" mb={4}>
@@ -63,10 +79,46 @@ const Formation = () => {
         </Heading>
       </Container>
     );
+  }
+
+  // Calculer les niveaux disponibles
+  const completedLevels = (progress.completedNiveau || []).map((niveau) => ({
+    ...niveau,
+    type: "completed",
+  }));
+
+  const currentLevel = progress.niveauActually
+    ? {
+        ...progress.niveauActually,
+        type: "current",
+      }
+    : null;
+
+  const availableLevels = formation.niveau
+    .filter(
+      (niveau) =>
+        !completedLevels.some((completed) => completed._id === niveau._id) &&
+        (!currentLevel || currentLevel._id !== niveau._id)
+    )
+    .map((niveau) => ({
+      ...niveau,
+      type: "available",
+    }));
+
+  // Fusionner les niveaux en une seule liste
+  const allLevels = [
+    ...completedLevels,
+    currentLevel,
+    ...availableLevels,
+  ].filter((level) => level); // Filtrer les valeurs nulles
+
+  const handleLevelClick = (niveauId) => {
+    setOpenLevel(openLevel === niveauId ? null : niveauId);
+  };
 
   return (
-    <Container maxW="container.lg">
-      <Button mt={4} mb={4} onClick={() => navigate(-1)}>
+    <Container className="main" maxW="container.lg" p={4}>
+      <Button mt={4} mb={4} onClick={() => navigate(-1)} colorScheme="teal">
         Retour
       </Button>
       <VStack spacing={4} align="stretch">
@@ -100,56 +152,96 @@ const Formation = () => {
           <Heading as="h3" size="lg" mb={2}>
             Niveaux
           </Heading>
-
-          {progress.niveauActually.cours &&
-          progress.niveauActually.cours.length > 0 ? (
-            progress.niveauActually.cours.map((cours, coursIndex) => (
-              <Box key={coursIndex} pl={4} borderLeft="2px solid teal">
-                <Text
-                  fontSize="md"
-                  onClick={() => navigate(`/cours/${cours._id}`)}
-                  mb={1}
+          {allLevels.length === 0 ? (
+            <Text fontSize="md">Tous les niveaux sont accessibles.</Text>
+          ) : (
+            allLevels.map((niveau, niveauIndex) => (
+              <Box key={niveauIndex} className="level-container">
+                <Box
+                  className="level-item"
+                  onClick={() => handleLevelClick(niveau._id)}
                 >
-                  {cours.nom}
-                </Text>
-              </Box>
-            ))
-          ) : (
-            <Text fontSize="md">Aucun cours disponible.</Text>
-          )}
+                  <Text flex="1">{niveau.title}</Text>
+                  <i
+                    className={`fa ${
+                      niveau.type === "completed"
+                        ? "fa-star completed-icon"
+                        : niveau.type === "current"
+                        ? "fa-check-circle current-icon"
+                        : "fa-lock locked-icon"
+                    }`}
+                    style={{ fontSize: "24px" }} // Ajustez la taille des icônes selon vos besoins
+                  ></i>
+                </Box>
+                <Collapse in={openLevel === niveau._id}>
+                  {(niveau.type === "completed" || niveau.type === "current") &&
+                  niveau.cours
+                    ? niveau.cours.map((cours, coursIndex) => {
+                        const isCompleted =
+                          progress.completedCours.some(
+                            (completedCoursItem) =>
+                              completedCoursItem._id === cours._id
+                          ) ||
+                          progress.completedNiveau.some(
+                            (completedNiveau) =>
+                              completedNiveau._id === niveau._id
+                          );
 
-          {/* {formation.niveau && formation.niveau.length > 0 ? (
-            formation.niveau.map((niveau, index) => (
-              <Box key={index} mb={4}>
-                <Heading as="h4" size="md" mb={2}>
-                  {niveau.title}
-                </Heading>
-                {niveau.cours && niveau.cours.length > 0 ? (
-                  niveau.cours.map((cours, coursIndex) => (
-                    <Box key={coursIndex} pl={4} borderLeft="2px solid teal">
-                      <Text fontSize="md" mb={1}>
-                       {cours.nom}
-                       
-                      </Text>
-                   
-                    <Text fontSize="md" mb={1}>
-                    {cours.description}
-                     
-                    </Text>
-                  </Box>
-                     
-                  ))
-                ) : (
-                  <Text fontSize="md">Aucun cours disponible.</Text>
-                )}
+                        return (
+                          <Box
+                            key={coursIndex}
+                            className="course-item"
+                            onClick={() =>
+                              navigate(`/cours/${cours._id}`, {
+                                state: { isCompleted },
+                              })
+                            }
+                          >
+                            <Text flex="1">{cours.nom}</Text>
+                            {niveau.type !== "completed" && ( // Ne pas afficher l'icône si le niveau est complet
+                              <i
+                                className={`fa ${
+                                  isCompleted
+                                    ? "fa-check completed-course-icon"
+                                    : "fa-times incomplete-course-icon"
+                                }`}
+                                style={{ fontSize: "20px" }} // Ajustez la taille des icônes selon vos besoins
+                              ></i>
+                            )}
+                          </Box>
+                        );
+                      })
+                    : null}
+                </Collapse>
               </Box>
             ))
-          ) : (
-            <Text fontSize="md">Aucun niveau disponible.</Text>
-          )} */}
+          )}
         </Box>
       </VStack>
-      <Messagesection></Messagesection>
+      {/* Icône de message */}
+      <Box
+        className="message-icon"
+        onClick={() => setShowMessages(!showMessages)}
+      >
+        <i className="fa fa-envelope" style={{ fontSize: "30px" }}></i>
+      </Box>
+      {/* Section des messages */}
+      {showMessages && <Messagesection />}
+
+      {progress.finish && (
+        <>
+          <div class="congrats-card">
+            <div class="congrats-icon">
+              <i class="fa fa-trophy"></i>
+            </div>
+            <h1 class="congrats-title">Félicitations !</h1>
+            <p class="congrats-message">
+              Vous avez terminé votre formation avec succès.
+            </p>
+            <button class="congrats-button">Voir le certificat</button>
+          </div>
+        </>
+      )}
     </Container>
   );
 };

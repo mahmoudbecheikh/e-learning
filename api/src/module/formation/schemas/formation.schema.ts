@@ -1,7 +1,8 @@
 
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-import { Document, HydratedDocument, Types } from 'mongoose';
+import { Document, HydratedDocument, ObjectId, Types } from 'mongoose';
+import { User, UserSchema } from 'src/auth/schemas/user.schema';
 import { Message, MessageSchema } from 'src/module/message/entities/message.entity';
 import { Niveau, NiveauSchema } from 'src/module/niveau/schemas/niveau.schema';
 
@@ -9,6 +10,9 @@ export type FormationDocument = HydratedDocument<Formation>;
 
 @Schema()
 export class Formation {
+
+  _id: ObjectId;
+
   @Prop({ required: true })
   titre: string;
 
@@ -27,6 +31,8 @@ export class Formation {
   @Prop({ required: true })
   nbrNiveau: number;
 
+  @Prop({ type: [UserSchema], default: [] })
+  users: Types.DocumentArray<User>;
 
   @Prop({ type: [MessageSchema], default: [] })
   forums: Types.DocumentArray<Message>;

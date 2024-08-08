@@ -1,0 +1,141 @@
+Formation.css
+
+.level-container {
+    display: flex;
+    flex-direction: column;
+    border-left: 2px solid teal;
+    padding-left: 16px;
+    margin-bottom: 16px;
+  }
+
+  .main{
+    margin: 10px 180px ;
+  }
+  
+  .level-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .level-item:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .completed-icon {
+    color: green;
+  }
+  
+  .current-icon {
+    color: blue;
+  }
+  
+  .locked-icon {
+    color: red;
+  }
+  
+  .course-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    cursor: pointer;
+    border-left: 2px solid teal;
+    margin-bottom: 8px;
+  }
+  
+  .completed-course-icon {
+    color: green;
+  }
+  
+  .incomplete-course-icon {
+    color: red;
+  }
+  
+  .message-icon {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    cursor: pointer;
+    z-index: 1000; /* Assure que l'icône est au-dessus du contenu */
+    
+    /* Style de l'icône */
+    width: 50px; /* Largeur de l'icône */
+    height: 50px; /* Hauteur de l'icône */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(61, 64, 77);
+    
+    /* Bordure circulaire */
+    border: 2px solid #007bff; /* Couleur de la bordure */
+    border-radius: 50%; /* Rendre la bordure circulaire */
+    
+    /* Style de fond et de l'icône */
+    background-color: #fff; /* Couleur de fond (blanc) */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre pour un effet de profondeur */
+  }
+  
+  /* Styles de la section des messages */
+  .message-section-hidden {
+    display: none;
+  }
+
+
+  .congrats-card {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background: linear-gradient(135deg, #f5a623, #f76b1c);
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    color: #fff;
+    animation: slideIn 0.5s ease-out;
+  }
+  
+  .congrats-icon {
+    font-size: 50px;
+    margin-bottom: 20px;
+    color: #fff;
+  }
+  
+  .congrats-title {
+    font-size: 36px;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  .congrats-message {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  
+  .congrats-button {
+    background-color: #fff;
+    color: #f76b1c;
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .congrats-button:hover {
+    background-color: #f7c14d;
+  }
+  
+  @keyframes slideIn {
+    from {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  

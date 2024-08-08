@@ -10,5 +10,7 @@ import forFeatureDb from 'src/db/for-feature.db';
   imports: [
     MongooseModule.forFeature(forFeatureDb),
   ],
+  exports: [ProgressService]
+
 })
 export class ProgressModule {}

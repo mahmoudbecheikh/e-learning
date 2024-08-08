@@ -10,6 +10,7 @@ const AutoIncrement = AutoIncrementFactory(mongoose);
 @Schema()
 export class Niveau extends Document {
   
+  _id : mongoose.ObjectId
 
   @Prop({ required: true })
   title: string;

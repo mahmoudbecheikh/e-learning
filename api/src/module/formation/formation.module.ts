@@ -6,13 +6,15 @@ import { Formation, FormationSchema } from './schemas/formation.schema';
 import { AuthModule } from '../../auth/auth.module';
 import { NiveauModule } from '../niveau/niveau.module';
 import { CoursModule } from '../cours/cours.module';
+import { ProgressModule } from '../progress/progress.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Formation.name, schema: FormationSchema }]),
     AuthModule,
     forwardRef(() => NiveauModule),
-    CoursModule  // Use forwardRef to resolve circular dependency
+    CoursModule ,
+    ProgressModule // Use forwardRef to resolve circular dependency
   ],
   providers: [FormationService],
   controllers: [FormationController],

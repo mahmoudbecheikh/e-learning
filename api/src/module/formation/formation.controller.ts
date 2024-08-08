@@ -65,4 +65,13 @@ export class FormationController {
     const niveau = new Niveau(createNiveauDto);
     return this.formationService.addLevel(id, niveau);
   }
+
+  @Put('/subscribe/:id')
+  async subscribe(
+    @Param('id') id: string,
+    @Body() data: any,
+  ) {
+    console.log(data);
+    return this.formationService.subscribe(data.user,id)
+  }
 }

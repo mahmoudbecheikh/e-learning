@@ -5,10 +5,6 @@ import { MessagesGateway } from 'src/utils/messages.gateway';
 import { MongooseModule } from '@nestjs/mongoose';
 import forFeatureDb from 'src/db/for-feature.db';
 
-@Module({
-  controllers: [MessageController],
-  providers: [MessageService, MessagesGateway],
-})
 
 @Module({
   controllers: [MessageController],

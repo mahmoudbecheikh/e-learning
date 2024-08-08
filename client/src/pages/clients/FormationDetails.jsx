@@ -22,11 +22,16 @@ const FormationDetails = () => {
   useEffect(() => {
     const fetchFormation = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/formation/${id}`);
+        const response = await axios.get(
+          `http://localhost:5000/formation/${id}`
+        );
         setFormation(response.data);
       } catch (error) {
-        console.error("Erreur de récupération des détails de la formation", error);
-        navigate("/"); 
+        console.error(
+          "Erreur de récupération des détails de la formation",
+          error
+        );
+        navigate("/");
       } finally {
         setLoading(false);
       }
@@ -34,6 +39,26 @@ const FormationDetails = () => {
 
     fetchFormation();
   }, [id, navigate]);
+
+  const subscribe = async () => {
+    const idUser = localStorage.getItem("id");
+    const myForm = {
+      user: idUser,
+    };
+
+    try {
+      const { data } = await axios.put(
+        `http://localhost:5000/formation/subscribe/${id}`,
+        myForm
+      );
+      if (data) {
+        localStorage.setItem('progress',data._id)
+        navigate(`/formations/${id}`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   if (loading) {
     return (
@@ -91,29 +116,33 @@ const FormationDetails = () => {
           </Heading>
           {formation.niveau && formation.niveau.length > 0 ? (
             formation.niveau.map((niveau, index) => (
-              <Box key={index} mb={4}>
-                <Heading as="h4" size="md" mb={2}>
-                  {niveau.title}
-                </Heading>
-                {niveau.cours && niveau.cours.length > 0 ? (
-                  niveau.cours.map((cours, coursIndex) => (
-                    <Box key={coursIndex} pl={4} borderLeft="2px solid teal">
-                      <Text fontSize="md" mb={1}>
-                        <Link to={`/cours/${cours._id}`}>{cours.nom}</Link>
-                      </Text>
-                      <Text fontSize="md" mb={1}>
-                        {cours.description}
-                      </Text>
-                    </Box>
-                  ))
-                ) : (
-                  <Text fontSize="md">Aucun cours disponible.</Text>
-                )}
-              </Box>
+              <>
+                {" "}
+                <Box key={index} mb={4}>
+                  <Heading as="h4" size="md" mb={2}>
+                    {niveau.title}
+                  </Heading>
+                  {niveau.cours && niveau.cours.length > 0 ? (
+                    niveau.cours.map((cours, coursIndex) => (
+                      <Box key={coursIndex} pl={4} borderLeft="2px solid teal">
+                        <Text fontSize="md" mb={1}>
+                          <Link to={`/cours/${cours._id}`}>{cours.nom}</Link>
+                        </Text>
+                        <Text fontSize="md" mb={1}>
+                          {cours.description}
+                        </Text>
+                      </Box>
+                    ))
+                  ) : (
+                    <Text fontSize="md">Aucun cours disponible.</Text>
+                  )}
+                </Box>
+              </>
             ))
           ) : (
             <Text fontSize="md">Aucun niveau disponible.</Text>
           )}
+          <Button onClick={() => subscribe()}>S'inscrire</Button>
         </Box>
       </VStack>
       <Messagesection />
