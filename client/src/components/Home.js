@@ -1,41 +1,80 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Button} from "@chakra-ui/react";
+import { Link } from "react-router-dom";
+import { Box, Button, Text } from "@chakra-ui/react";
+import home from '../images/home.jpg';
 
 const Home = () => {
+  const imageStyle = {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    height: '100%',
+    width: '100%',
+    pointerEvents: 'none',
+  };
 
+  const containerStyle = {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: '100vh',
+    position: 'relative',
+    zIndex: 1,
+  };
 
-    return (
-        <div>
-            <div className="container" style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                minHeight: '100vh'
-            }}>
-                <div className="row">
-                            <div style={{ textAlign: 'center' }}> {/* Centre les éléments dans le conteneur parent */}
-                                <h4 style={{ marginBottom:'20px'
-                                }}>Welcome to SA coaching</h4>
+  const buttonContainerStyle = {
+    position: 'absolute',
+    top: '50px',
+    right: '30px',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    zIndex: 2,
+  };
 
-                                <Button 
-                                    style={{ marginBottom:'20px'
-                                    }}>
-                                <Link to="/registration" > s'inscrire à SA coaching</Link></Button>
+  const buttonStyle = {
+    marginLeft: '10px'
+  };
 
-                                <div>
-                                    <p>
-                                        J'ai déjà un compte
-                                    </p>
-                                    <Link to="/login" style={{ marginLeft: '6px' }}>
-                                        <button style={{ color: 'red' }}>se connecter</button>
-                                    </Link>
-                                </div>                            
-                            </div>
-                        </div>
-                    </div>
-                </div>
-    );
+  const boxContainerStyle = {
+    position: 'absolute',
+    bottom: '50px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 3,
+    backgroundColor: 'white',
+    borderRadius: '50px',
+    width: '700px',
+    padding: '20px',
+  };
+
+  return (
+    <div>
+      <img src={home} alt="background" style={imageStyle} />
+      <div style={buttonContainerStyle}>
+        <Button borderRadius={50} bg='#4CA5EB' color={"whitesmoke"}>
+          <Link to="/login" style={{ textDecoration: 'none', color: 'inherit' }}>Se connecter</Link>
+        </Button>
+        <Button style={buttonStyle} borderRadius={50} bg='#4CA5EB' color={"whitesmoke"} >
+          <Link to="/registration" style={{ textDecoration: 'none', color: 'inherit' }}>S'inscrire</Link>
+        </Button>
+      </div>
+      <div className="container" style={containerStyle}>
+        <div className="row">
+          <div style={boxContainerStyle}>
+            <Text fontWeight={700} fontSize={20} color='#061C60' marginRight="60px" marginBottom="-0.5px">Commencez maintenant avec SA Coaching</Text>
+            <Button borderRadius={50} bg='#4CA5EB' color={"whitesmoke"}>
+              <Link to="/login" style={{ textDecoration: 'none', color: 'inherit' }}>Se connecter</Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Home;

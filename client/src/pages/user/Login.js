@@ -2,14 +2,20 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from 'jwt-decode'; 
+import background from '../../images/background.jpg';
+import logo from '../../images/logo.png';
 
 import {
+  AbsoluteCenter,
   Box,
   Button,
+  Divider,
+  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
   Input,
+  Text,
 } from "@chakra-ui/react";
 
 const Login = () => {
@@ -85,41 +91,56 @@ const Login = () => {
     }
   };
 
+  const imageStyle = {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    height: '100%',
+    width: '100%',
+    pointerEvents: 'none',
+  };
   return (
-    <div>
-      <div
-        className="container"
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "100vh", // Assurez-vous que l'élément prend toute la hauteur de la vue
-        }}
-      >
-        <div className="row">
-          <div className="col-md-6 offset-md-3">
-            <div className="signup-form">
-              <div style={{ textAlign: "center" }}>
-                {" "}
-                {/* Centre les éléments dans le conteneur parent */}
-                <h4
-                  style={{
-                    fontSize: "20px",
-                    margin: "10px 0",
-                  }}
-                >
-                  Login
-                </h4>
-              </div>
-              <form onSubmit={handleSubmit}>
+<div>  
+            <img src={background} alt="background" style={imageStyle} />          
+        <Box display="flex">
+        <Box flex="1" padding="50px" textAlign="left" color="white" zIndex={1} position="relative">
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+          marginTop: '-100px'
+        }}>
+        <img src={logo} alt="logo" />
+      </div>
+        <p style={{bottom:'20px', position:'absolute',left:'150px'}}>vous n'avez pas de compte ? <Link to="/registration"><button style={{color:'blue',bottom:'10px'}}>s'inscrire</button></Link></p>        
+               </Box>      
+
+                <Box flex="1" display="flex" justifyContent="flex-end" padding="40px" mt={-10}>
+      <Box width="600px" mr={70} p={6} zIndex={1} position="relative">
+      <p style={{display:'flex',
+                        fontSize: '20px',
+                        margin: '10px 0', 
+                        fontWeight: '400',
+                        color:'white',
+                        marginTop:'80px'
+
+                    }}>
+                        Sur SA Coaching, accédez à des formations de qualité et développez vos compétences professionelles
+                    </p>
+              <form onSubmit={handleSubmit} style={{
+                        marginTop:'60px'
+
+                    }}>
                 <div className="row">
                   {/* Email */}
                   <div className="mb-3 col-md-12">
                     <FormControl isInvalid={!!errors.email}>
-                      <FormLabel>
+                      <FormLabel color='white'>
                         Email <span className="text-danger">*</span>
                       </FormLabel>
                       <Input
+                      bg="white"
                         type="email"
                         name="email"
                         className="form-control"
@@ -146,10 +167,11 @@ const Login = () => {
                   {/* Password */}
                   <div className="mb-3 col-md-12">
                     <FormControl isInvalid={!!errors.password}>
-                      <FormLabel>
-                        Password <span className="text-danger">*</span>
+                      <FormLabel color='white'>
+                        Mot de passe <span className="text-danger">*</span>
                       </FormLabel>
                       <Input
+                        bg="white"
                         type="password"
                         name="password"
                         className="form-control"
@@ -171,26 +193,40 @@ const Login = () => {
                         </FormErrorMessage>
                       </Box>
                     </FormControl>
-                    <Link
-                      to="/reset-password-request"
-                      style={{ marginLeft: "6px" }}
-                    >
-                      <button style={{ color: "red" }}>
-                        mot de passe oublié
-                      </button>
-                    </Link>
+                    
                   </div>
                   <div className="col-md-12 text-center">
-                    <Button type="submit" colorScheme="blue">
+                    <Button type="submit" colorScheme="blue" width={"full"}>
                       Connexion
                     </Button>
                   </div>
+                  <Link
+                      to="/reset-password-request"
+                      style={{ marginLeft: "6px", marginTop:'20px' }}
+                    >
+                      <button style={{ color: "white" }}>
+                        mot de passe oublié ?
+                      </button>
+                    </Link>
+                  {/* <Box position='relative' padding='10'>
+  <Flex alignItems="center" ml={3}>
+    <Divider width="170px" ml={-6} />
+    <Text color="white" px="5">
+      Ou continuez avec
+    </Text>
+    <Divider width="170px" mr={-1}/>
+  </Flex>
+</Box>
+                    <div className="col-md-12 text-center">
+                    <Button type="submit" colorScheme="yellow" color={"white"} width={"full"}>
+                     Numéro de téléphone
+                    </Button>
+                  </div> */}
                 </div>
               </form>
-            </div>
-          </div>
-        </div>
-      </div>
+              </Box>
+              </Box>
+          </Box>    
     </div>
   );
 };

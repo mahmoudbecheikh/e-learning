@@ -1,0 +1,31 @@
+.contact-info {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.contact-info p {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  margin: 10px 0;
+  font-weight: 200;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.3s linear;
+}
+
+.contact-info:hover p {
+  visibility: visible;
+  opacity: 1;
+}
+
+.contact-info .icon {
+  width: 50px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+
+
+

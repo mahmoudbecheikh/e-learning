@@ -124,6 +124,27 @@ export class NiveauService {
 
     await this.niveauModel.findByIdAndDelete(id).exec();
   }
+
+
+
+  async removeEvaluation(niveauId: string, evaluationId: string): Promise<Niveau> {
+    const niveau = await this.niveauModel.findById(niveauId);
+    if (!niveau) {
+      throw new NotFoundException(`Niveau with ID ${niveauId} not found`);
+    }
+
+    // Convertir evaluationId en ObjectId
+    const evaluationObjectId = new Types.ObjectId(evaluationId);
+
+    // Filtrer les évaluations pour exclure celle à supprimer
+    niveau.evaluations = niveau.evaluations.filter(
+      (evalId) => evalId.toString() !== evaluationObjectId.toString()
+    );
+
+    // Sauvegarder les modifications
+    return niveau.save();
+  }
+  
 }
 
 

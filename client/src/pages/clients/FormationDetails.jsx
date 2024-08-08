@@ -12,12 +12,22 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import Messagesection from "../message";
+import EvaluationsList from "../evaluation/EvaluationsList";
+import QuizList from "../evaluation/QuizzList";
+import Questions from "../evaluation/Questions";
 
 const FormationDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [formation, setFormation] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const [showEvaluations, setShowEvaluations] = useState(false);
+  const [showQuizzes, setShowQuizzes] = useState(false);
+
+  const [showAddEvaluationForm, setShowAddEvaluationForm] = useState(false); // New state
+  const params = useParams();
+// const niveauId={formation.niveau._id}
 
   useEffect(() => {
     const fetchFormation = async () => {
@@ -116,28 +126,25 @@ const FormationDetails = () => {
           </Heading>
           {formation.niveau && formation.niveau.length > 0 ? (
             formation.niveau.map((niveau, index) => (
-              <>
-                {" "}
-                <Box key={index} mb={4}>
-                  <Heading as="h4" size="md" mb={2}>
-                    {niveau.title}
-                  </Heading>
-                  {niveau.cours && niveau.cours.length > 0 ? (
-                    niveau.cours.map((cours, coursIndex) => (
-                      <Box key={coursIndex} pl={4} borderLeft="2px solid teal">
-                        <Text fontSize="md" mb={1}>
-                          <Link to={`/cours/${cours._id}`}>{cours.nom}</Link>
-                        </Text>
-                        <Text fontSize="md" mb={1}>
-                          {cours.description}
-                        </Text>
-                      </Box>
-                    ))
-                  ) : (
-                    <Text fontSize="md">Aucun cours disponible.</Text>
-                  )}
-                </Box>
-              </>
+              <Box key={index} mb={4}>
+                <Heading as="h4" size="md" mb={2}>
+                  {niveau.title}
+                </Heading>
+                {niveau.cours && niveau.cours.length > 0 ? (
+                  niveau.cours.map((cours, coursIndex) => (
+                    <Box key={coursIndex} pl={4} borderLeft="2px solid teal">
+                      <Text fontSize="md" mb={1}>
+                        <Link to={`/cours/${cours._id}`}>{cours.nom}</Link>
+                      </Text>
+                      <Text fontSize="md" mb={1}>
+                        {cours.description}
+                      </Text>
+                    </Box>
+                  ))
+                ) : (
+                  <Text fontSize="md">Aucun cours disponible.</Text>
+                )}
+              </Box>
             ))
           ) : (
             <Text fontSize="md">Aucun niveau disponible.</Text>
@@ -145,7 +152,6 @@ const FormationDetails = () => {
           <Button onClick={() => subscribe()}>S'inscrire</Button>
         </Box>
       </VStack>
-      <Messagesection />
     </Container>
   );
 };
