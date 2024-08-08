@@ -19,7 +19,7 @@ import {
 import EvaluationForm from './EvaluationForm';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { GlobalContext } from '../globalwrapper';
+import { GlobalContext } from '../../globalwrapper';
 
 const EvaluationsList = ({ niveauId,fetchEvaluations }) => {
   const { getEvaluationsByNiveauId, deleteEvaluation } = useContext(GlobalContext);
@@ -109,7 +109,7 @@ const EvaluationsList = ({ niveauId,fetchEvaluations }) => {
 
   return (
     <Box>
-      <Heading size="md">Question-réponse</Heading>
+      {/* <Heading size="md">Question-réponse</Heading> */}
 
       <Stack spacing={3}>
         {evaluations.length > 0 ? (

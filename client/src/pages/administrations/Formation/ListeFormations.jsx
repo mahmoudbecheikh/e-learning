@@ -72,11 +72,15 @@ const FormationsList = () => {
     }
   };
 
-  const handleShowDetails = (formation) => {
-    setSelectedFormation(formation);
-    setShowDetailsModal(true);
-  };
+  // const handleShowDetails = (formation) => {
+  //   setSelectedFormation(formation);
+  //   setShowDetailsModal(true);
+  // };
 
+  const handleShowDetails = (formation) => {
+    navigate(`/formationadmin/${formation._id}`);
+  };
+  
   const handleCloseDetailsModal = () => {
     setShowDetailsModal(false);
     setSelectedFormation(null);
@@ -153,6 +157,7 @@ const FormationsList = () => {
                     >
                       Details
                     </Button>
+                    
                    
                      <FontAwesomeIcon icon={faEdit}    
                       onClick={() =>

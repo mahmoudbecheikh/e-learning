@@ -16,7 +16,7 @@ import {
   Select,
 } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
-import EvaluationsList from "../evaluation/EvaluationsList";
+import EvaluationsList from "../Evaluation/EvaluationsList";
 
 const AddFormationsForm = () => {
   const [formationData, setFormationData] = useState({

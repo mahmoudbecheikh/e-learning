@@ -13,7 +13,7 @@ import {
     Flex,
     Tooltip,
 } from '@chakra-ui/react';
-import { GlobalContext } from '../globalwrapper';
+import { GlobalContext } from '../../globalwrapper';
 import QuizForm from './QuizzForm';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -85,7 +85,7 @@ const QuizList = ({ niveauId,fetchQuizzes }) => {
 
     return (
         <Box>
-            <Heading size="md">Quizz</Heading>
+            {/* <Heading size="md">Quizz</Heading> */}
             {/* <Button onClick={handleAddQuiz} colorScheme="teal" mb={4}>
                 Add Quiz
             </Button> */}

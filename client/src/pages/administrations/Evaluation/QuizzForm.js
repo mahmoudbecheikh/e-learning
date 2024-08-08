@@ -15,7 +15,7 @@ import {
     Select,
     useToast,
 } from '@chakra-ui/react';
-import { GlobalContext } from '../globalwrapper';
+import { GlobalContext } from '../../globalwrapper';
 
 const QuizForm = ({ isEdit, quiz, niveauId, isOpen, onClose }) => {
     const { handleCreateQuizz, addQuizzToNiveau, handleUpdateQuizz } = useContext(GlobalContext);

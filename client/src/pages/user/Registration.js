@@ -247,16 +247,7 @@ const Registration = () => {
                     }}>
                         {splitText(typeEffect)}
                         </span>
-                    {/* <p style={{
-                        fontSize: '20px',
-                        margin: '10px 0', 
-                        fontWeight: '200',
-
-                    }}>
-                        Bienvenue sur SA Coaching , votre plateforme dédiée à l'apprentissage et au 
-                        développement professionnel. Explorez nos cours variées et commencez votre parcours
-                        éducatif dès aujourd'hui.
-                    </p> */}
+                    
                     
                     <div class="contact-info" style={contactContainerStyle}>
                     
@@ -268,25 +259,7 @@ const Registration = () => {
                         </p>
                         
                     </div>
-                    {/* <p style={{
-                        fontSize: '18px',
-                        margin: '10px 0', 
-                        fontWeight: '200',
-
-                    }}>
-                        <FontAwesomeIcon icon={faPhone} style={{color:'#FFC300', fontSize: '30px', marginRight:'10px'}}/>
-                        +216 22 307 862
-                    </p> */}
                     
-                    {/* <p style={{
-                        fontSize: '18px',
-                        margin: '10px 0', 
-                        fontWeight: '200',
-
-                    }}>
-                        <FontAwesomeIcon icon={faMapLocationDot} style={{color:'#FFC300', fontSize: '30px', marginRight:'10px'}}/>
-                        IMMEUBLE AZAIEZ, ROUTE DE LA MARSA GP9, EL AOUINA, TUNISIE, TUNIS, TUNISIA
-                    </p> */}
                     
                 </Box>
             <Box flex="1" display="flex" justifyContent="flex-end" padding="55px" paddingTop={8} mt={-10}>
@@ -298,7 +271,6 @@ const Registration = () => {
                                 <FormControl isInvalid={!!errors.nom}>
                                     <FormLabel color='white'>Nom <span>*</span></FormLabel>
                                     <Input
-                                    borderRadius={50} 
                                     bg="white"
                                         type="text"
                                         name="nom"
@@ -315,7 +287,6 @@ const Registration = () => {
                                 <FormControl isInvalid={!!errors.prenom}>
                                     <FormLabel color='white'>Prénom <span>*</span></FormLabel>
                                     <Input
-                                    borderRadius={50} 
                                     bg="white"
                                         type="text"
                                         name="prenom"
@@ -334,7 +305,6 @@ const Registration = () => {
                                 <FormControl isInvalid={!!errors.email}>
                                     <FormLabel color='white'>Email <span>*</span></FormLabel>
                                     <Input
-                                    borderRadius={50} 
                                     bg="white"
                                         type="email"
                                         name="email"
@@ -368,7 +338,6 @@ const Registration = () => {
                                 <FormControl isInvalid={!!errors.password}>
                                     <FormLabel color='white'>Mot de Passe <span>*</span></FormLabel>
                                     <Input
-                                    borderRadius={50} 
                                     bg="white"
                                         type="password"
                                         name="password"
@@ -386,7 +355,6 @@ const Registration = () => {
                                 <FormControl isInvalid={!!errors.cpassword}>
                                     <FormLabel color='white'>Confirmation du Mot de Passe <span>*</span></FormLabel>
                                     <Input
-                                    borderRadius={50} 
                                     bg="white"
                                         type="password"
                                         name="cpassword"
@@ -404,7 +372,6 @@ const Registration = () => {
                                 <FormControl isInvalid={!!errors.nomEntreprise}>
                                     <FormLabel color='white'>Nom d'Entreprise <span>*</span></FormLabel>
                                     <Input
-                                    borderRadius={50} 
                                     bg="white"
                                         type="text"
                                         name="nomEntreprise"
@@ -422,7 +389,6 @@ const Registration = () => {
                                 <FormControl isInvalid={!!errors.secteur}>
                                     <FormLabel color='white'>Secteur <span>*</span></FormLabel>
                                     <Input
-                                    borderRadius={50} 
                                     bg="white"
                                         type="text"
                                         name="secteur"
@@ -441,7 +407,6 @@ const Registration = () => {
                                 <FormControl isInvalid={!!errors.poste}>
                                     <FormLabel color='white'>Poste <span>*</span></FormLabel>
                                     <Input
-                                    borderRadius={50} 
                                     bg="white"
                                         type="text"
                                         name="poste"
@@ -458,7 +423,6 @@ const Registration = () => {
                                 <FormControl isInvalid={!!errors.cin}>
                                     <FormLabel color='white'>Numéro CIN </FormLabel>
                                     <Input
-                                    borderRadius={50} 
                                     bg="white"
                                         type="text"
                                         name="cin"
@@ -509,7 +473,7 @@ const Registration = () => {
                                             </VStack>
                                             </FormControl>
                                     </div>
-                            <Button borderRadius={50}  type="submit" bg={'#FFC300'}>S'inscrire</Button>
+                            <Button  type="submit" bg={'#FFC300'}>S'inscrire</Button>
                         </div>
                     </form>
                 </Box>
