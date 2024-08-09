@@ -12,7 +12,7 @@ export type ProgressDocument = HydratedDocument<Progress>;
 @Schema()
 export class Progress {
 
-z
+
     @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
     user: User;
 
