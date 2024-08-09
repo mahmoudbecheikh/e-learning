@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import {
   Box,
   FormControl,
@@ -16,6 +16,7 @@ import {
   Select,
 } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
+import EvaluationsList from "../Evaluation/EvaluationsList";
 
 const AddFormationsForm = () => {
   const [formationData, setFormationData] = useState({
@@ -31,6 +32,10 @@ const AddFormationsForm = () => {
   const [newCourseName, setNewCourseName] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
+
+  const [showEvaluations, setShowEvaluations] = useState(false);
+  const [showAddEvaluationForm, setShowAddEvaluationForm] = useState(false); // New state
+  const params = useParams();
 
   useEffect(() => {
     if (location.state && location.state.formationData) {
@@ -243,6 +248,10 @@ const AddFormationsForm = () => {
                   />
                 </Box>
               ))}
+
+
+
+
             </Box>
           ))}
           <Button colorScheme="teal" size="sm" onClick={handleAddNiveau}>

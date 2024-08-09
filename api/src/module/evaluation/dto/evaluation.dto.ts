@@ -4,9 +4,11 @@ export class EvaluationDto {
    
    
   @IsNotEmpty()
- 
-  text: string;
+    titre: string;
 
+    description: string;
+
+    question: string;
 
     
 }

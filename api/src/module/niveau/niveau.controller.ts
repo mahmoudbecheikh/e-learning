@@ -29,6 +29,8 @@ export class NiveauController {
   ) {
     return this.niveauService.update(id, updateNiveauDto);
   }
+
+
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<void> {
     try {
@@ -37,4 +39,14 @@ export class NiveauController {
       throw new NotFoundException(`Niveau with id ${id} not found`);
     }
   }
+
+
+    @Delete(':niveauId/evaluations/:evaluationId')
+  async removeEvaluation(
+    @Param('niveauId') niveauId: string,
+    @Param('evaluationId') evaluationId: string,
+  ) {
+    return this.niveauService.removeEvaluation(niveauId, evaluationId);
+  }
+
 }

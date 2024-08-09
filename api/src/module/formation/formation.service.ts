@@ -1,7 +1,7 @@
 
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types, Document } from 'mongoose';
+import { Model, Types,Document } from 'mongoose';
 import { Formation } from './schemas/formation.schema';
 import { CreateFormationDto } from './dto/create-formation.dto';
 import { UpdateFormationDto } from './dto/update-formation.dto';
@@ -9,8 +9,6 @@ import * as nodemailer from 'nodemailer';
 import { Niveau } from 'src/module/niveau/schemas/niveau.schema';
 import { Cours } from '../cours/entities/cours.entity';
 import { User } from 'src/auth/schemas/user.schema';
-import { ProgressService } from '../progress/progress.service';
-import { Progress } from '../progress/entities/progress.entity';
 
 /*@Injectable()
 export class FormationService {
@@ -42,19 +40,19 @@ export class FormationService {
     console.log('Formation created:', savedFormation);
 
   // If related data is required, validate it here
-  // const clients = await this.clientModel.find().exec();
-  // if (clients.length === 0) {
-  //   throw new Error('No clients found to notify');
+  // const users = await this.userModel.find().exec();
+  // if (users.length === 0) {
+  //   throw new Error('No users found to notify');
   // }
     
-  //   await this.sendEmailNotifications(clients, savedFormation);
+  //   await this.sendEmailNotifications(users, savedFormation);
     // If related data is required, validate it here
-    const clients = await this.clientModel.find().exec();
-    if (clients.length === 0) {
-      throw new Error('No clients found to notify');
+    const users = await this.userModel.find().exec();
+    if (users.length === 0) {
+      throw new Error('No users found to notify');
     }
 
-    await this.sendEmailNotifications(clients, savedFormation);
+    await this.sendEmailNotifications(users, savedFormation);
 
     return savedFormation;
   }
@@ -104,12 +102,12 @@ export class FormationService {
       .populate('niveaux')
       .populate({
         path: 'forums.user',
-        model: 'Client'
+        model: 'User'
       })
       .exec();
   }
 
-  // private async sendEmailNotifications(clients: Client[], formation: Formation) {
+  // private async sendEmailNotifications(users: User[], formation: Formation) {
   //   const transporter = nodemailer.createTransport({
   //     service: 'gmail',
   //     auth: {
@@ -118,35 +116,35 @@ export class FormationService {
   //     },
   //   });
 
-  //   for (const client of clients) {
+  //   for (const user of users) {
   //     const mailOptions = {
   //       from: 'eyabenamara288@gmail.com', 
-  //       to: client.email,
+  //       to: user.email,
   //       subject: `New Formation Available: ${formation.titre}`,
   //       text: `A new formation titled "${formation.titre}" is now available. Check it out!`,
   //     };
 
   //     try {
   //       await transporter.sendMail(mailOptions);
-  //       console.log(`Email sent to ${client.email}`);
+  //       console.log(`Email sent to ${user.email}`);
   //     } catch (error) {
-  //       console.error(`Failed to send email to ${client.email}:`, error);
+  //       console.error(`Failed to send email to ${user.email}:`, error);
   //     }
   //   }
   // }
-    for (const client of clients) {
+    for (const user of users) {
       const mailOptions = {
         from: 'eyabenamara288@gmail.com',
-        to: client.email,
+        to: user.email,
         subject: `New Formation Available: ${formation.titre}`,
         text: `A new formation titled "${formation.titre}" is now available. Check it out!`,
       };
 
       try {
         await transporter.sendMail(mailOptions);
-        console.log(`Email sent to ${client.email}`);
+        console.log(`Email sent to ${user.email}`);
       } catch (error) {
-        console.error(`Failed to send email to ${client.email}:`, error);
+        console.error(`Failed to send email to ${user.email}:`, error);
       }
     }
   }
@@ -159,36 +157,18 @@ export class FormationService {
     @InjectModel(User.name) private userModel: Model<User>,
     @InjectModel(Niveau.name) private niveauModel: Model<Niveau>,
     @InjectModel(Cours.name) private coursModel: Model<Niveau>,
-    private progressService: ProgressService
-  ) { }
+  ) {}
 
   async create(createFormationDto: CreateFormationDto): Promise<Formation> {
     console.log('Creating formation with data:', createFormationDto);
 
-    /* const formations = await this.formationModel.find().exec();
- 
-     const formationInfos = formations.map((formations) => ({
-      
-       formationTitle: formations.titre,
-     }));
-     console.log(formationInfos);*/
-
-    const formation = await this.formationModel.find().exec();
-    const formationid = formation.map((formation => formation._id))
-    console.log(formationid);
     // Create and save Niveau objects
     const niveaux = await Promise.all(
       createFormationDto.niveau.map(async (niveauDto) => {
-        // Add the formation title to each Niveau
-        const newNiveau = new this.niveauModel({
-          ...niveauDto,
-          formationTitle: createFormationDto.titre,
-
-        });
+        const newNiveau = new this.niveauModel(niveauDto);
         return newNiveau.save();
       }),
     );
-
 
     // Create Formation with Niveau IDs
     const createdFormation = new this.formationModel({
@@ -199,12 +179,12 @@ export class FormationService {
 
     console.log('Formation created:', savedFormation);
 
-    const clients = await this.userModel.find().exec();
-    if (clients.length === 0) {
-      throw new Error('No clients found to notify');
+    const users = await this.userModel.find().exec();
+    if (users.length === 0) {
+      throw new Error('No users found to notify');
     }
 
-    //await this.sendEmailNotifications(clients, savedFormation);
+    //await this.sendEmailNotifications(users, savedFormation);
 
     return savedFormation;
   }
@@ -213,35 +193,7 @@ export class FormationService {
     return this.formationModel.findByIdAndUpdate(id, updateFormationDto, { new: true }).populate('niveau').exec();
   }
 
-  /* async destroy(id: string): Promise<Formation> {
-     id = id.trim();
- 
-     if (!Types.ObjectId.isValid(id)) {
-       throw new NotFoundException(`Invalid ID format: ${id}`);
-     }
- 
-     const objectId = new Types.ObjectId(id);
- 
-     const formation = await this.formationModel.findById(objectId).exec();
-     if (!formation) {
-       throw new NotFoundException(`Formation with id ${id} not found`);
-     }
- 
-     if (formation.niveau && formation.niveau.length > 0) {
-       const niveauIds = formation.niveau
-         .map(niveau => niveau instanceof Document ? (niveau as any)._id : niveau)
-         .filter(id => id !== null);
- 
-       if (niveauIds.length > 0) {
-         console.log('Deleting Niveaux with IDs:', niveauIds); 
-         await this.niveauModel.deleteMany({ _id: { $in: niveauIds } }).exec();
-       }
-     }
- 
-     return this.formationModel.findByIdAndDelete(objectId).exec();
-   }*/
-
-  async destroy(id: string): Promise<{ message: string }> {
+ /* async destroy(id: string): Promise<Formation> {
     id = id.trim();
 
     if (!Types.ObjectId.isValid(id)) {
@@ -255,28 +207,56 @@ export class FormationService {
       throw new NotFoundException(`Formation with id ${id} not found`);
     }
 
-    // Delete associated Niveaux 
     if (formation.niveau && formation.niveau.length > 0) {
-      const niveauIds = formation.niveau.map(niveau => new Types.ObjectId(niveau._id as any));
+      const niveauIds = formation.niveau
+        .map(niveau => niveau instanceof Document ? (niveau as any)._id : niveau)
+        .filter(id => id !== null);
+
       if (niveauIds.length > 0) {
-        console.log('Deleting Niveaux with IDs:', niveauIds);
-        /*await Promise.all(
-          niveauIds.map(async (niveauId) => {
-            const niveau = await this.niveauModel.findById(niveauId).exec();
-            if (niveau && niveau.cours.length > 0) {
-              const coursIds = niveau.cours.map(coursId => new Types.ObjectId(coursId as any));
-              await this.coursModel.deleteMany({ _id: { $in: coursIds } }).exec();
-            }
-          }),
-        );*/
+        console.log('Deleting Niveaux with IDs:', niveauIds); 
         await this.niveauModel.deleteMany({ _id: { $in: niveauIds } }).exec();
       }
     }
 
-    await this.formationModel.findByIdAndDelete(objectId).exec();
-    return { message: 'Formation, niveaux successfully deleted' };
-  }
+    return this.formationModel.findByIdAndDelete(objectId).exec();
+  }*/
 
+    async destroy(id: string): Promise<{ message: string }>  {
+      id = id.trim();
+    
+      if (!Types.ObjectId.isValid(id)) {
+        throw new NotFoundException(`Invalid ID format: ${id}`);
+      }
+    
+      const objectId = new Types.ObjectId(id);
+    
+      const formation = await this.formationModel.findById(objectId).exec();
+      if (!formation) {
+        throw new NotFoundException(`Formation with id ${id} not found`);
+      }
+    
+      // Delete associated Niveaux and their Cours
+      if (formation.niveau && formation.niveau.length > 0) {
+        const niveauIds = formation.niveau.map(niveau => new Types.ObjectId(niveau._id as any));
+        if (niveauIds.length > 0) {
+          console.log('Deleting Niveaux with IDs:', niveauIds);
+          await Promise.all(
+            niveauIds.map(async (niveauId) => {
+              const niveau = await this.niveauModel.findById(niveauId).exec();
+              if (niveau && niveau.cours.length > 0) {
+                const coursIds = niveau.cours.map(coursId => new Types.ObjectId(coursId as any));
+                await this.coursModel.deleteMany({ _id: { $in: coursIds } }).exec();
+              }
+            }),
+          );
+          await this.niveauModel.deleteMany({ _id: { $in: niveauIds } }).exec();
+        }
+      }
+    
+      await this.formationModel.findByIdAndDelete(objectId).exec();
+      return { message: 'Formation, niveaux, and courses successfully deleted' };
+    }
+    
 
   async getAll(): Promise<Formation[]> {
     return this.formationModel.find().populate('niveau').exec();
@@ -292,25 +272,7 @@ export class FormationService {
     return this.formationModel.findById(id).populate('niveau').exec();
   }
 
-  async subscribe(userId: string, formationId: string): Promise<Progress> {
-
- 
-
-    const user = await this.userModel.findById(userId);
-    if (!user) {
-      throw new Error('User not found');
-    }
-    const formation = await this.formationModel.findByIdAndUpdate(
-      formationId,
-      { $push: { users: user._id } },
-      { new: true }
-    ).exec();
-    if (formation) {
-      return await this.progressService.create(user, formation);
-    }
-    return null
-  }
-  /*private async sendEmailNotifications(clients: Client[], formation: Formation) {
+  /*private async sendEmailNotifications(users: User[], formation: Formation) {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -319,19 +281,19 @@ export class FormationService {
       },
     });
 
-    for (const client of clients) {
+    for (const user of users) {
       const mailOptions = {
         from: 'eyabenamara288@gmail.com',
-        to: client.email,
+        to: user.email,
         subject: `New Formation Available: ${formation.titre}`,
         text: `A new formation titled "${formation.titre}" is now available. Check it out!`,
       };
 
       try {
         await transporter.sendMail(mailOptions);
-        console.log(`Email sent to ${client.email}`);
+        console.log(`Email sent to ${user.email}`);
       } catch (error) {
-        console.error(`Failed to send email to ${client.email}:`, error);
+        console.error(`Failed to send email to ${user.email}:`, error);
       }
     }
   }*/

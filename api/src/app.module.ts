@@ -30,6 +30,8 @@ import { ProgressModule } from './module/progress/progress.module';
     NiveauModule,
     MailerConfigModule,
     EvaluationsModule,
+    EvaluationsModule,
+
     MessageModule,
     ProgressModule,
 

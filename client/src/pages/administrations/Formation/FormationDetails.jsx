@@ -11,12 +11,9 @@ import {
   Container,
   Spinner,
 } from "@chakra-ui/react";
-import Messagesection from "../message";
-import EvaluationsList from "../administrations/Evaluation/EvaluationsList";
-import QuizList from "../administrations/Evaluation/QuizzList";
-import Questions from "../administrations/Evaluation/Questions";
+import Questions from "../Evaluation/Questions";
 
-const FormationDetails = () => {
+const FormationAdminDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [formation, setFormation] = useState(null);
@@ -32,16 +29,11 @@ const FormationDetails = () => {
   useEffect(() => {
     const fetchFormation = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:5000/formation/${id}`
-        );
+        const response = await axios.get(`http://localhost:5000/formation/${id}`);
         setFormation(response.data);
       } catch (error) {
-        console.error(
-          "Erreur de récupération des détails de la formation",
-          error
-        );
-        navigate("/");
+        console.error("Erreur de récupération des détails de la formation", error);
+        navigate("/"); 
       } finally {
         setLoading(false);
       }
@@ -49,26 +41,6 @@ const FormationDetails = () => {
 
     fetchFormation();
   }, [id, navigate]);
-
-  const subscribe = async () => {
-    const idUser = localStorage.getItem("id");
-    const myForm = {
-      user: idUser,
-    };
-
-    try {
-      const { data } = await axios.put(
-        `http://localhost:5000/formation/subscribe/${id}`,
-        myForm
-      );
-      if (data) {
-        localStorage.setItem('progress',data._id)
-        navigate(`/formations/${id}`);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   if (loading) {
     return (
@@ -104,21 +76,15 @@ const FormationDetails = () => {
           />
         )}
         <Box>
-          <Heading as="h2" size="xl" mb={4}>
-            {formation.titre}
-          </Heading>
-          <Text fontSize="lg" mb={2}>
-            <strong>Objectif:</strong> {formation.objectif}
-          </Text>
-          <Text fontSize="lg" mb={2}>
-            <strong>Description:</strong> {formation.description}
-          </Text>
-          <Text fontSize="lg" mb={2}>
-            <strong>Compétences Acquises:</strong> {formation.competenceAquises}
-          </Text>
-          <Text fontSize="lg" mb={2}>
-            <strong>Résultats Souhaités:</strong> {formation.resultatSouhaites}
-          </Text>
+          
+         <Heading as="h2" size="xl" mb={4}>
+         {formation.titre}
+       </Heading>
+       <Text mb={2}>Description: {formation.description}</Text>
+       <Text mb={2}>Objectif: {formation.objectif}</Text>
+       <Text mb={2}>Compétences Acquises: {formation.competenceAquises}</Text>
+       <Text mb={2}>Résultat Souhaité: {formation.resultatSouhaites}</Text>
+       <Text mb={2}>Nombre de Niveaux: {formation.nbrNiveau}</Text>
         </Box>
         <Box>
           <Heading as="h3" size="lg" mb={2}>
@@ -145,29 +111,24 @@ const FormationDetails = () => {
                   <Text fontSize="md">Aucun cours disponible.</Text>
                 )}
 
-
-                <Button>passer à l'évaluation</Button>
-
-                  {/* <Button onClick={() => setShowEvaluations(!showEvaluations)} mt="4" colorScheme="teal">
+                  <Button onClick={() => setShowEvaluations(!showEvaluations)} mt="4" colorScheme="teal">
                               {showEvaluations ? 'Masquer les Questions' : 'Afficher les Questions'}
                             </Button>
-                            
                             {showEvaluations && (
                               <Box mt="4">
+                                {/* <EvaluationsList niveauId={params.niveauId} /> */}
                                 <Questions niveauId={niveau._id} />
                               </Box>
-                            )} */}
-
+                            )}
               </Box>
             ))
           ) : (
             <Text fontSize="md">Aucun niveau disponible.</Text>
           )}
-          <Button onClick={() => subscribe()}>S'inscrire</Button>
         </Box>
       </VStack>
     </Container>
   );
 };
 
-export default FormationDetails;
+export default FormationAdminDetails;

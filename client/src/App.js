@@ -2,8 +2,8 @@ import "./App.css";
 import Sidebar from "./components/Sidebar";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Formations from "./pages/clients/Formations";
-import UpdateFormationForm from "./pages/administrations/UpdateFormations";
-import AddFormationsForm from "./pages/administrations/AddFormation";
+import UpdateFormationForm from "./pages/administrations/Formation/UpdateFormations";
+import AddFormationsForm from "./pages/administrations/Formation/AddFormation";
 import CoursItem from "./pages/cours/CourseItem";
 import CreateCourse from "./pages/cours/CreateCourse";
 import ListingCourse from "./pages/cours/ListingCourse";
@@ -21,9 +21,16 @@ import EmployeurList from "./pages/user/users/listemployeur";
 import AdminList from "./pages/user/users/listadmin";
 import Messagesection from "./pages/message";
 import FormationDetails from "./pages/clients/FormationDetails";
+import EvaluationsList from "./pages/administrations/Evaluation/EvaluationsList";
+import EvaluationForm from "./pages/administrations/Evaluation/EvaluationForm";
+import EvaluationDetails from "./pages/administrations/Evaluation/EvaluationDetails";
+import QuizzList from "./pages/administrations/Evaluation/QuizzList";
+import QuizzForm from "./pages/administrations/Evaluation/QuizzForm";
+import QuizzDetails from "./pages/administrations/Evaluation/QuizzDetails";
 import Forums from "./pages/forums";
-import FormationsList from "./pages/administrations/ListeFormations";
+import FormationsList from "./pages/administrations/Formation/ListeFormations";
 import Formation from "./pages/clients/Formation";
+import FormationAdminDetails from "./pages/administrations/Formation/FormationDetails";
 import VideoPlayer from "./components/VideoPlayer";
 function App() {
   return (
@@ -35,7 +42,7 @@ function App() {
         <Route path="/reset-password-request" element={<ResetPasswordRequestForm />}  />
         <Route path="/reset-password/:token" element={<ResetPasswordForm />}  />
         <Route path="/addformation" element={<AddFormationsForm />} />
-        <Route path="/formations" element={<Formations />} />
+        <Route path="/formations" element={<Formations />} /> {/*client */}
         <Route path="/updateFormation/:id" element={<UpdateFormationForm />} />
         <Route path="/*" element={<MainLayout />} />
         <Route path="/cours" element={<ListingCourse />} />
@@ -46,9 +53,13 @@ function App() {
         <Route path="/message" element={<Messagesection />} />
         <Route path="/formationdetails/:id" element={<FormationDetails />} />
         <Route path="/forums" element={<Forums />} />
-        <Route path="/listformations" element={<FormationsList />} />
+        
+
         <Route path="/formations/:idFormation" element={<Formation />} />
-        {/* <Route path="/video" element={<VideoPlayer />} /> */}
+        <Route path="/video" element={<VideoPlayer />} />
+
+
+        
 
       </Routes>
     </Router>
@@ -71,6 +82,21 @@ function MainLayout() {
         <Route path="/listclient" element={<ClientList />} />
         <Route path="/listemployeur" element={<EmployeurList />} />
         <Route path="/listadmin" element={<AdminList />} />
+        <Route path="/listformations" element={<FormationsList />} /> {/*admin*/}
+        <Route path="/formationadmin/:id" element={<FormationAdminDetails />} />
+        <Route path="/evaluations" element={<EvaluationsList/>} />
+        <Route path="/evaluations/new" element={<EvaluationForm isEdit={false} />} />
+        <Route path="/evaluations/:id/edit" element={<EvaluationForm isEdit={true} />} />
+        <Route path="/evaluations/:id" element={<EvaluationDetails />} />
+
+        <Route path="/quizz" element={<QuizzList/>} />
+                <Route path="/quizz" element={<QuizzList/>} />
+
+      <Route path="/quizz/create" element={<QuizzForm/>} />
+      <Route path="/quizz/edit/:id" element={<QuizzForm/>} />
+      <Route path="/quizz/:id" element={<QuizzDetails />} />
+      
+
           </Routes>
         </div>
       </div>

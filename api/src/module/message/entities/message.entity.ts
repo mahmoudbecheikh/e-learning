@@ -12,7 +12,7 @@ export class Message  {
     @Prop({ required: true })
     contenu: string;
 
-    @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
+    @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Client' })
     user: User;
 
     @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Forum' })
