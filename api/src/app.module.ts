@@ -24,6 +24,10 @@ import { ProgressModule } from './module/progress/progress.module';
     rootPath: join(__dirname, '..', 'uploads'),
     serveRoot: '/uploads',
   }),
+  ServeStaticModule.forRoot({
+    rootPath: join(__dirname, '..', 'uploads/dash'),
+    serveRoot: '/uploads',
+  }),
     AuthModule,
     CoursModule,
     FormationModule,

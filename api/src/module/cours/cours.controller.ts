@@ -13,55 +13,61 @@ import {
 import { CoursService } from './cours.service';
 import { CreateCourDto } from './dto/create-cours.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
-// import { UpdateCourDto } from './dto/update-cours.dto';
 import { diskStorage } from 'multer';
-import { extname } from 'path';
+import { extname, join } from 'path';
 import { Cours } from './entities/cours.entity';
-// import { UpdateCourDto } from './dto/update-cours.dto';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 import * as path from 'path';
+import * as ffmpeg from 'fluent-ffmpeg';
+import * as fs from 'fs';
+
 
 @Controller('cours')
 export class CoursController {
-  constructor(private readonly coursService: CoursService) {}
+  constructor(private readonly coursService: CoursService) { }
 
   @Post()
   @UseInterceptors(
     FilesInterceptor('files', 10, {
       storage: diskStorage({
-        destination: './uploads',
+        destination: (req, file, callback) => {
+          const dir = file.mimetype.includes('video') ? './temp/uploads' : './uploads';
+          if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+          }
+          callback(null, dir);
+        },
         filename: (req, file, callback) => {
-          const uniqueSuffix =
-            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
           const ext = extname(file.originalname);
           callback(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
         },
       }),
     }),
   )
-  create(
+  async create(
     @UploadedFiles() files: Express.Multer.File[],
     @Body() createCourDto: CreateCourDto,
   ) {
-    let videoUploaded = {};
+    let videoUploaded = null;
     const filesUploaded = [];
-    let fileUploaded = {};
-    for (let i = 0; i < files.length; i++) {
-      fileUploaded = {
-        originalname: files[i].originalname,
-        filename: files[i].filename,
-        path: files[i].path,
-        mimetype: files[i].mimetype,
-        size: files[i].size,
-      };
-      if (!files[i].mimetype.includes('video')) {
-        filesUploaded.push(fileUploaded);
+
+    for (const file of files) {
+      if (file.mimetype.includes('video')) {
+        try {
+          videoUploaded = await this.convertToMPEGDash(file);
+        } catch (error) {
+          console.error('Error processing video file:', error);
+        }
       } else {
-        videoUploaded = files[i];
+        filesUploaded.push({
+          originalname: file.originalname,
+          filename: file.filename,
+          path: file.path,
+          mimetype: file.mimetype,
+          size: file.size,
+        });
       }
     }
-
-    console.log(filesUploaded);
 
     const coursData = {
       nom: createCourDto.nom,
@@ -76,6 +82,56 @@ export class CoursController {
     return this.coursService.create(coursData);
   }
 
+  private async convertToMPEGDash(file: Express.Multer.File) {
+    const fileName = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    const outputDir = `uploads/dash/${fileName}`;
+    const dashManifest = `${outputDir}/${fileName}.mpd`;
+
+    // Ensure the output directory exists
+    if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir, { recursive: true });
+    }
+
+    // Return a promise for ffmpeg conversion
+    await new Promise<void>((resolve, reject) => {
+        ffmpeg(file.path)
+            .outputOptions([
+                '-map 0',
+                '-c:v libx264',
+                '-b:v 1000k',
+                '-s 1280x720',
+                '-c:a aac',
+                '-strict -2',
+                '-f dash',
+            ])
+            .output(dashManifest)
+            .on('end', () => {
+                console.log('MPEG-DASH conversion finished.');
+                try {
+                    fs.unlinkSync(file.path); // Clean up temporary video file
+                } catch (unlinkErr) {
+                    console.error('Error deleting the temporary video file:', unlinkErr);
+                }
+                resolve();
+            })
+            .on('error', (err) => {
+                console.error('Error during MPEG-DASH conversion:', err);
+                reject(err);
+            })
+            .run();
+    });
+
+    return {
+        originalname: file.originalname,
+        filename: `${fileName}.mpd`,
+        path: dashManifest,
+        mimetype: 'application/dash+xml',
+        size: file.size,
+    };
+}
+
+
+
   @Get()
   async findAll(): Promise<Cours[]> {
     return this.coursService.findAll();
@@ -85,47 +141,51 @@ export class CoursController {
   findOne(@Param('id') id: string) {
     return this.coursService.findOne(id);
   }
-
   @Patch(':id')
   @UseInterceptors(
     FilesInterceptor('files', 10, {
       storage: diskStorage({
-        destination: './uploads',
+        destination: (req, file, callback) => {
+          const dir = file.mimetype.includes('video') ? './temp/uploads' : './uploads';
+          if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+          }
+          callback(null, dir);
+        },
         filename: (req, file, callback) => {
-          const uniqueSuffix =
-            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
           const ext = extname(file.originalname);
           callback(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
         },
       }),
     }),
   )
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateCourDto: any,
     @UploadedFiles() files: Express.Multer.File[],
   ) {
-    console.log(files);
-
-    let videoUploaded = {};
+    let videoUploaded = null;
     const filesUploaded = [];
-    let fileUploaded = {};
-    for (let i = 0; i < files.length; i++) {
-      fileUploaded = {
-        originalname: files[i].originalname,
-        filename: files[i].filename,
-        path: files[i].path,
-        mimetype: files[i].mimetype,
-        size: files[i].size,
-      };
-      if (!files[i].mimetype.includes('video')) {
-        filesUploaded.push(fileUploaded);
+
+    for (const file of files) {
+      if (file.mimetype.includes('video')) {
+        try {
+          videoUploaded = await this.convertToMPEGDash(file);
+        } catch (error) {
+          console.error('Error processing video file:', error);
+          // Optionally handle the error or notify the user
+        }
       } else {
-        videoUploaded = files[i];
+        filesUploaded.push({
+          originalname: file.originalname,
+          filename: file.filename,
+          path: file.path,
+          mimetype: file.mimetype,
+          size: file.size,
+        });
       }
     }
-
-    console.log(filesUploaded);
 
     const coursData = {
       nom: updateCourDto.nom,
