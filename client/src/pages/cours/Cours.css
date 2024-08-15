@@ -1,33 +1,3 @@
-.video-display {
-  max-width: 800px;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  background-color: #f9f9f9;
-}
-
-.video-js {
-  width: 100%; /* Ajuste la largeur du lecteur */
-  max-width: 800px; /* Limite la largeur maximale du lecteur */
-  height: auto; /* Conserve les proportions de la vidéo */
-}
-
-.video-display h1 {
-  font-size: 2em;
-  margin-bottom: 10px;
-}
-
-.video-display p {
-  font-size: 1.2em;
-  margin-bottom: 20px;
-}
-
-.video-display video {
-  width: 100%;
-  height: auto;
-  margin-bottom: 20px;
-}
 
 .files-list h2 {
   font-size: 1.5em;

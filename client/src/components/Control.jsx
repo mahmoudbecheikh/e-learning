@@ -1,97 +1,93 @@
-// import React from "react";
-// import { Slider } from "@mui/material";
-// import { FastForward, FastRewind, Pause, PlayArrow, SkipNext, VolumeUp } from "@mui/icons-material";
-// import { styled } from "@mui/material/styles";
-// import { makeStyles } from "@mui/styles";
-// import "./control.css";
+import React from "react";
+import {
+  Box,
+  IconButton,
+  Slider,
+  SliderTrack,
+  SliderFilledTrack,
+  SliderThumb,
+  Text,
+} from "@chakra-ui/react";
+import {
+  FaPause,
+  FaPlay,
+  FaVolumeUp,
+  FaVolumeMute,
+  FaExpand,
+} from "react-icons/fa";
+import "./control.css";
 
-// // Custom styles for sliders using styled
-// const PrettoSlider = styled(Slider)(({ theme }) => ({
-//   height: "20px",
-//   color: "#9556CC",
-//   display: "flex",
-//   justifyContent: "center",
-//   alignItems: "center",
-//   "& .MuiSlider-thumb": {
-//     height: 20,
-//     width: 20,
-//     backgroundColor: "#9556CC",
-//     border: "2px solid currentColor",
-//     marginTop: -3,
-//     marginLeft: -12,
-//     "&:focus, &:hover, &.Mui-active": {
-//       boxShadow: "inherit",
-//     },
-//   },
-//   "& .MuiSlider-track": {
-//     height: 5,
-//     borderRadius: 4,
-//   },
-//   "& .MuiSlider-rail": {
-//     height: 5,
-//     borderRadius: 4,
-//   },
-// }));
+const Control = ({
+  onPlayPause,
+  playing,
+  played,
+  onSeek,
+  onSeekMouseUp,
+  volume,
+  onVolumeChange,
+  onMute,
+  muted,
+  onExpand,
+  currentTime,
+  duration,
+  controlRef,
+}) => {
+  return (
+    <Box className="control_Container" ref={controlRef} position="relative">
+      <Box display="flex" alignItems="center" justifyContent="center">
+        <IconButton
+          aria-label="Play/Pause"
+          icon={playing ? <FaPause /> : <FaPlay />}
+          mx={4}
+          onClick={onPlayPause}
+        />
+      </Box>
 
-// // Styles for the control component
-// const useStyles = makeStyles({
-//   volumeSlider: {
-//     width: "100px",
-//     color: "#9556CC",
-//   },
-//   bottomIcons: {
-//     color: "#999",
-//     padding: "12px 8px",
-//     "&:hover": {
-//       color: "#fff",
-//     },
-//   },
-// });
+      
 
-// const Control = () => {
-//   const classes = useStyles(); // Use the styles
+      <Box className="bottom__container">
+        <Box className="slider__container">
+          <Slider
+            aria-label="time-slider"
+            value={played * 100}
+            onChange={onSeek}
+            onChangeEnd={onSeekMouseUp}
+            width="100%"
+          >
+            <SliderTrack>
+              <SliderFilledTrack />
+            </SliderTrack>
+            <SliderThumb />
+          </Slider>
+        </Box>
 
-//   return (
-//     <div className="control_Container">
-//       <div className="top_container">
-//         <h2>Video Player</h2>
-//       </div>
-//       <div className="mid__container">
-//         <div className="icon__btn">
-//           <FastRewind fontSize="medium" />
-//         </div>
+        <Text className="time-display">
+          {currentTime} / {duration}
+        </Text>
 
-//         <div className="icon__btn">
-//           <Pause fontSize="medium" />
-//         </div>
+        <Box display="flex" alignItems="center">
+          <IconButton
+            aria-label="Mute/Unmute"
+            icon={muted ? <FaVolumeMute /> : <FaVolumeUp />}
+            onClick={onMute}
+          />
+          <Slider
+            aria-label="volume-slider"
+            value={volume * 100}
+            onChange={onVolumeChange}
+            width="150px"
+          >
+            <SliderTrack>
+              <SliderFilledTrack />
+            </SliderTrack>
+            <SliderThumb />
+          </Slider>
 
-//         <div className="icon__btn">
-//           <FastForward fontSize="medium" />
-//         </div>
-//       </div>
-//       <div className="bottom__container">
-//         <div className="slider__container">
-//           <PrettoSlider />
-//         </div>
-//         <div className="control__box">
-//           <div className="inner__controls">
-//             <div className="icon__btn">
-//               <PlayArrow fontSize="medium" />
-//             </div>
-//             <div className="icon__btn">
-//               <SkipNext fontSize="medium" />
-//             </div>
-//             <div className="icon__btn">
-//               <VolumeUp fontSize="medium" />
-//             </div>
 
-//             <Slider className={classes.volumeSlider} />
-//             <span>5/20</span>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
+        </Box>
+      </Box>
+    </Box>
+  );
+};
 
-// export default Control;
+export default Control;

@@ -37,7 +37,8 @@ export default function UpdateCourse() {
         setDescription(data.description)
         setFiles(data.files)
         setvideo(data.video)
-        setVideoPrev(`http://localhost:5000/uploads/${data.video.filename}`);
+        setVideoPrev(`http://localhost:5000/${data.video.path}`);
+        console.log(videoPrev);
         setLoading(false);
         setError(false);
       } catch (error) {

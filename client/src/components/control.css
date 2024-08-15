@@ -1,61 +1,88 @@
+.control__wrapper {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .control_Container {
-    background-color: rgba(0, 0, 0, 0.6);
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    flex-direction: column;
-    z-index: 1;
-    display: flex;
-    justify-content: space-between;
- }
- 
- .top_container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 5px 20px;
- }
- 
- .mid__container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
- }
- 
- .icon__btn {
-    padding: 0 10px;
-    color: #7b2cbf;
- }
- 
- .slider__container {
-    /* width: 100%; */
-    display: flex;
-    align-items: center;
-    padding: 0 16px;
- }
- 
- .control__box {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
- }
- 
- .inner__controls {
-    display: flex;
-    padding: 10px 0;
-    align-items: center;
-    width: 50%;
- }
- 
- span {
-    color: #9556cc;
-    font-size: 0.8rem;
-    margin-left: 10px;
- }
- 
- .second__control {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  color: #fff;
+}
+
+.bottom__container {
   display: flex;
   align-items: center;
- }
+  justify-content: space-between;
+  width: 100%;
+}
+
+.slider__container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.time-display {
+  margin: 16px 16px;
+  font-size: 14px;
+  color: #fff;
+}
+
+.chakra-iconbutton {
+  font-size: 18px; 
+  width: 32px; 
+  height: 32px;
+  padding: 0; 
+}
+
+.slider__container .chakra-slider__track {
+  background-color: #555;
+}
+
+.slider__container .chakra-slider__filled-track {
+  background-color: #007bff;
+}
+
+.slider__container .chakra-slider__thumb {
+  background-color: #fff;
+}
+
+.chakra-slider__thumb,
+.chakra-slider__track,
+.chakra-slider__filled-track {
+  height: 6px;
+}
+
+.chakra-slider__thumb {
+  width: 14px;
+  height: 14px;
+}
+
+.volume-slider {
+  width: 100px; 
+}
+
+.chakra-slider__track.volume-slider-track {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.chakra-slider__filled-track.volume-slider-filled {
+  background: #fff;
+}
+
+.chakra-slider__thumb.volume-slider-thumb {
+  background: #fff;
+}
+
+.chakra-iconbutton {
+  color: white;
+  background: transparent;
+}
