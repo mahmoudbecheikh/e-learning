@@ -266,6 +266,59 @@ const getQuizzByNiveauId = async (niveauId) => {
   return response;
 };
 
+// const addReponseToEvaluation = async (evaluationId, token) => {
+//   try {
+//     // const token = localStorage.getItem('token');
+//     const response = await axios.post(
+//       `http://localhost:5000/reponses/${evaluationId}`,
+//       {
+//         headers: {
+//           Authorization: `Bearer ${token}`, // Utilisation correcte des backticks pour l'interpolation de la variable userToken
+//         },
+//       }
+//     );
+
+//     if (response.status !== 201) {  // Correction de la vérification du code de statut
+//       throw new Error('Failed to add response');
+//     }
+
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error adding response:', error.response ? error.response.data : error.message);
+//     throw error;
+//   }
+// };
+
+
+
+const addReponseToEvaluation = async (evaluationId, responseContent, token) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:5000/reponses/${evaluationId}`,
+      { text: responseContent },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.status !== 201) {
+      throw new Error('Failed to add response');
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error adding response:', error.response ? error.response.data : error.message);
+    throw error;
+  }
+};
+
+
+
+
+
+
     return (
         <GlobalContext.Provider value={{ 
           getAllEvaluations,
@@ -293,7 +346,8 @@ const getQuizzByNiveauId = async (niveauId) => {
             handleUpdateQuizz,
             handleDeleteQuizz,
             addQuizzToNiveau,
-            getQuizzByNiveauId
+            getQuizzByNiveauId,
+            addReponseToEvaluation
         }}>
             {children}
         </GlobalContext.Provider>

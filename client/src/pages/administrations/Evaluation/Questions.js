@@ -22,10 +22,7 @@ import EvaluationForm from "./EvaluationForm";
 
 const Questions = ({ niveauId }) => {
   const { getQuizzByNiveauId, getEvaluationsByNiveauId } = useContext(GlobalContext);
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [showEvaluations, setShowEvaluations] = useState(false);
-  const [showQuizzes, setShowQuizzes] = useState(false);
   const [quizzes, setQuizzes] = useState([]);
   const toast = useToast();
   const [selectedQuiz, setSelectedQuiz] = useState(null);

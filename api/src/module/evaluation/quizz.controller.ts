@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, NotFoundException, BadRequestException, Req } from '@nestjs/common';
 import { QuizzService } from './quizz.service';
 import { QuizzDto } from './dto/quizz.dto';
 
@@ -70,5 +70,43 @@ async addQuizzToNiveau(@Param('niveauId') niveauId: string, @Body() quizzDto: Qu
     }
   }
 
+
+  // @Post(':quizzId/submit')
+  // async submitQuizzResponse(
+  //   @Param('quizzId') quizzId: string,
+  //   @Body('userId') userId: string,
+  //   @Body('selectedOption') selectedOption: string
+  // ) {
+  //   try {
+  //     return await this.quizzService.submitQuizzResponse(quizzId, userId, selectedOption);
+  //   } catch (error) {
+  //     if (error instanceof NotFoundException || error instanceof BadRequestException) {
+  //       throw error;
+  //     }
+  //     throw new Error('Une erreur est survenue lors de la soumission de votre réponse.');
+  //   }
+  // }
+
+
+  @Post('/reponse/:quizId/:userId')
+  async submitQuizzResponse(
+    @Param('quizId') quizId: string,
+    @Body() responseDto: { selectedOption: string },
+    // @Req() req,
+    @Param('userId') userId: string
+  ) {
+    // const userId = req.user.id; // Assurez-vous que l'utilisateur est authentifié
+    return this.quizzService.saveQuizResponse(quizId, userId, responseDto.selectedOption);
+  } 
+
+
+//   @Post('/reponse/:quizId')
+//   async submitQuizzResponse(
+//     @Param('quizId') quizId: string,
+//     @Body() responseDto: { selectedOption: string },
+//     @ReqUser() user: User,
+// ): Promise<Reponse>{
+//     return this.quizzService.saveQuizResponse(quizId, responseDto.selectedOption, user);
+//   }
 
 }

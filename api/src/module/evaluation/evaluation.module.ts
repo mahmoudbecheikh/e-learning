@@ -6,12 +6,17 @@ import { Evaluation, EvaluationSchema, Quizz, QuizzSchema } from './model/evalua
 import { Niveau, NiveauSchema } from '../niveau/schemas/niveau.schema';
 import { QuizzController } from './quizz.controller';
 import { QuizzService } from './quizz.service';
+import { Reponse, ReponseSchema } from '../reponseEv/model/reponse.models';
+import { User, UserSchema } from 'src/auth/schemas/user.schema';
 
 @Module({
   imports : [  MongooseModule.forFeature([
     { name: Quizz.name, schema: QuizzSchema },
     { name: Evaluation.name, schema: EvaluationSchema },
     { name: Niveau.name, schema: NiveauSchema },
+    { name: Reponse.name, schema: ReponseSchema },
+    { name: User.name, schema: UserSchema },
+
   ]),
   
   

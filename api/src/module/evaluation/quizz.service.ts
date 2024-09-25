@@ -1,15 +1,18 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Quizz, QuizzDocument } from './model/evaluation.models';
 import { QuizzDto } from './dto/quizz.dto';
 import { Niveau, NiveauDocument } from '../niveau/schemas/niveau.schema';
+import { Reponse, ReponseDocument } from '../reponseEv/model/reponse.models';
 
 @Injectable()
 export class QuizzService {
   constructor(
     @InjectModel(Quizz.name) private readonly quizzModel: Model<QuizzDocument>,
     @InjectModel(Niveau.name) private NiveauModel: Model<NiveauDocument>,
+    @InjectModel(Reponse.name) private readonly reponseModel: Model<ReponseDocument>,
+
 
   ) {}
 
@@ -109,6 +112,89 @@ export class QuizzService {
       }
       return niveau.quizzs;
     }
+
+
+    // async submitQuizzResponse(quizzId: string, userId: string, selectedOption: string): Promise<{ isCorrect: boolean }> {
+    //   const quizz = await this.quizzModel.findById(quizzId);
+    //   if (!quizz) {
+    //     throw new NotFoundException('Quizz non trouvé');
+    //   }
+  
+    //   // Vérification si l'utilisateur a déjà répondu
+    //   const existingResponse = quizz.userResponses.find(response => response.userId === userId);
+    //   if (existingResponse) {
+    //     throw new BadRequestException('Vous avez déjà répondu à ce quiz.');
+    //   }
+  
+    //   // Ajouter la réponse de l'utilisateur
+    //   quizz.userResponses.push({ userId, selectedOption });
+    //   await quizz.save();
+  
+    //   // Vérifier si la réponse est correcte
+    //   const isCorrect = quizz.correctOption === selectedOption;
+    //   return { isCorrect };
+    // }
+
+
+    async saveQuizResponse(quizId: string, userId: string, selectedOption: string): Promise<any> {
+      const quizz = await this.quizzModel.findById(quizId).exec();
+      
+      if (!quizz) {
+        throw new NotFoundException(`Quizz with id ${quizId} not found`);
+      }
+      
+      const isCorrect = quizz.correctOption === selectedOption;
+    
+      const newResponse = new this.reponseModel({
+        text: selectedOption,
+        quizId: quizId,
+        userId: userId,
+        isCorrect: isCorrect
+      });
+    
+      await newResponse.save();
+
+      quizz.reponses.push(newResponse.id);
+      
+      // Sauvegarder les modifications du evaluation
+      await quizz.save();
+    
+      return {
+        message: isCorrect ? 'Réponse correcte' : 'Réponse fausse',
+        isCorrect: isCorrect,
+      };
+    }
+    
+
+
+    
+
+
+    // async saveQuizResponse(quizId: string, user: User, selectedOption: string): Promise<Reponse> {
+    //   const quizz = await this.quizzModel.findById(quizId).exec();
+      
+    //   if (!quizz) {
+    //     throw new NotFoundException(`Quizz with id ${quizId} not found`);
+    //   }
+      
+    //   const isCorrect = quizz.correctOption === selectedOption;
+    
+    //   const newResponse = new this.reponseModel({
+    //     text: selectedOption,
+    //     quizId: quizz._id,
+    //     userId: user._id,
+    //     isCorrect: isCorrect
+    //   });
+    
+    //   await newResponse.save();
+    
+    //   quizz.reponses.push(newResponse.id);
+      
+    //   // Sauvegarder les modifications du evaluation
+    //   await quizz.save();
+
+    //   return newResponse;
+    // }
 
 
 }

@@ -13,6 +13,7 @@ import { MailerConfigModule } from './auth/mailer.module';
 import { EvaluationsModule } from './module/evaluation/evaluation.module';
 import { MessageModule } from './module/message/message.module';
 import { ProgressModule } from './module/progress/progress.module';
+import { ReponsesModule } from './module/reponseEv/reponse.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -38,6 +39,7 @@ import { ProgressModule } from './module/progress/progress.module';
 
     MessageModule,
     ProgressModule,
+    ReponsesModule
 
   ],
   controllers: [AppController],

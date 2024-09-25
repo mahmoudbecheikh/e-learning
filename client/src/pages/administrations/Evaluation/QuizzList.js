@@ -52,11 +52,6 @@ const QuizList = ({ niveauId,fetchQuizzes }) => {
         }));
     };
 
-    const handleAddQuiz = () => {
-        setSelectedQuiz(null); // Reset the selected quiz
-        onOpen(); // Open the modal
-    };
-
     const handleEditQuiz = (quiz) => {
         setSelectedQuiz(quiz); // Set the selected quiz for editing
         onOpen(); // Open the modal

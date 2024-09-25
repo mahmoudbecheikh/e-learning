@@ -20,11 +20,7 @@ const FormationAdminDetails = () => {
   const [loading, setLoading] = useState(true);
 
   const [showEvaluations, setShowEvaluations] = useState(false);
-  const [showQuizzes, setShowQuizzes] = useState(false);
-
-  const [showAddEvaluationForm, setShowAddEvaluationForm] = useState(false); // New state
-  const params = useParams();
-// const niveauId={formation.niveau._id}
+ 
 
   useEffect(() => {
     const fetchFormation = async () => {
@@ -73,7 +69,7 @@ const FormationAdminDetails = () => {
             boxSize="400px"
             objectFit="cover"
             alignSelf="center"
-          />
+          /> 
         )}
         <Box>
           

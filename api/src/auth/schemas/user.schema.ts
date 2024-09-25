@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId } from 'mongoose';
+import { Document, ObjectId, Types } from 'mongoose';
 export type UserDocument = User & Document;
 
 export enum Role {
@@ -47,6 +47,10 @@ export class User extends Document {
 
   @Prop()
   role: Role;
+
+  // @Prop({ type: [Types.ObjectId], ref: 'Reponse' }) // Assurer que c'est un tableau d'ObjectId
+  // reponses: Types.ObjectId[];
+  
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

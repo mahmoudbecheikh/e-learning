@@ -29,3 +29,16 @@
 
 
 
+/* Dans votre fichier CSS */
+@media screen and (max-width: 1000px) {
+  .responsive-container {
+    flex-direction: column; /* Change l'alignement en colonne */
+  }
+
+  .responsive-container > .first-box,
+  .responsive-container > .second-box,
+  .responsive-container > .third-box {
+    width: 100%; /* Assurez-vous que chaque box occupe toute la largeur */
+    margin-bottom: 20px; /* Ajoute un espacement entre les box */
+  }
+}

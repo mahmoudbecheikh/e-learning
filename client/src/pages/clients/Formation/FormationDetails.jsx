@@ -11,10 +11,10 @@ import {
   Container,
   Spinner,
 } from "@chakra-ui/react";
-import Messagesection from "../message";
-import EvaluationsList from "../administrations/Evaluation/EvaluationsList";
-import QuizList from "../administrations/Evaluation/QuizzList";
-import Questions from "../administrations/Evaluation/Questions";
+import Messagesection from "../../message";
+import EvaluationsList from "../../administrations/Evaluation/EvaluationsList";
+import QuizList from "../../administrations/Evaluation/QuizzList";
+import Questions from "../../administrations/Evaluation/Questions";
 
 const FormationDetails = () => {
   const { id } = useParams();
@@ -88,6 +88,11 @@ const FormationDetails = () => {
     );
   }
 
+  const handleShowDetails = (niveauId) => {
+    navigate(`/passevaluation/${niveauId}`);
+  };
+
+
   return (
     <Container maxW="container.lg">
       <Button mt={4} mb={4} onClick={() => navigate(-1)}>
@@ -145,18 +150,12 @@ const FormationDetails = () => {
                   <Text fontSize="md">Aucun cours disponible.</Text>
                 )}
 
+<Button as={Link} to={`/passevaluation/${niveau._id}`} colorScheme="teal">
+  Passer à l'évaluation
+</Button>
 
-                <Button>passer à l'évaluation</Button>
-
-                  {/* <Button onClick={() => setShowEvaluations(!showEvaluations)} mt="4" colorScheme="teal">
-                              {showEvaluations ? 'Masquer les Questions' : 'Afficher les Questions'}
-                            </Button>
-                            
-                            {showEvaluations && (
-                              <Box mt="4">
-                                <Questions niveauId={niveau._id} />
-                              </Box>
-                            )} */}
+                {/* <Button onClick={() => handleShowDetails(niveau._id)} >passer à l'évaluation</Button> 
+                navigate(`/passevaluation/${niveau._id}`) */}
 
               </Box>
             ))

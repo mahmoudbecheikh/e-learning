@@ -38,7 +38,7 @@ const Home = () => {
 
   const boxContainerStyle = {
     position: 'absolute',
-    bottom: '50px',
+    bottom: '40px',
     left: '50%',
     transform: 'translateX(-50%)',
     display: 'flex',
@@ -46,8 +46,8 @@ const Home = () => {
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 3,
-    backgroundColor: 'white',
-    borderRadius: '50px',
+    // backgroundColor: 'white',
+    // borderRadius: '50px',
     width: '700px',
     padding: '20px',
   };
@@ -56,10 +56,10 @@ const Home = () => {
     <div>
       <img src={home} alt="background" style={imageStyle} />
       <div style={buttonContainerStyle}>
-        <Button borderRadius={50} bg='#4CA5EB' color={"whitesmoke"}>
+        <Button borderRadius={50} bg='#83d3e1' color={"whitesmoke"}>
           <Link to="/login" style={{ textDecoration: 'none', color: 'inherit' }}>Se connecter</Link>
         </Button>
-        <Button style={buttonStyle} borderRadius={50} bg='#4CA5EB' color={"whitesmoke"} >
+        <Button style={buttonStyle} borderRadius={50} bg='#83d3e1' color={"whitesmoke"} >
           <Link to="/registration" style={{ textDecoration: 'none', color: 'inherit' }}>S'inscrire</Link>
         </Button>
       </div>
@@ -67,7 +67,7 @@ const Home = () => {
         <div className="row">
           <div style={boxContainerStyle}>
             <Text fontWeight={700} fontSize={20} color='#061C60' marginRight="60px" marginBottom="-0.5px">Commencez maintenant avec SA Coaching</Text>
-            <Button borderRadius={50} bg='#4CA5EB' color={"whitesmoke"}>
+            <Button borderRadius={50} bg='#83d3e1' color={"whitesmoke"}>
               <Link to="/login" style={{ textDecoration: 'none', color: 'inherit' }}>Se connecter</Link>
             </Button>
           </div>

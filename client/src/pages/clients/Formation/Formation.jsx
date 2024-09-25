@@ -12,7 +12,7 @@ import {
   Spinner,
   Collapse,
 } from "@chakra-ui/react";
-import Messagesection from "../message";
+import Messagesection from "../../message";
 import "./formation.css";
 
 const Formation = () => {

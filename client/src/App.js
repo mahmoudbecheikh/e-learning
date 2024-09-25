@@ -1,7 +1,7 @@
 import "./App.css";
 import Sidebar from "./components/Sidebar";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Formations from "./pages/clients/Formations";
+import Formations from "./pages/clients/Formation/Formations";
 import UpdateFormationForm from "./pages/administrations/Formation/UpdateFormations";
 import AddFormationsForm from "./pages/administrations/Formation/AddFormation";
 import CoursItem from "./pages/cours/CourseItem";
@@ -20,7 +20,6 @@ import ClientList from "./pages/user/users/listclient";
 import EmployeurList from "./pages/user/users/listemployeur";
 import AdminList from "./pages/user/users/listadmin";
 import Messagesection from "./pages/message";
-import FormationDetails from "./pages/clients/FormationDetails";
 import EvaluationsList from "./pages/administrations/Evaluation/EvaluationsList";
 import EvaluationForm from "./pages/administrations/Evaluation/EvaluationForm";
 import EvaluationDetails from "./pages/administrations/Evaluation/EvaluationDetails";
@@ -29,9 +28,11 @@ import QuizzForm from "./pages/administrations/Evaluation/QuizzForm";
 import QuizzDetails from "./pages/administrations/Evaluation/QuizzDetails";
 import Forums from "./pages/forums";
 import FormationsList from "./pages/administrations/Formation/ListeFormations";
-import Formation from "./pages/clients/Formation";
+import Formation from "./pages/clients/Formation/Formation";
 import FormationAdminDetails from "./pages/administrations/Formation/FormationDetails";
 import VideoPlayer from "./components/VideoPlayer";
+import FormationDetails from "./pages/clients/Formation/FormationDetails";
+import Passevaluation from "./pages/clients/evaluation/PassEvaluation";
 function App() {
   return (
     <Router>
@@ -57,6 +58,9 @@ function App() {
 
         <Route path="/formations/:idFormation" element={<Formation />} />
         <Route path="/video" element={<VideoPlayer />} />
+
+        <Route path="/passevaluation/:niveauId" element={<Passevaluation />} />
+
 
 
         

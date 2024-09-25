@@ -67,7 +67,7 @@ const ResetPasswordRequestForm = () => {
           required
           mb={10}
         />
-        <Button type="submit" colorScheme="yellow" color={"white"} width={"full"} mb={10} >Réinitialiser le mot de passe</Button>
+        <Button type="submit" bg={"#83d3e1"} color={"white"} width={"full"} mb={10} >Réinitialiser le mot de passe</Button>
       </VStack>
       {message && <Text fontWeight={500} color={"white"} >{message}</Text>}
     </Box>

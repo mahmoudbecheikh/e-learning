@@ -4,6 +4,7 @@ import axios from "axios";
 import { jwtDecode } from 'jwt-decode'; 
 import background from '../../images/background.jpg';
 import logo from '../../images/logo.png';
+import logoblanc from '../../images/logoblanc.png';
 
 import {
   AbsoluteCenter,
@@ -112,8 +113,10 @@ const Login = () => {
           marginTop: '-100px'
         }}>
         <img src={logo} alt="logo" />
+        {/* <img src={logoblanc} alt="logoblanc" />           */}
+
       </div>
-        <p style={{bottom:'20px', position:'absolute',left:'150px'}}>vous n'avez pas de compte ? <Link to="/registration"><button style={{color:'blue',bottom:'10px'}}>s'inscrire</button></Link></p>        
+        <p style={{bottom:'20px', position:'absolute',left:'150px'}}>vous n'avez pas de compte ? <Link to="/registration"><button style={{color:'#83d3e1',bottom:'10px'}}>s'inscrire</button></Link></p>        
                </Box>      
 
                 <Box flex="1" display="flex" justifyContent="flex-end" padding="40px" mt={-10}>
@@ -135,11 +138,13 @@ const Login = () => {
                 <div className="row">
                   {/* Email */}
                   <div className="mb-3 col-md-12">
-                    <FormControl isInvalid={!!errors.email}>
+                    {/* <FormControl isInvalid={!!errors.email}>
                       <FormLabel color='white'>
                         Email <span className="text-danger">*</span>
                       </FormLabel>
                       <Input
+                      borderRadius={15}
+                      style={{  backgroundColor: 'rgba(255, 255, 255, 0.7) '}}
                       bg="white"
                         type="email"
                         name="email"
@@ -161,7 +166,41 @@ const Login = () => {
                           {errors.email}
                         </FormErrorMessage>
                       </Box>
-                    </FormControl>
+                    </FormControl> */}
+
+<FormControl isInvalid={!!errors.email}>
+  <FormLabel color='white'>
+    Email <span className="text-danger">*</span>
+  </FormLabel>
+  <Input
+    borderRadius={15}
+    style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)' }}
+    bg="white"
+    type="email"
+    name="email"
+    className="form-control"
+    placeholder="Entrez l'email"
+    focusBorderColor="blue.500"    // Couleur de la bordure lorsqu'il est focus
+    errorBorderColor="#83d3e1"  // Couleur de la bordure en cas d'erreur
+    onChange={(event) =>
+      setFormData({
+        ...formData,
+        email: event.target.value,
+      })
+    }
+  />
+  <Box height="20px" position="relative">
+    <FormErrorMessage
+      position="absolute"
+      bottom="0"
+      fontSize="xs"
+      color="#83d3e1"   // Couleur personnalisée pour le texte d'erreur
+    >
+      {errors.email}
+    </FormErrorMessage>
+  </Box>
+</FormControl>
+
                   </div>
 
                   {/* Password */}
@@ -171,6 +210,8 @@ const Login = () => {
                         Mot de passe <span className="text-danger">*</span>
                       </FormLabel>
                       <Input
+                      borderRadius={15}
+                      style={{backgroundColor: 'rgba(255, 255, 255, 0.7) '}}
                         bg="white"
                         type="password"
                         name="password"
@@ -196,7 +237,8 @@ const Login = () => {
                     
                   </div>
                   <div className="col-md-12 text-center">
-                    <Button type="submit" colorScheme="blue" width={"full"}>
+                      
+                      <Button type="submit"  bg={"#83d3e1"} width={"50%"} borderRadius={15}  >
                       Connexion
                     </Button>
                   </div>

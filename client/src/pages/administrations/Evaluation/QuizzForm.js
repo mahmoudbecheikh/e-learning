@@ -18,7 +18,7 @@ import {
 import { GlobalContext } from '../../globalwrapper';
 
 const QuizForm = ({ isEdit, quiz, niveauId, isOpen, onClose }) => {
-    const { handleCreateQuizz, addQuizzToNiveau, handleUpdateQuizz } = useContext(GlobalContext);
+    const { addQuizzToNiveau, handleUpdateQuizz } = useContext(GlobalContext);
     const toast = useToast();
 
     const [form, setForm] = useState({
@@ -106,10 +106,10 @@ const QuizForm = ({ isEdit, quiz, niveauId, isOpen, onClose }) => {
                         <FormControl>
                             <FormLabel>Correct Option</FormLabel>
                             <Select name="correctOption" value={form.correctOption} onChange={handleChange}>
-                                <option value="option1">Option 1</option>
-                                <option value="option2">Option 2</option>
-                                <option value="option3">Option 3</option>
-                                <option value="option4">Option 4</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
                             </Select>
                         </FormControl>
                     </Stack>

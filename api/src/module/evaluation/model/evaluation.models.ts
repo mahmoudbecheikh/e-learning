@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document ,Schema as MongooseSchema} from "mongoose";
+import { Document ,Schema as MongooseSchema, Types} from "mongoose";
 
 
 export enum typeEvaluation {
@@ -37,6 +37,9 @@ export class Evaluation {
     @Prop()
     isValidated: boolean;
 
+    @Prop({ type: [Types.ObjectId], ref: 'Reponse' }) // Assurer que c'est un tableau d'ObjectId
+  reponses: Types.ObjectId[];
+
     
 
 }
@@ -60,6 +63,9 @@ export class Quizz extends Evaluation {
 
   @Prop()
   correctOption: string;
+
+  @Prop({ type: [{ userId: String, selectedOption: String }], _id: false })
+  userResponses: { userId: string; selectedOption: string }[];
 }
 
 export const QuizzSchema = SchemaFactory.createForClass(Quizz);

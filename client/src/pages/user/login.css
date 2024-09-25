@@ -1,0 +1,20 @@
+@media screen and (max-width: 1500px) {
+    .logo-default {
+      display: none;
+    }
+  
+    .logo-white {
+      display: block;
+    }
+  }
+  
+  @media screen and (min-width: 1500px) {
+    .logo-default {
+      display: block;
+    }
+  
+    .logo-white {
+      display: none;
+    }
+  }
+  

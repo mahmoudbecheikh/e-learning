@@ -11,9 +11,20 @@ import { useTypewriter, Cursor } from 'react-simple-typewriter';
 import { PhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { FlagIcon } from 'react-flag-kit';
+
+
 import "./Registration.css"
 const Registration = () => {
 
+
+    const contactContainerStyle = {
+        position: 'absolute',
+        bottom: '1px',
+        left: '1px',
+        display: 'flex',
+        zIndex: 2,
+      };
 
     const [typeEffect] = useTypewriter({
         words: ['Bienvenue sur SA Coaching , votre plateforme dédiée à l\'apprentissage et au développement professionnel. Explorez nos cours variées et commencez votre parcours éducatif dès aujourd\'hui.'],
@@ -172,15 +183,15 @@ const Registration = () => {
             }
         }
     };
-    const contactContainerStyle = {
-        position: 'absolute',
-        bottom: '70px',
-        left: '50px',
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        zIndex: 2,
-      };
+    // const contactContainerStyle = {
+    //     position: 'absolute',
+    //     bottom: '70px',
+    //     left: '50px',
+    //     display: 'flex',
+    //     flexDirection: 'row',
+    //     alignItems: 'center',
+    //     zIndex: 2,
+    //   };
     const RadioCard = (props) => {
         const { getInputProps, getRadioProps } = useRadio(props);
         const input = getInputProps();
@@ -214,29 +225,36 @@ const Registration = () => {
     };
 
     return (
-        <div>  
+        <Box>  
             <img src={background} alt="background" style={imageStyle} />          
             <NavbarComponent/>
-        <Box display="flex">
-            <Box flex="1" padding="50px" textAlign="left" color="white" zIndex={1} position="relative">
+            <VStack
+  spacing={4}
+  align='stretch'
+>
+        <Box className="responsive-container" display="flex" width='100%'>
+            <Box className="first-box" flex="1" padding="20px" paddingLeft="50" textAlign="left" color="white" zIndex={1} position="relative">
                     <h4 style={{
-                        marginTop:'30px',
+                        marginTop:'10px',
                         fontWeight: '200',
                         fontSize: '30px',
                         margin: '15px 0'
                     }}>INSCRIVEZ-VOUS</h4>
 
-                    <Text color='#FFC300' style={{
-                        fontSize: '50px',
+                    <Text color='#83d3e1' style={{
+                        fontSize: '60px',
                         margin: '10px 0', 
-                        marginTop:'30px'
+                        marginTop:'30px',
+                        fontWeight:'bold'
                     }}>
                         Découvrez Nos
                     </Text>
                     <p style={{
-                        fontSize: '50px',
+                        fontSize: '60px',
                         margin: '10px 0', 
-                        marginTop:'-25px'
+                        marginTop:'-25px',
+                        fontWeight:'bold'
+
                     }}>
                         Formations
                     </p>
@@ -246,24 +264,11 @@ const Registration = () => {
                         fontWeight: '200',
                     }}>
                         {splitText(typeEffect)}
-                        </span>
-                    
-                    
-                    <div class="contact-info" style={contactContainerStyle}>
-                    
-                        <FontAwesomeIcon icon={faEnvelope} class="icon" color="#FFC300" />
-                        <p>
-                            <Box bg={'#FFC300'} borderRadius={50} width={300} px={5}>
-                                info.international@sacoaching.ca
-                            </Box>
-                        </p>
-                        
-                    </div>
-                    
+                        </span>                    
                     
                 </Box>
-            <Box flex="1" display="flex" justifyContent="flex-end" padding="55px" paddingTop={8} mt={-10}>
-                <Box width="650px" backgroundColor="white" p={4} borderRadius="md" boxShadow="md">
+            <Box className="second-box" flex="1" display="flex" justifyContent="center" padding="55px" paddingTop={8} mt={-10}>
+                <Box width="650px" backgroundColor="white" borderRadius="md" boxShadow="md">
                     <form onSubmit={handleSubmit}>
                         <div className="row">
                             {/* First name */}
@@ -271,6 +276,8 @@ const Registration = () => {
                                 <FormControl isInvalid={!!errors.nom}>
                                     <FormLabel color='white'>Nom <span>*</span></FormLabel>
                                     <Input
+                                    borderRadius={15}
+                                    style={{  backgroundColor: 'rgba(255, 255, 255, 0.7) '}}
                                     bg="white"
                                         type="text"
                                         name="nom"
@@ -287,6 +294,8 @@ const Registration = () => {
                                 <FormControl isInvalid={!!errors.prenom}>
                                     <FormLabel color='white'>Prénom <span>*</span></FormLabel>
                                     <Input
+                                    borderRadius={15}
+                                    style={{  backgroundColor: 'rgba(255, 255, 255, 0.7) '}}
                                     bg="white"
                                         type="text"
                                         name="prenom"
@@ -305,6 +314,8 @@ const Registration = () => {
                                 <FormControl isInvalid={!!errors.email}>
                                     <FormLabel color='white'>Email <span>*</span></FormLabel>
                                     <Input
+                                    borderRadius={15}
+                                    style={{  backgroundColor: 'rgba(255, 255, 255, 0.7) '}}
                                     bg="white"
                                         type="email"
                                         name="email"
@@ -322,11 +333,12 @@ const Registration = () => {
                             <FormControl id="numtel" isInvalid={errors.numtel}>
                                     <FormLabel  color='white'>Numéro de Téléphone <span>*</span></FormLabel>
                                     <PhoneInput
+                                    borderRadius={15}
                                         country={'tn'}
                                         // defaultCountry="tn"
                                         value={formData.numtel}
                                         onChange={(phone) => setFormData({ ...formData, numtel: phone })}
-                                        inputStyle={{ width: '100%'}}                                       
+                                        inputStyle={{ width: '100%', backgroundColor: 'rgba(255, 255, 255, 0.7) '}}                                       
                                     />
                                     <FormErrorMessage>{errors.numtel}</FormErrorMessage>
                                 </FormControl>
@@ -338,6 +350,8 @@ const Registration = () => {
                                 <FormControl isInvalid={!!errors.password}>
                                     <FormLabel color='white'>Mot de Passe <span>*</span></FormLabel>
                                     <Input
+                                    borderRadius={15}
+                                    style={{  backgroundColor: 'rgba(255, 255, 255, 0.7) '}}
                                     bg="white"
                                         type="password"
                                         name="password"
@@ -355,6 +369,8 @@ const Registration = () => {
                                 <FormControl isInvalid={!!errors.cpassword}>
                                     <FormLabel color='white'>Confirmation du Mot de Passe <span>*</span></FormLabel>
                                     <Input
+                                    borderRadius={15}
+                                    style={{  backgroundColor: 'rgba(255, 255, 255, 0.7) '}}
                                     bg="white"
                                         type="password"
                                         name="cpassword"
@@ -372,6 +388,8 @@ const Registration = () => {
                                 <FormControl isInvalid={!!errors.nomEntreprise}>
                                     <FormLabel color='white'>Nom d'Entreprise <span>*</span></FormLabel>
                                     <Input
+                                    borderRadius={15}
+                                    style={{  backgroundColor: 'rgba(255, 255, 255, 0.7) '}}
                                     bg="white"
                                         type="text"
                                         name="nomEntreprise"
@@ -389,6 +407,8 @@ const Registration = () => {
                                 <FormControl isInvalid={!!errors.secteur}>
                                     <FormLabel color='white'>Secteur <span>*</span></FormLabel>
                                     <Input
+                                    borderRadius={15}
+                                    style={{  backgroundColor: 'rgba(255, 255, 255, 0.7) '}}
                                     bg="white"
                                         type="text"
                                         name="secteur"
@@ -407,6 +427,8 @@ const Registration = () => {
                                 <FormControl isInvalid={!!errors.poste}>
                                     <FormLabel color='white'>Poste <span>*</span></FormLabel>
                                     <Input
+                                    borderRadius={15}
+                                    style={{  backgroundColor: 'rgba(255, 255, 255, 0.7) '}}
                                     bg="white"
                                         type="text"
                                         name="poste"
@@ -423,6 +445,8 @@ const Registration = () => {
                                 <FormControl isInvalid={!!errors.cin}>
                                     <FormLabel color='white'>Numéro CIN </FormLabel>
                                     <Input
+                                    borderRadius={15}
+                                    style={{  backgroundColor: 'rgba(255, 255, 255, 0.7) '}}
                                     bg="white"
                                         type="text"
                                         name="cin"
@@ -438,7 +462,7 @@ const Registration = () => {
                                             <HStack justify="center" align="center">
                                                 
                                                 <p style={{ marginLeft: '10px',color: 'white' }}>
-                                                    J'ai lu <button type="button" onClick={onOpen} style={{ color: 'yellow', fontWeight:'bold' }} > les conditions d'utilisations</button>
+                                                    J'ai lu <button type="button" onClick={onOpen} style={{ color: '#83d3e1', fontWeight:'bold' }} > les conditions d'utilisations</button>
                                                     <Modal isOpen={isOpen} onClose={onClose} size='4xl'>
                                                 <ModalOverlay/>
                                                 <ModalContent>
@@ -473,13 +497,29 @@ const Registration = () => {
                                             </VStack>
                                             </FormControl>
                                     </div>
-                            <Button  type="submit" bg={'#FFC300'}>S'inscrire</Button>
+                            <Button borderRadius={15} type="submit" bg={'#83d3e1'}>S'inscrire</Button>
                         </div>
                     </form>
                 </Box>
             </Box>
+            
         </Box>
-        </div>
+        <Box p={10} mt={10}  style={contactContainerStyle} className="third-box" >
+                <div class="contact-info" >
+                    
+                    <FontAwesomeIcon icon={faEnvelope} class="icon" color="#83d3e1" />
+                    <p>
+                        <Box bg={'#83d3e1'} borderRadius={50} width={300} px={5}>
+                           <Text>  <FlagIcon code="TN" size={24} style={{marginRight:'10px'}}/> info.international@sacoaching.ca</Text>
+                          <Text> <FlagIcon code="CA" size={24}  style={{marginRight:'10px'}} /> info.international@sacoaching.ca</Text>
+                        </Box>
+                    </p>
+                    
+                </div>
+        </Box>
+            </VStack>
+
+        </Box>
 
     );
 };

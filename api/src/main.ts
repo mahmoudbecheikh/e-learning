@@ -9,17 +9,12 @@ async function bootstrap() {
 
   app.enableCors({
     origin: 'http://localhost:3000', 
-    // methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    // credentials: true,
-    // exposedHeaders: 'Set-Cookie',
-
-    // allowedHeaders: [
-    //   'Access-Control-Allow-Origin',
-    //   'Content-Type',
-    //   'Authorization',
-    // ],
-
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    exposedHeaders: 'Set-Cookie',
+    allowedHeaders: ['Access-Control-Allow-Origin', 'Content-Type', 'Authorization'],
   });
+  
 
 
   app.useGlobalPipes(new ValidationPipe());

@@ -83,7 +83,7 @@ const ResetPasswordForm = () => {
           mb={10}
           bg="white"
         />
-        <Button type="submit" mb={10} colorScheme="yellow" color={"white"} >Réinitialiser le mot de passe</Button>
+        <Button type="submit" mb={10} bg={"#83d3e1"}  color={"white"} >Réinitialiser le mot de passe</Button>
       </VStack>
       {message && <Text fontWeight={500} color={"white"} >{message}</Text>}
     </Box>

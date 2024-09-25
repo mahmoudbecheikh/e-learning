@@ -16,7 +16,6 @@ import {
   Select,
 } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
-import EvaluationsList from "../Evaluation/EvaluationsList";
 
 const AddFormationsForm = () => {
   const [formationData, setFormationData] = useState({
@@ -29,13 +28,9 @@ const AddFormationsForm = () => {
     niveau: [],
   });
   const [existingCourses, setExistingCourses] = useState([]);
-  const [newCourseName, setNewCourseName] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [showEvaluations, setShowEvaluations] = useState(false);
-  const [showAddEvaluationForm, setShowAddEvaluationForm] = useState(false); // New state
-  const params = useParams();
 
   useEffect(() => {
     if (location.state && location.state.formationData) {

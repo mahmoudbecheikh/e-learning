@@ -1,11 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 import {
   Box,
   Button,
-  Heading,
-  List,
-  ListItem,
   Spinner,
   useToast,
   Text,
@@ -67,11 +63,6 @@ const EvaluationsList = ({ niveauId,fetchEvaluations }) => {
           isClosable: true,
         });
       });
-  };
-
-  const handleAddEvaluation = () => {
-    setSelectedEvaluation(null); // Reset the selected evaluation
-    onOpen(); // Open the modal
   };
 
   const handleEditEvaluation = (evaluation) => {
